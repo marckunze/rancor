@@ -9,12 +9,14 @@ gem 'data_mapper' 	#ORM adapter for db
 
 group :test, :development do
   # for any gems that are required in testing but not production
-  gem 'dm-sqlite-adapter' 
   # and other variations in dev/test compared to production
+  gem "sqlite3"
+  gem "dm-sqlite-adapter"
 end
 
 group :production do
 	#Same but with production
-	# mk - I can't get this working just yet
-	#gem 'dm-postgres-adapter'
+	gem "pg"
+	gem "dm-postgres-adapter"
+	gem "dm-migrations"
 end

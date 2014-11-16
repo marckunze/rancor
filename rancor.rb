@@ -2,7 +2,15 @@ require 'rubygems'
 require 'sinatra'
 require 'data_mapper'
 # sets up a new database in this directory
-DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/rancor.db")
+configure :development do
+	DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/rancor.db")
+end
+
+configure :production do
+	DataMapper.setup(:default,
+		ENV['HEROKU_POSTGRESQL_RED_URL'])
+end
+
 
 # sets up the Polls table in the above database
 # the syntax is:
