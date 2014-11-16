@@ -4,11 +4,11 @@ require 'data_mapper'
 
 # sets up a new database in this directory
 configure :development do
-	DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/rancor.db")
+	DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/rancor.db")
 end
 
 configure :production do
-	DataMapper::setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+	DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
 end
 
 
@@ -34,7 +34,7 @@ end
 
 post '/' do
 
-end2
+end
 
 get '/new_user' do
 	erb :new_user
