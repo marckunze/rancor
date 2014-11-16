@@ -1,1 +1,1 @@
-web: bundle exec ruby rancor.rb -p $PORT
+web: bundle exec rackup config.ru -p $PORT
