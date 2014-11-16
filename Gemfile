@@ -1,4 +1,5 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
+ruby "2.0.0"		#fixing a ruby version to avoid a warning on heroku
 
 gem 'sinatra' 		#Required for running framework
 gem 'data_mapper' 	#ORM adapter for db
