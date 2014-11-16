@@ -4,7 +4,7 @@ require 'data_mapper'
 
 # sets up a new database in this directory
 configure :development do
-	DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/rancor.db")
+	DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor.db")
 end
 
 configure :production do
