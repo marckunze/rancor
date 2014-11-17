@@ -26,9 +26,9 @@ end
 DataMapper.finalize.auto_upgrade!
 
 # homepage displays all of the users
-get '/' do 
+get '/' do
 	@users = User.all :order => :id.desc
-	@title = 'All Users'
+	@title = 'rancor:users'
 	erb :home
 end
 
@@ -37,6 +37,7 @@ post '/' do
 end
 
 get '/new_user' do
+	@title = 'rancor:register'
 	erb :new_user
 end
 
@@ -51,3 +52,35 @@ post '/new_user' do
 	u.save
 	redirect '/'
 end
+
+#TODO
+
+#TODO voting page
+#get '/vote' do
+#	@title = 'rancor:vote!'
+	#erb :vote
+#end
+
+#TODO Confirmation page? Not sure on routing on this or if this needs separate page.
+#get '/vote/confirm' do
+#	@title = 'rancor:your vote?'
+#	#erb :confirm
+#end
+
+#TODO basic results page for people who voted (and for organizers for now)
+#get '/results' do
+#	@title = 'rancor:results'
+#	erb :results
+#end
+
+#TODO new poll creation page
+#get '/new_poll' do
+#	@title = 'rancor:new poll?'
+#	erb :new_poll
+#end
+
+#TODO organizer results page? not sure if needed, and routing on this
+#get '/results-org' do
+#	@title = 'rancor:results(org)'
+#	erb :results_organizer
+#end
