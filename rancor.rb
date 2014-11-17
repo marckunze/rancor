@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'sinatra'
 require 'data_mapper'
 
@@ -33,7 +32,7 @@ get '/' do
 end
 
 post '/' do
-
+	# Nothing here yet
 end
 
 get '/new_user' do
@@ -42,15 +41,13 @@ get '/new_user' do
 end
 
 post '/new_user' do
-	if params[:password1] != params[:password2]
-		redirect '/new_user'
-	end
-	u = User.new
-	u.username = params[:username]
-	u.email = params[:email]
-	u.joined_at = Time.now
-	u.save
-	redirect '/'
+	redirect to('/new_user') unless params[:password1] == params[:password2]
+	User.create(
+		:username  => params[:username],
+		:email 		 => params[:email],
+		:joined_at => Time.now
+	)
+	redirect to('/')
 end
 
 #TODO
