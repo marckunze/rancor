@@ -74,11 +74,14 @@ GEM
     stringex (1.5.1)
     tilt (1.4.1)
     uuidtools (2.1.5)
+    warden (1.2.3)
+      rack (>= 1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt
   data_mapper
   dm-migrations
   dm-postgres-adapter
@@ -86,3 +89,4 @@ DEPENDENCIES
   pg
   sinatra
   sqlite3
+  warden

@@ -1,8 +1,10 @@
 source 'https://rubygems.org'
-ruby "2.0.0"		#fixing a ruby version to avoid a warning on heroku
+ruby "2.0.0"      # fixing a ruby version to avoid a warning on heroku
 
-gem 'sinatra' 		#Required for running framework
-gem 'data_mapper' 	#ORM adapter for db
+gem 'sinatra'     # Required for running framework
+gem 'data_mapper' # ORM adapter for db
+gem 'warden'      # Required for authentication
+gem 'bcrypt'      # Required for passwords. Should be automatically install by data_mapper
 
 # http://bundler.io/v1.3/sinatra.html
 # http://bundler.io/v1.3/gemfile.html
