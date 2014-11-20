@@ -107,11 +107,10 @@ class Rancor < Sinatra::Base
   #   erb :results
   # end
 
-  # TODO new poll creation page
-  # get '/new_poll' do
-  #   @title = 'rancor:new poll?'
-  #   erb :new_poll
-  # end
+  get '/new_poll' do
+    @title = 'rancor:new poll?'
+    erb :new_poll
+  end
 
   # TODO organizer results page? not sure if needed, and routing on this
   # get '/results-org' do
