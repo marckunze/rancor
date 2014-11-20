@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-ruby "2.0.0"      # fixing a ruby version to avoid a warning on heroku
-
+# fixing a ruby version to avoid a warning on heroku
+ruby "2.0.0"
 gem 'sinatra'     # Required for running framework
 gem 'data_mapper' # ORM adapter for db
 gem 'warden'      # Required for authentication
@@ -18,8 +18,8 @@ group :test, :development do
 end
 
 group :production do
-	#Same but with production
-	gem "pg"
-	gem "dm-postgres-adapter"
-	gem "dm-migrations"
+  #Same but with production
+  gem "pg"
+  gem "dm-postgres-adapter"
+  gem "dm-migrations"
 end

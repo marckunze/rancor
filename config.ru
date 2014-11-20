@@ -4,4 +4,4 @@ require 'bundler'
 Bundler.require
 
 require './rancor'
-run Sinatra::Application
+run Rancor
