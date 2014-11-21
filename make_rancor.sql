@@ -40,9 +40,10 @@ CREATE TABLE IF NOT EXISTS access_to(
 rid INTEGER,
 id INTEGER,
 voted BOOLEAN DEFAULT 0,
-choice INTEGER,
+choice INTEGER DEFAULT null,
 FOREIGN KEY (rid) REFERENCES rancor(rid),
-FOREIGN KEY (id) REFERENCES User(id)
+FOREIGN KEY (id) REFERENCES User(id),
+FOREIGN KEY (rid,choice) REFERENCES choices(rid,cid)
 );
 
 INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
