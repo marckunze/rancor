@@ -40,6 +40,12 @@ class Rancor < Sinatra::Base
     erb :home
   end
 
+  get '/all_users' do
+    @users = User.all :order => :id.desc
+    @title = 'rancor:users'
+    erb :all_users
+  end
+
   post '/' do
     # Nothing here yet
   end
