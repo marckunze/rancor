@@ -35,8 +35,7 @@ class Rancor < Sinatra::Base
 
   # homepage displays all of the users
   get '/' do
-    @users = User.all :order => :id.desc
-    @title = 'rancor:users'
+    @title = 'rancor:home'
     erb :home
   end
 
@@ -49,7 +48,7 @@ class Rancor < Sinatra::Base
   post '/' do
     # Nothing here yet
   end
-
+1
   get '/login' do
     @title = 'rancor:login'
     erb :login
