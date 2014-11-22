@@ -22,7 +22,7 @@ class User
   property :username,     Text, :required => true, :unique => true
   property :email,        Text, :required => true, :unique => true
   property :password,     BCryptHash
-  property :joined_at,    DateTime, :default => Time.now
+  property :joined_at,    DateTime, :default => DateTime.now
   property :account_type, Enum[ :user, :admin ], :default => :user
 
   has n, :polls

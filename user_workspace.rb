@@ -5,7 +5,7 @@ Bundler.require
 
 # sets up a new database in this directory
 configure :development do
-  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor.db")
+  DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor_workspace.db")
 end
 
 configure :production do
@@ -20,56 +20,64 @@ end
 # Handled by DataMapper.auto_migrate!
 #
 # PRAGMA foreign_keys = ON;
-#
-# CREATE TABLE IF NOT EXISTS User(
-# id INTEGER PRIMARY KEY,
-# username TEXT NOT NULL UNIQUE,
-# email VARCHAR(320) NOT NULL UNIQUE,
-# joined_at DATETIME
-# );
+
+# CREATE TABLE User
 class User
   include DataMapper::Resource
   include BCrypt
 
+  # id INTEGER PRIMARY KEY,
   property :id,         Serial
+  # username TEXT NOT NULL UNIQUE,
   property :username,   Text, required: true, unique: true
+  # email VARCHAR(320) NOT NULL UNIQUE,
   property :email,      String, length: 320, required: true, unique: true
   property :password,   BCryptHash
-  property :joined_at,  DateTime, default: Time.now
+  # joined_at DATETIME
+  property :joined_at,  DateTime, default: DateTime.now
+
+  has n, :poll
 end
-# CREATE TABLE IF NOT EXISTS rancor(
-# rid INTEGER PRIMARY KEY,
-# oid INTEGER NOT NULL,
-# question TEXT NOT NULL,
-# open BOOLEAN DEFAULT 1,
-# closedate DATETIME,
-# FOREIGN KEY (oid) REFERENCES User(id)
-# );
-class Rancor
+
+class Poll  # Rancor is the name of the sinatra class
+  include DataMapper::Resource
+
+  # CREATE TABLE rancor
+  storage_names[:default] = "rancor"
+  # rid INTEGER PRIMARY KEY,
   property :rid,        Serial
-  property :oid,        Integer, required: true
+  # question TEXT NOT NULL,
   property :question,   Text
+  # open BOOLEAN DEFAULT 1,
   property :open,       Boolean, default: true
+  # closedate DATETIME,
   property :closedate,  DateTime
 
+  # oid INTEGER NOT NULL,
   # FOREIGN KEY (oid) REFERENCES User(id)
+  belongs_to :user, required: false
+  has n, :choice, child_key: :rid
 end
-# CREATE TABLE IF NOT EXISTS choices(
-# rid INTEGER,
-# cid INTEGER,
-# option TEXT NOT NULL,
-# count INTEGER DEFAULT 0,
-# FOREIGN KEY (rid) REFERENCES rancor(rid),
-# PRIMARY KEY(rid,cid)
-# );
-class Choice
-  property :rid,    Integer, key: true
-  property :cid,    Integer, key: true
-  property :option, Text, required: true
 
+# CREATE TABLE choices(
+class Choice
+  include DataMapper::Resource
+
+  # cid INTEGER, PRIMARY KEY(rid,cid)
+  property :cid,    Integer, key: true, unique: false
+  # option TEXT NOT NULL,
+  property :option, Text, required: true
+  # count INTEGER DEFAULT 0,
+  property :count, Integer, default: 0
+
+  # rid INTEGER,
   # FOREIGN KEY (rid) REFERENCES rancor(rid)
+  belongs_to :poll, child_key: :rid, key: true
+  # PRIMARY KEY(rid,cid)
 end
-#
+
+###### I don't think the following is necessary with DataMapper's belong_to
+###### and has n properties. Please correct me if I'm wrong.
 # CREATE TABLE IF NOT EXISTS access_to(
 # rid INTEGER,
 # id INTEGER,
@@ -79,17 +87,42 @@ end
 # FOREIGN KEY (id) REFERENCES User(id),
 # FOREIGN KEY (rid,choice) REFERENCES choices(rid,cid)
 # );
-#
+
+DataMapper.finalize
+DataMapper.auto_migrate!
+
 # INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
-User.create(id: 1, username: 'p1', email: 'abc@email.com')
+p1 = User.create(username: 'p1', email: 'abc@email.com')
+
 # INSERT INTO User (id,username,email) VALUES(2,'student','cdad@email.com');
-User.create(id: 2, username: 'student', email: 'cdad@email.com')
+student = User.create(username: 'student', email: 'cdad@email.com')
+
 # INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
+dinner = Poll.create(question: 'What is for dinner?')
+p1.poll << dinner
+p1.save
+
 # INSERT INTO rancor (rid,oid,question) VALUES(2,2,'Go out for drinks?');
+drinks = Poll.create(question: 'Go out for drinks?')
+student.poll << drinks
+student.save
+
 # INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');
+dinner.choice << Choice.create(cid: 1, option: 'steak')
+
 # INSERT INTO choices (rid,cid,option) VALUES(1,2,'sushi');
+dinner.choice << Choice.create(cid: 2, option: 'sushi')
+dinner.save
+
 # INSERT INTO choices (rid,cid,option) VALUES(2,1,'yes');
-# INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
+drinks.choice << Choice.create(cid: 1, option: 'yes')
+
+#INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
+drinks.choice << Choice.create(cid: 2, option: 'no')
+drinks.save
+
+###### Ignored because there is no access_to table currently.
 # INSERT INTO access_to (rid,id) VALUES(1,1);
 # INSERT INTO access_to (rid,id) VALUES(1,2);
+# INSERT INTO access_to (rid,id) VALUES(2,1);
 # INSERT INTO access_to (rid,id) VALUES(2,2);
