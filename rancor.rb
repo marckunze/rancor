@@ -5,6 +5,7 @@ require_relative 'user'
 
 class Rancor < Sinatra::Base
   enable :sessions
+  register Sinatra::Flash
 
   use Warden::Manager do |config|
     config.serialize_into_session{|user| user.id }
@@ -57,12 +58,14 @@ class Rancor < Sinatra::Base
 
   post '/login' do
     env['warden'].authenticate!
-    redirect to('/authenticated')
+    flash[:status] = "You have successfully logged in"
+    redirect to('/')
   end
 
   get '/logout' do
     env['warden'].logout
-    "Logged out"
+    flash[:status] = "You have successfully logged out"
+    redirect to('/')
   end
 
   get '/new_user' do
@@ -80,17 +83,11 @@ class Rancor < Sinatra::Base
     redirect to('/')
   end
 
-  get '/authenticated' do
-    if env['warden'].authenticated?
-      "Success  User: #{env['warden'].user.username}"
-    else
-      "User not authenticated"
-    end
-  end
-
   post '/unauthenticated' do
     # Message is currently nil. I need to figure out how to access it.
-    "Failure: #{env['warden'].message}"
+    flash[:status] = env['warden'].message
+    flash[:status] ||= "You are not logged in"
+    redirect to('/login')
   end
 
   # TODO
