@@ -5,6 +5,7 @@ gem 'sinatra'     # Required for running framework
 gem 'data_mapper' # ORM adapter for db
 gem 'warden'      # Required for authentication
 gem 'bcrypt'      # Required for passwords. Should be automatically install by data_mapper
+gem 'sinatra-flash', require: 'sinatra/flash'
 
 # http://bundler.io/v1.3/sinatra.html
 # http://bundler.io/v1.3/gemfile.html
