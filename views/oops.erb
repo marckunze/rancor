@@ -1,0 +1,6 @@
+require 'erb'
+
+name = "rancor"
+template_string = "My nbame is <%= name %>"
+templtae = ERB.new template_string
+puts template.result # prints "My name is rancor"
