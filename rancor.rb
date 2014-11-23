@@ -74,13 +74,25 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_user' do
-    redirect to('/new_user') unless params[:password1] == params[:password2]
+    if params[:password] != params[:confirmation]
+      flash[:status] = "Your passwords do not match"
+      redirect to('/new_user')
+    elsif User.exists?(params['username'])
+      flash[:status] = "Username is already registered"
+      redirect to('/new_user')
+    elsif User.exists?(params['email'])
+      flash[:status] = "Email address is already registered"
+      redirect to('/new_user')
+    end
+
     User.create(
       :username  => params[:username],
       :email     => params[:email],
-      :password  => params[:password1],
+      :password  => params[:password],
     )
+
     flash[:status] = "Your account has been created."
+    env['warden'].authenticate!
     redirect to('/')
   end
 

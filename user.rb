@@ -37,7 +37,15 @@ class User
   end
 
   def self.exists?(user)
-    first(username: user).nil? || first(email: user).nil?
+    self.username_exists?(user) || self.email_exists?(user)
+  end
+
+  def self.username_exists?(username)
+    !first(username: username).nil?
+  end
+
+  def self.email_exists?(email)
+    !first(email:email).nil?
   end
 end
 
