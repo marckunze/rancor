@@ -1,12 +1,44 @@
-<section id="new">
-	<form action="/" method="post">
-		<p><input name="pollname" placeholder="Your poll&hellip;"></input></p>
-		<p><input name="end_date" type="datetime-local"></input></p>
-		<p><input name="item1" type="text" placeholder="First item&hellip;"></input></p>
-		<p><input name="item2" type="text" placeholder="Second item&hellip;"></input></p>
-		<p><input name="item3" type="text" placeholder="Third item&hellip;"></input></p>
-		<p><input name="item4" type="text" placeholder="Fourt item&hellip;"></input></p>
-		<p><input name="item5" type="text" placeholder="Fifth item&hellip;"></input></p>
-		<p><input type="submit" value="Create Poll!">
-	</form>
-</section>
+
+<div class="container" id="poll_question_container">
+  <div class="jumbotron">
+    <table>
+        <% @polls.each do |question|%>
+          <tr>
+            <td class="question"><%= question.poll_question %></td>
+          </tr>
+          <% end %>
+      </table>
+        <div>
+          <div class="count">
+             <table>
+              <% @choices.each do |row|%>
+                <tr>
+                  <td class="rank"><%= row.count %></td>
+                </tr>
+                <% end %>
+            </table>
+          </div>
+          <div class="option">
+            <table>
+              <ul class="list-group" id="sortable_options">
+               <% @choices.each do |row|%>
+                  <li class="list-group-item"><%= row.option %><i class="glyphicon glyphicon-sort">&nbsp</i></li>
+                  <% end %>
+               </ul>
+            </table>
+          </div>
+          </div>
+
+          <form action="/new_poll/" method="POST">
+              A Greeting: <input type="text" name="greeting">
+              <br/>
+              Your Name: <input type="text" name="name">
+              <br/>
+              <input type="submit">
+          </form>
+            <div class="col-md-1"> 
+              <a href="confirmation.html" class="btn btn-info btn-lg" style="margin: 0px;" ><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
+        </div>
+      </div>
+    </div>
+  </div>

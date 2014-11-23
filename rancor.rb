@@ -150,7 +150,16 @@ class Rancor < Sinatra::Base
 
   get '/new_poll' do
     @title = 'rancor:new poll?'
+    @choices = Choice.all
+    @polls = Poll.all
     erb :new_poll
+  end
+
+  post '/new_poll' do
+    greeting = params[:greeting] || "Hi There"
+    name = params[:name] || "Nobody"
+
+    erb :index, :locals => {'greeting' => greeting, 'name' => name}
   end
 
   # TODO organizer results page? not sure if needed, and routing on this

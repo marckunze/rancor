@@ -53,7 +53,7 @@ class Poll
   include DataMapper::Resource
 
   property :id,            Serial
-  property :poll_question, Text
+  property :\, Text
   property :open,          Boolean
   property :close_date,    DateTime
 
@@ -69,6 +69,16 @@ class Question
   property :points, Integer
 
   belongs_to :poll
+end
+
+class Choice
+  include DataMapper::Resource
+
+  property :cid,    Integer, key: true, unique: false
+  property :option, Text, required: true
+  property :count, Integer, default: 0
+
+  belongs_to :poll, child_key: :rid, key: true
 end
 
 DataMapper.finalize.auto_upgrade!

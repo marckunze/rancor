@@ -16,6 +16,8 @@ group :test, :development do
   # and other variations in dev/test compared to production
   gem "sqlite3"
   gem "dm-sqlite-adapter"
+  #console that lets us run Ruby code in the environment of our app/database.
+  gem "tux"
 end
 
 group :production do

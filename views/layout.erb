@@ -8,8 +8,28 @@
 
 		<title><%= @title %></title>
 		<!-- Boootstrap -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap.css" rel="stylesheet">
 		<link href="css/jumbotron.css" rel="stylesheet">
+		<link href="css/navbar.css" rel="stylesheet">
+
+		<!-- bootstrap links -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+        <!-- normalize all the default DOM styles with noremalize.css -->
+        <link rel="stylesheet" href="http://necolas.github.com/normalize.css/2.0.1/normalize.css"> 
+    
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <!-- Include all compiled plugins (below), or include individual files as needed -->	    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	     <!--  jQuery and the jQuery UI library from CDN -->
+		<script src="http://code.jquery.com/jquery-1.8.2.js"></script>  
+		<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>  
+		<script src="js/bootstrap.js"></script>
+	    <script src="js/bootstrap.min.js"></script>
+	    <!-- For poll functions -->      
+	    <script src="js/poll.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,12 +86,7 @@
 		  </div>
 		</nav>
 
-
 		<%= yield %>
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-	    <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>
