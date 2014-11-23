@@ -33,7 +33,7 @@
 		      <a class="navbar-brand" href="/">rancor</a>
 		    </div>
 		    <div id="navbar" class="navbar-collapse collapse">
-		    	         <ul class="nav navbar-nav">
+		    	         <ul class="nav navbar-nav" style="float:none">
              <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">vote<span class="caret"></span></a>
 		          <ul class="dropdown-menu" role="menu">
@@ -48,16 +48,20 @@
 		            <li><a href="/results">results</a></li>
 		          </ul>
 	        </li>
-		      <form class="navbar-form navbar-right" role="form">
+              <% if env['warden'].authenticated? %>
+              <a class="btn btn-default navbar-right" style="margin-top:8px; background-color:#222; color:#999" href="/logout" role="button">logout</a>
+              <% else %>
+		      <form class="navbar-form navbar-right" role="form" action="/login" method="post">
 		        <div class="form-group">
-		          <input type="text" placeholder="Email" class="form-control">
+		          <input type="text" name="username" placeholder="Username or Email" class="form-control">
 		        </div>
 		        <div class="form-group">
-		          <input type="password" placeholder="Password" class="form-control">
+		          <input type="password" name="password" placeholder="Password" class="form-control">
 		        </div>
 		        <button type="submit" class="btn btn-success">sign in</button>
 		        <a class="btn btn-info" href="/new_user" role="button">register</a>
 		      </form>
+              <% end %>
 		    </div><!--/.navbar-collapse -->
 		  </div>
 		</nav>
