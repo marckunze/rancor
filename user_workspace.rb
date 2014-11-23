@@ -78,6 +78,8 @@ end
 
 ###### I don't think the following is necessary with DataMapper's belong_to
 ###### and has n properties. Please correct me if I'm wrong.
+####### This is to see which user can access which poll.
+
 # CREATE TABLE IF NOT EXISTS access_to(
 # rid INTEGER,
 # id INTEGER,
