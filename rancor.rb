@@ -106,12 +106,37 @@ class Rancor < Sinatra::Base
   # TODO
 
   # TODO voting page
+  # Initial support for vote locking based on cookies
+  get '/poll/:id/?' do
+    if request.cookies["rancor.pollid.#{params[:id]}"].nil?
+      # No cookie means the user has not voted
+      "You haven't voted yet!"
+      # @poll = Poll.get(params[:id])
+      # erb :poll
+    else
+      # user has voted
+      "Poll locked, you have voted."
+      # redirect to("/poll/#{params[:id]/results}")
+    end
+  end
+
+  post '/poll/:id/?' do
+    response.set_cookie "rancor.pollid.#{params[:id]}",
+                        { value: 'voted', exprires: Date.new(2016) }
+    # Get vote results
+    # flash[:status] = "Your vote has been recorded"
+    redirect to("/poll/#{params[:id]}")
+  end
+
+  # original voting page template
   # get '/vote' do
   #   @title = 'rancor:vote!'
   #   erb :vote
   # end
 
   # TODO Confirmation page? Not sure on routing on this or if this needs separate page.
+  # I think we should redirect to the results page with a flash message detailing
+  # that the user's vote has been successfully stored
   # get '/vote/confirm' do
   #   @title = 'rancor:your vote?'
   #   #erb :confirm
