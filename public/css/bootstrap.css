@@ -22,10 +22,10 @@
       margin: 20px;
     }
     .ui-sortable-placeholder {  
-        border: 2px dashed #D3D3D3;  
+        border: 2px dashed #D3D3D3; 
         height: 41px;  
         width: 100%;  
-        background: #EDEDED;  
+        background: #EDEDED; 
     }
 
 .col-md-1{
@@ -45,9 +45,10 @@ td.rank {
 }
 
 div.count {
-  width: 50px;
+  width: auto;
   float: left;
   margin-top:10px;
+  margin-right: 25px;
   vertical-align: top;
 }
 

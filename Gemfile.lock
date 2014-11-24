@@ -60,9 +60,12 @@ GEM
     do_sqlite3 (0.10.14)
       data_objects (= 0.10.14)
     fastercsv (1.5.5)
+    humanize (1.1.0)
     json (1.8.1)
     json_pure (1.8.1)
     multi_json (1.10.1)
+    ordinalize (0.0.3)
+      humanize
     pg (0.17.1)
     rack (1.5.2)
     rack-protection (1.5.3)
@@ -104,6 +107,7 @@ DEPENDENCIES
   dm-migrations
   dm-postgres-adapter
   dm-sqlite-adapter
+  ordinalize (~> 0.0.3)
   pg
   sinatra
   sinatra-flash

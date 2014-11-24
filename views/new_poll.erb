@@ -13,7 +13,7 @@
              <table>
               <% 1.upto(@choices.length) do |row|%>
                 <tr>
-                  <td class="rank"><%= row %></td>
+                  <td class="rank"><%= row.ordinalize.capitalize %></td>
                 </tr>
                 <% end %>
             </table>
