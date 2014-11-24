@@ -11,9 +11,9 @@
         <div>
           <div class="count">
              <table>
-              <% @choices.each do |row|%>
+              <% 1.upto(@choices.length) do |row|%>
                 <tr>
-                  <td class="rank"><%= row.count %></td>
+                  <td class="rank"><%= row %></td>
                 </tr>
                 <% end %>
             </table>
@@ -22,22 +22,14 @@
             <table>
               <ul class="list-group" id="sortable_options">
                <% @choices.each do |row|%>
-                  <li class="list-group-item"><%= row.option %><i class="glyphicon glyphicon-sort">&nbsp</i></li>
+                  <li class="list-group-item" id="<%= row.option %>"><%= row.option %><i class="glyphicon glyphicon-sort">&nbsp</i></li>
                   <% end %>
                </ul>
             </table>
           </div>
           </div>
-
-          <form action="/new_poll/" method="POST">
-              A Greeting: <input type="text" name="greeting">
-              <br/>
-              Your Name: <input type="text" name="name">
-              <br/>
-              <input type="submit">
-          </form>
             <div class="col-md-1"> 
-              <a href="confirmation.html" class="btn btn-info btn-lg" style="margin: 0px;" ><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
+              <a href="#" class="btn btn-info btn-lg" style="margin: 0px;" id="vote"><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
         </div>
       </div>
     </div>

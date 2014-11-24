@@ -53,7 +53,7 @@ class Poll
   include DataMapper::Resource
 
   property :id,            Serial
-  property :\, Text
+  property :poll_question, Text
   property :open,          Boolean
   property :close_date,    DateTime
 

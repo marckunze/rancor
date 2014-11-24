@@ -50,7 +50,7 @@ class Rancor < Sinatra::Base
   post '/' do
     # Nothing here yet
   end
-1
+
   get '/login' do
     @title = 'rancor:login'
     erb :login
@@ -156,10 +156,13 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_poll' do
-    greeting = params[:greeting] || "Hi There"
-    name = params[:name] || "Nobody"
+    vote = params[:vote]
+  end
 
-    erb :index, :locals => {'greeting' => greeting, 'name' => name}
+get '/confirmation' do
+    @title = 'rancor:new poll?'
+    
+    erb :confirmation
   end
 
   # TODO organizer results page? not sure if needed, and routing on this
