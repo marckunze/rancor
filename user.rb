@@ -22,7 +22,7 @@ class User
   property :username,     Text, :required => true, :unique => true
   property :email,        Text, :required => true, :unique => true
   property :password,     BCryptHash
-  property :joined_at,    DateTime, :default => Time.now
+  property :joined_at,    DateTime, :default => DateTime.now
   property :account_type, Enum[ :user, :admin ], :default => :user
 
   has n, :polls
@@ -37,7 +37,15 @@ class User
   end
 
   def self.exists?(user)
-    first(username: user).nil? || first(email: user).nil?
+    self.username_exists?(user) || self.email_exists?(user)
+  end
+
+  def self.username_exists?(username)
+    !first(username: username).nil?
+  end
+
+  def self.email_exists?(email)
+    !first(email:email).nil?
   end
 end
 
@@ -61,6 +69,16 @@ class Question
   property :points, Integer
 
   belongs_to :poll
+end
+
+class Choice
+  include DataMapper::Resource
+
+  property :cid,    Integer, key: true, unique: false
+  property :option, Text, required: true
+  property :count, Integer, default: 0
+
+  belongs_to :poll, child_key: :rid, key: true
 end
 
 DataMapper.finalize.auto_upgrade!

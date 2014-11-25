@@ -8,8 +8,28 @@
 
 		<title><%= @title %></title>
 		<!-- Boootstrap -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/bootstrap.css" rel="stylesheet">
 		<link href="css/jumbotron.css" rel="stylesheet">
+		<link href="css/navbar.css" rel="stylesheet">
+
+		<!-- bootstrap links -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+
+        <!-- normalize all the default DOM styles with noremalize.css -->
+        <link rel="stylesheet" href="http://necolas.github.com/normalize.css/2.0.1/normalize.css"> 
+    
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <!-- Include all compiled plugins (below), or include individual files as needed -->	    
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	     <!--  jQuery and the jQuery UI library from CDN -->
+		<script src="http://code.jquery.com/jquery-1.8.2.js"></script>  
+		<script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>  
+		<script src="js/bootstrap.js"></script>
+	    <script src="js/bootstrap.min.js"></script>
+	    <!-- For poll functions -->      
+	    <script src="js/poll.js"></script>
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,7 +53,7 @@
 		      <a class="navbar-brand" href="/">rancor</a>
 		    </div>
 		    <div id="navbar" class="navbar-collapse collapse">
-		    	         <ul class="nav navbar-nav">
+		    	         <ul class="nav navbar-nav" style="float:none">
              <li class="dropdown">
 	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">vote<span class="caret"></span></a>
 		          <ul class="dropdown-menu" role="menu">
@@ -48,26 +68,25 @@
 		            <li><a href="/results">results</a></li>
 		          </ul>
 	        </li>
-		      <form class="navbar-form navbar-right" role="form">
+              <% if env['warden'].authenticated? %>
+              <a class="btn btn-default navbar-right" style="margin-top:8px; background-color:#222; color:#999" href="/logout" role="button">logout</a>
+              <% else %>
+		      <form class="navbar-form navbar-right" role="form" action="/login" method="post">
 		        <div class="form-group">
-		          <input type="text" placeholder="Email" class="form-control">
+		          <input type="text" name="username" placeholder="Username or Email" class="form-control">
 		        </div>
 		        <div class="form-group">
-		          <input type="password" placeholder="Password" class="form-control">
+		          <input type="password" name="password" placeholder="Password" class="form-control">
 		        </div>
 		        <button type="submit" class="btn btn-success">sign in</button>
 		        <a class="btn btn-info" href="/new_user" role="button">register</a>
 		      </form>
+              <% end %>
 		    </div><!--/.navbar-collapse -->
 		  </div>
 		</nav>
 
-
 		<%= yield %>
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
-	    <script src="js/bootstrap.min.js"></script>
 	</body>
 </html>

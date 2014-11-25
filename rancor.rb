@@ -1,9 +1,11 @@
 require 'bundler'
 Bundler.require
 require_relative 'user'
+# require_relative 'user_workspace'  # for experimenting only
 
 class Rancor < Sinatra::Base
   enable :sessions
+  register Sinatra::Flash
 
   use Warden::Manager do |config|
     config.serialize_into_session{|user| user.id }
@@ -35,8 +37,7 @@ class Rancor < Sinatra::Base
 
   # homepage displays all of the users
   get '/' do
-    @users = User.all :order => :id.desc
-    @title = 'rancor:users'
+    @title = 'rancor:home'
     erb :home
   end
 
@@ -57,12 +58,14 @@ class Rancor < Sinatra::Base
 
   post '/login' do
     env['warden'].authenticate!
-    redirect to('/authenticated')
+    flash[:status] = "You have successfully logged in"
+    redirect to('/')
   end
 
   get '/logout' do
     env['warden'].logout
-    "Logged out"
+    flash[:status] = "You have successfully logged out"
+    redirect to('/')
   end
 
   get '/new_user' do
@@ -71,37 +74,69 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_user' do
-    redirect to('/new_user') unless params[:password1] == params[:password2]
+    if params[:password] != params[:confirmation]
+      flash[:status] = "Your passwords do not match"
+      redirect to('/new_user')
+    elsif User.exists?(params['username'])
+      flash[:status] = "Username is already registered"
+      redirect to('/new_user')
+    elsif User.exists?(params['email'])
+      flash[:status] = "Email address is already registered"
+      redirect to('/new_user')
+    end
+
     User.create(
       :username  => params[:username],
       :email     => params[:email],
-      :password  => params[:password1],
+      :password  => params[:password],
     )
-    redirect to('/')
-  end
 
-  get '/authenticated' do
-    if env['warden'].authenticated?
-      "Success  User: #{env['warden'].user.username}"
-    else
-      "User not authenticated"
-    end
+    flash[:status] = "Your account has been created."
+    env['warden'].authenticate!
+    redirect to('/')
   end
 
   post '/unauthenticated' do
     # Message is currently nil. I need to figure out how to access it.
-    "Failure: #{env['warden'].message}"
+    flash[:status] = env['warden'].message
+    flash[:status] ||= "You are not logged in"
+    redirect to('/login')
   end
 
   # TODO
 
   # TODO voting page
+  # Initial support for vote locking based on cookies
+  get '/poll/:id/?' do
+    if request.cookies["rancor.pollid.#{params[:id]}"].nil?
+      # No cookie means the user has not voted
+      "You haven't voted yet!"
+      # @poll = Poll.get(params[:id])
+      # erb :poll
+    else
+      # user has voted
+      "Poll locked, you have voted."
+      # redirect to("/poll/#{params[:id]/results}")
+    end
+  end
+
+  post '/poll/:id/?' do
+    response.set_cookie "rancor.pollid.#{params[:id]}",
+                        { value: 'voted', exprires: Date.new(2016) }
+    # Get vote results
+    # flash[:status] = "Your vote has been recorded"
+    redirect to("/poll/#{params[:id]}")
+  end
+
+  # original voting page template
   # get '/vote' do
   #   @title = 'rancor:vote!'
   #   erb :vote
   # end
 
   # TODO Confirmation page? Not sure on routing on this or if this needs separate page.
+  # I think we should redirect to the results page with a flash message detailing
+  # that the user's vote has been successfully stored
   # get '/vote/confirm' do
   #   @title = 'rancor:your vote?'
   #   #erb :confirm
@@ -115,7 +150,19 @@ class Rancor < Sinatra::Base
 
   get '/new_poll' do
     @title = 'rancor:new poll?'
+    @choices = Choice.all
+    @polls = Poll.all
     erb :new_poll
+  end
+
+  post '/new_poll' do
+    vote = params[:vote]
+  end
+
+get '/confirmation' do
+    @title = 'rancor:new poll?'
+    
+    erb :confirmation
   end
 
   # TODO organizer results page? not sure if needed, and routing on this
