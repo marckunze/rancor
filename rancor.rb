@@ -8,8 +8,8 @@ class Rancor < Sinatra::Base
   register Sinatra::Flash
 
   use Warden::Manager do |config|
-    config.serialize_into_session{|user| user.id }
-    config.serialize_from_session{|id| User.get(id) }
+    config.serialize_into_session{|account| account.id }
+    config.serialize_from_session{|id| Account.get(id) }
 
     config.scope_defaults :default, strategies: [:password]
     # Warden "must have a failure application declared"
@@ -25,12 +25,12 @@ class Rancor < Sinatra::Base
     end
 
     def authenticate!
-      user = User.authenticate(params['username'], params['password'])
-      if user.nil?
+      account = Account.authenticate(params['username'], params['password'])
+      if account.nil?
         fail!("Incorrect username and/or password")
       else
-        env['warden'].set_user(@user)
-        success!(user)
+        env['warden'].set_user(@account)
+        success!(account)
       end
     end
   end
@@ -42,7 +42,7 @@ class Rancor < Sinatra::Base
   end
 
   get '/all_users' do
-    @users = User.all :order => :id.desc
+    @users = Account.all :order => :id.desc
     @title = 'rancor:users'
     erb :all_users
   end
@@ -77,10 +77,10 @@ class Rancor < Sinatra::Base
     if params[:password] != params[:confirmation]
       flash[:status] = "Your passwords do not match"
       redirect to('/new_user')
-    elsif User.exists?(params['username'])
+    elsif Account.exists?(params['username'])
       flash[:status] = "Username is already registered"
       redirect to('/new_user')
-    elsif User.exists?(params['email'])
+    elsif Account.exists?(params['email'])
       flash[:status] = "Email address is already registered"
       redirect to('/new_user')
     end
@@ -134,6 +134,10 @@ class Rancor < Sinatra::Base
   #   erb :vote
   # end
 
+  get '/result/:id/?' do
+    @poll = Poll.get(params[:id]).choices.all order: :total_count.desc
+  end
+
   # TODO Confirmation page? Not sure on routing on this or if this needs separate page.
   # I think we should redirect to the results page with a flash message detailing
   # that the user's vote has been successfully stored
@@ -156,7 +160,8 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_poll' do
-    vote = params[:vote]
+    # vote = params[:vote]
+    poll = Poll.new
   end
 
 get '/confirmation' do
