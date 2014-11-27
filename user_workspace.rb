@@ -18,7 +18,7 @@ class Account
   property :username,   Text, required: true, unique: true
   property :email,      String, length: 320, required: true, unique: true
   property :password,   BCryptHash
-  property :joined_at,  DateTime, default: DateTime.now
+  property :created_at, DateTime
 
   has n, :poll
 
