@@ -1,0 +1,7 @@
+<h1>If you can see this, the navbar is no longer eating the top of the page</h1>
+<p><%= @poll.question %></p>
+<ul>
+  <% @poll.options.each do |option| %>
+    <li><%= option.text %></li>
+  <% end %>
+</ul>

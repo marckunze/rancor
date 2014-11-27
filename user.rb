@@ -59,9 +59,9 @@ end
 class Option
   include DataMapper::Resource
 
-  property :cid,    Integer, key: true, unique: false
-  property :option, Text, required: true
-  property :count, Integer, default: 0
+  property :cid,   Integer, key: true, unique: false
+  property :text,  Text, required: true
+  property :score, Integer, default: 0
 
 
   belongs_to :poll, child_key: :rid, key: true
@@ -87,15 +87,15 @@ student.poll << drinks
 student.save
 
 # INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');
-dinner.options << Option.create(cid: 1, option: 'steak')
+dinner.options << Option.create(cid: 1, text: 'steak')
 
 # INSERT INTO choices (rid,cid,option) VALUES(1,2,'sushi');
-dinner.options << Option.create(cid: 2, option: 'sushi')
+dinner.options << Option.create(cid: 2, text: 'sushi')
 dinner.save
 
 # INSERT INTO choices (rid,cid,option) VALUES(2,1,'yes');
-drinks.options << Option.create(cid: 1, option: 'yes')
+drinks.options << Option.create(cid: 1, text: 'yes')
 
 #INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
-drinks.options << Option.create(cid: 2, option: 'no')
+drinks.options << Option.create(cid: 2, text: 'no')
 drinks.save

@@ -85,7 +85,7 @@ class Rancor < Sinatra::Base
       redirect to('/new_user')
     end
 
-    User.create(
+    Account.create(
       :username  => params[:username],
       :email     => params[:email],
       :password  => params[:password],
@@ -108,16 +108,8 @@ class Rancor < Sinatra::Base
   # TODO voting page
   # Initial support for vote locking based on cookies
   get '/poll/:id/?' do
-    if request.cookies["rancor.pollid.#{params[:id]}"].nil?
-      # No cookie means the user has not voted
-      "You haven't voted yet!"
-      # @poll = Poll.get(params[:id])
-      # erb :poll
-    else
-      # user has voted
-      "Poll locked, you have voted."
-      # redirect to("/poll/#{params[:id]/results}")
-    end
+    @poll = Poll.get(params[:id])
+    erb :poll
   end
 
   post '/poll/:id/?' do
@@ -134,8 +126,9 @@ class Rancor < Sinatra::Base
   #   erb :vote
   # end
 
-  get '/result/:id/?' do
-    @poll = Poll.get(params[:id]).choices.all order: :total_count.desc
+  get '/poll/:id/results/?' do
+    @options = Poll.get(params[:id]).options order: :score.desc
+    erb :results
   end
 
   # TODO Confirmation page? Not sure on routing on this or if this needs separate page.
