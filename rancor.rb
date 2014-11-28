@@ -82,12 +82,12 @@ class Rancor < Sinatra::Base
       :from => 'app31653694@heroku.com',
       :subject => 'Rancor testing', 
       :via => :smtp, 
-      :body => 'test'
+      :body => 'test', 
       :via_options => {
-        :address  => 'smtp.mandrillapp.com'
+        :address  => 'smtp.mandrillapp.com', 
         :user_name => ENV['MANDRILL_USERNAME'],
         :password =>  ENV['MANDRILL_APIKEY'],
-        :port =>      '587'
+        :port =>      '587', 
         :domain =>    'heroku.com',
         :authentication => :plain
       }
