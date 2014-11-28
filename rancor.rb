@@ -81,7 +81,7 @@ class Rancor < Sinatra::Base
       :to => 'mkunze@gmail.com',
       :from => 'app31653694@heroku.com',
       :subject => 'Rancor testing'
-      :via => 
+      :via => :smtp
       :body => 'test'
       :via_options => {
         :address  => 'smtp.mandrillapp.com'
