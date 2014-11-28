@@ -122,6 +122,11 @@ class Rancor < Sinatra::Base
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
     @poll ||= Poll.get(params['id']) || halt(404)
+
+    unless @poll.open
+      flash[:neutral] = "Voting is closed for this poll"
+      redirect to("/poll/#{params['id']}/results")
+    end
   end
 
   get '/poll/:id/?' do
