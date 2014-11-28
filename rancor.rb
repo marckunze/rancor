@@ -105,18 +105,19 @@ class Rancor < Sinatra::Base
 
   # TODO
 
-  before '/:id/?' do
-    @title = "rancor:poll.#{params[:id]}"
-    @poll ||= Poll.get(params[:id]) || halt(404)
-  end
-
-  get '/:id/?' do
+  # TODO voting page
+  # Initial support for vote locking based on cookies
+  get '/poll/:id/?' do
+    @poll = Poll.get(params[:id])
     erb :poll
   end
 
-  post '/:id/?' do
-    # TODO implement voting logic.
-    "Nothing here yet"
+  post '/poll/:id/?' do
+    response.set_cookie "rancor.pollid.#{params[:id]}",
+                        { value: 'voted', exprires: Date.new(2016) }
+    # Get vote results
+    # flash[:status] = "Your vote has been recorded"
+    redirect to("/poll/#{params[:id]}")
   end
 
   # original voting page template
@@ -125,7 +126,7 @@ class Rancor < Sinatra::Base
   #   erb :vote
   # end
 
-  get '/:id/results/?' do
+  get '/poll/:id/results/?' do
     @options = Poll.get(params[:id]).options order: :score.desc
     erb :results
   end
@@ -145,13 +146,15 @@ class Rancor < Sinatra::Base
   # end
 
   get '/new_poll' do
-    @title = 'rancor:new poll'
-    # TODO Implement poll creation logic
+    @title = 'rancor:new poll?'
+    @choices = Choice.all
+    @polls = Poll.all
+    erb :new_poll
   end
 
   post '/new_poll' do
     # vote = params[:vote]
-    # poll = Poll.new
+    poll = Poll.new
   end
 
 get '/confirmation' do
@@ -165,8 +168,4 @@ get '/confirmation' do
   #   @title = 'rancor:results(org)'
   #   erb :results_organizer
   # end
-
-  not_found do
-    "There is nothing here yet"
-  end
 end

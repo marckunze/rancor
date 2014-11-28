@@ -1,33 +1,7 @@
-
-<div class="container" id="poll_question_container">
-  <div class="jumbotron">
-    <table>
-      <tr>
-        <td class="question"><%= @poll.question %></td>
-      </tr>
-    </table>
-    <div>
-      <div class="count">
-        <table>
-          <% 1.upto(@poll.options.size) do |row|%>
-            <tr>
-              <td class="rank"><%= row.ordinalize.capitalize %></td>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-      <div class="option">
-        <table>
-          <ul class="list-group" id="sortable_options">
-            <% @poll.options.each do |option|%>
-              <li class="list-group-item" id="<%= option.text %>"><%= option.text %><i class="glyphicon glyphicon-sort">&nbsp</i></li>
-            <% end %>
-          </ul>
-        </table>
-      </div>
-    </div>
-    <div class="col-md-1">
-      <a href="#" class="btn btn-info btn-lg" style="margin: 0px;" id="vote"><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
-    </div>
-  </div>
-</div>
+<h1>If you can see this, the navbar is no longer eating the top of the page</h1>
+<p><%= @poll.question %></p>
+<ul>
+  <% @poll.options.each do |option| %>
+    <li><%= option.text %></li>
+  <% end %>
+</ul>
