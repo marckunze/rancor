@@ -96,7 +96,7 @@ class Rancor < Sinatra::Base
 
     Pony.mail({
       :to => params['email'],
-      :from => 'rancor app',
+      :from => 'app31653694@heroku.com',
       :subject => 'Rancor account created', 
       :via => :smtp, 
       :body => 'test', 
