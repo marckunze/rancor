@@ -2,3 +2,4 @@ rancor.wiki/*
 *~
 .bundle/config
 rancor.db
+/db/rancor.db
