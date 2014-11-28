@@ -1,4 +1,4 @@
 rancor.wiki/*
 *~
 .bundle/config
-db/rancor.db
+rancor.db
