@@ -41,14 +41,14 @@ class Rancor < Sinatra::Base
     erb :home
   end
 
+  post '/' do
+    # Nothing here yet
+  end
+
   get '/all_users' do
     @users = Account.all :order => :id.desc
     @title = 'rancor:users'
     erb :all_users
-  end
-
-  post '/' do
-    # Nothing here yet
   end
 
   get '/login' do
@@ -98,34 +98,28 @@ class Rancor < Sinatra::Base
 
   post '/unauthenticated' do
     # Message is currently nil. I need to figure out how to access it.
-    flash[:status] = env['warden'].message
-    flash[:status] ||= "You are not logged in"
+    flash[:status] ||= env['warden'].message || "You are not logged in"
     redirect to('/login')
   end
 
   # TODO
 
   # TODO voting page
-  # Initial support for vote locking based on cookies
+  before '/poll/:id/?' do
+    @title = "rancor:poll.#{params[:id]}"
+    @poll ||= Poll.get(params[:id]) || halt(404)
+  end
+
   get '/poll/:id/?' do
-    @poll = Poll.get(params[:id])
     erb :poll
   end
 
   post '/poll/:id/?' do
-    response.set_cookie "rancor.pollid.#{params[:id]}",
-                        { value: 'voted', exprires: Date.new(2016) }
-    # Get vote results
-    # flash[:status] = "Your vote has been recorded"
-    redirect to("/poll/#{params[:id]}")
+    # TODO implement voting logic.
+    "Nothing here yet"
   end
 
-  # original voting page template
-  # get '/vote' do
-  #   @title = 'rancor:vote!'
-  #   erb :vote
-  # end
-
+  # TODO basic results page for people who voted (and for organizers for now)
   get '/poll/:id/results/?' do
     @options = Poll.get(params[:id]).options order: :score.desc
     erb :results
@@ -139,25 +133,17 @@ class Rancor < Sinatra::Base
   #   #erb :confirm
   # end
 
-  # TODO basic results page for people who voted (and for organizers for now)
-  # get '/results' do
-  #   @title = 'rancor:results'
-  #   erb :results
-  # end
 
   get '/new_poll' do
-    @title = 'rancor:new poll?'
-    @choices = Choice.all
-    @polls = Poll.all
-    erb :new_poll
+    @title = 'rancor:new poll'
+    # TODO erb for new poll
   end
 
   post '/new_poll' do
-    # vote = params[:vote]
-    poll = Poll.new
+    # TODO Implement poll creation logic
   end
 
-get '/confirmation' do
+  get '/confirmation' do
     @title = 'rancor:new poll?'
     
     erb :confirmation
@@ -168,4 +154,8 @@ get '/confirmation' do
   #   @title = 'rancor:results(org)'
   #   erb :results_organizer
   # end
+
+  not_found do
+    "There is nothing here yet"
+  end
 end

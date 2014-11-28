@@ -68,34 +68,36 @@ class Option
 end
 
 DataMapper.finalize
-DataMapper.auto_migrate!
+DataMapper.auto_upgrade!
 
-# INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
-p1 = Account.create(username: 'p1', email: 'abc@email.com')
+if Account.all.count < 2 # Prevents re-running this every time we test
+  # INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
+  p1 = Account.create(username: 'p1', email: 'abc@email.com')
 
-# INSERT INTO User (id,username,email) VALUES(2,'student','cdad@email.com');
-student = Account.create(username: 'student', email: 'cdad@email.com')
+  # INSERT INTO User (id,username,email) VALUES(2,'student','cdad@email.com');
+  student = Account.create(username: 'student', email: 'cdad@email.com')
 
-# INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
-dinner = Poll.create(question: 'What is for dinner?')
-p1.poll << dinner
-p1.save
+  # INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
+  dinner = Poll.create(question: 'What is for dinner?')
+  p1.poll << dinner
+  p1.save
 
-# INSERT INTO rancor (rid,oid,question) VALUES(2,2,'Go out for drinks?');
-drinks = Poll.create(question: 'Go out for drinks?')
-student.poll << drinks
-student.save
+  # INSERT INTO rancor (rid,oid,question) VALUES(2,2,'Go out for drinks?');
+  drinks = Poll.create(question: 'Go out for drinks?')
+  student.poll << drinks
+  student.save
 
-# INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');
-dinner.options << Option.create(cid: 1, text: 'steak')
+  # INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');
+  dinner.options << Option.create(cid: 1, text: 'steak')
 
-# INSERT INTO choices (rid,cid,option) VALUES(1,2,'sushi');
-dinner.options << Option.create(cid: 2, text: 'sushi')
-dinner.save
+  # INSERT INTO choices (rid,cid,option) VALUES(1,2,'sushi');
+  dinner.options << Option.create(cid: 2, text: 'sushi')
+  dinner.save
 
-# INSERT INTO choices (rid,cid,option) VALUES(2,1,'yes');
-drinks.options << Option.create(cid: 1, text: 'yes')
+  # INSERT INTO choices (rid,cid,option) VALUES(2,1,'yes');
+  drinks.options << Option.create(cid: 1, text: 'yes')
 
-#INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
-drinks.options << Option.create(cid: 2, text: 'no')
-drinks.save
+  #INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
+  drinks.options << Option.create(cid: 2, text: 'no')
+  drinks.save
+end
