@@ -21,7 +21,6 @@ class Rancor < Sinatra::Base
   Warden::Strategies.add(:password) do
     def valid?
       # docs claim this is optional. Acts as a guard.
-      p "username: #{params['username']}, password: #{params['password']}"
       params['username'] && params['password']
     end
 
@@ -30,11 +29,12 @@ class Rancor < Sinatra::Base
       if account.nil?
         fail!("Incorrect username and/or password")
       else
-        # env['warden'].set_user(@account)
         success!(account)
       end
     end
   end
+
+  public
 
   # homepage displays all of the users
   get '/' do
@@ -58,16 +58,25 @@ class Rancor < Sinatra::Base
   end
 
   post '/login' do
-    p params
     env['warden'].authenticate!
     flash[:positive] = "You have successfully logged in"
-    redirect to('/')
+    redirect to('/home')
   end
 
   get '/logout' do
     env['warden'].logout
     flash[:positive] = "You have successfully logged out"
     redirect to('/')
+  end
+
+  get '/home' do
+    unless env['warden'].authenticated?
+      flash[:negative] = "You are not logged in!"
+      redirect to('/login')
+    end
+
+    @polls = env['warden'].user.polls.all
+    erb :homepage
   end
 
   get '/new_user' do
@@ -99,8 +108,11 @@ class Rancor < Sinatra::Base
   end
 
   post '/unauthenticated' do
+    # Reserve '/unauenticated' for failed logins until I figure out why fail!()
+    # is not passing the messages you insert.
+
     # Message is currently nil. I need to figure out how to access it.
-    flash[:neutral] ||= env['warden'].message || "You are not logged in"
+    flash[:negative] ||= env['warden'].message || "Incorrect username and/or password"
     redirect to('/login')
   end
 
@@ -169,12 +181,6 @@ class Rancor < Sinatra::Base
     # TODO Implement poll creation logic
   end
 
-  get '/confirmation' do
-    @title = 'rancor:new poll?'
-    
-    erb :confirmation
-  end
-
   # TODO organizer results page? not sure if needed, and routing on this
   # get '/results-org' do
   #   @title = 'rancor:results(org)'
@@ -184,4 +190,8 @@ class Rancor < Sinatra::Base
   not_found do
     "There is nothing here yet"
   end
+
+  private
+
+
 end
