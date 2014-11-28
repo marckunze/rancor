@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require
 require_relative 'user'
 # require_relative 'user_workspace'  # for experimenting only
+require 'pony'
 
 class Rancor < Sinatra::Base
   enable :sessions
