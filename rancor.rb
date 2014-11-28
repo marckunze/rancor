@@ -80,7 +80,7 @@ class Rancor < Sinatra::Base
     Pony.mail({
       :to => 'mkunze@gmail.com',
       :from => 'app31653694@heroku.com',
-      :subject => 'Rancor testing'
+      :subject => 'Rancor testing', 
       :via => :smtp, 
       :body => 'test'
       :via_options => {
