@@ -133,10 +133,12 @@ rank_no = Ranking.create(rank: 2)
 ballot.rankings << rank_yes
 ballot.rankings << rank_no
 
+drinks_base_score = drinks.options.size + 1
+
 yes.rankings << rank_yes
-yes.score += (3 - rank_yes.rank)  # 3 = number of options + 1
+yes.score += (drinks_base_score - rank_yes.rank)
 no.rankings << rank_no
-no.score += (3 - rank_no.rank)
+no.score += (drinks_base_score - rank_no.rank)
 drinks.ballots << ballot
 
 yes.save
