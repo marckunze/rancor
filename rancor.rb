@@ -77,22 +77,6 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_user' do
-    Pony.mail({
-      :to => 'mkunze@gmail.com',
-      :from => 'app31653694@heroku.com',
-      :subject => 'Rancor testing', 
-      :via => :smtp, 
-      :body => 'test', 
-      :via_options => {
-        :address  => 'smtp.mandrillapp.com', 
-        :user_name => ENV['MANDRILL_USERNAME'],
-        :password =>  ENV['MANDRILL_APIKEY'],
-        :port =>      '587', 
-        :domain =>    'heroku.com',
-        :authentication => :plain
-      }
-    })
-
     if params['password'] != params['confirmation']
       flash[:negative] = "Your passwords do not match"
       redirect to('/new_user')
@@ -109,6 +93,22 @@ class Rancor < Sinatra::Base
       :email     => params['email'],
       :password  => params['password'],
     )
+
+    Pony.mail({
+      :to => params['email'],
+      :from => 'rancor app',
+      :subject => 'Rancor account created', 
+      :via => :smtp, 
+      :body => 'test', 
+      :via_options => {
+        :address  => 'smtp.mandrillapp.com', 
+        :user_name => ENV['MANDRILL_USERNAME'],
+        :password =>  ENV['MANDRILL_APIKEY'],
+        :port =>      '587', 
+        :domain =>    'heroku.com',
+        :authentication => :plain
+      }
+    })
 
     flash[:neutral] = "Your account has been created."
     env['warden'].authenticate!
