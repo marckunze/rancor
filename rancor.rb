@@ -21,6 +21,7 @@ class Rancor < Sinatra::Base
   Warden::Strategies.add(:password) do
     def valid?
       # docs claim this is optional. Acts as a guard.
+      p "username: #{params['username']}, password: #{params['password']}"
       params['username'] && params['password']
     end
 
@@ -29,7 +30,7 @@ class Rancor < Sinatra::Base
       if account.nil?
         fail!("Incorrect username and/or password")
       else
-        env['warden'].set_user(@account)
+        # env['warden'].set_user(@account)
         success!(account)
       end
     end
@@ -57,14 +58,15 @@ class Rancor < Sinatra::Base
   end
 
   post '/login' do
+    p params
     env['warden'].authenticate!
-    flash[:status] = "You have successfully logged in"
+    flash[:positive] = "You have successfully logged in"
     redirect to('/')
   end
 
   get '/logout' do
     env['warden'].logout
-    flash[:status] = "You have successfully logged out"
+    flash[:positive] = "You have successfully logged out"
     redirect to('/')
   end
 
@@ -74,31 +76,31 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_user' do
-    if params[:password] != params[:confirmation]
-      flash[:status] = "Your passwords do not match"
+    if params['password'] != params['confirmation']
+      flash[:negative] = "Your passwords do not match"
       redirect to('/new_user')
     elsif Account.exists?(params['username'])
-      flash[:status] = "Username is already registered"
+      flash[:negative] = "Username is already registered"
       redirect to('/new_user')
     elsif Account.exists?(params['email'])
-      flash[:status] = "Email address is already registered"
+      flash[:negative] = "Email address is already registered"
       redirect to('/new_user')
     end
 
     Account.create(
-      :username  => params[:username],
-      :email     => params[:email],
-      :password  => params[:password],
+      :username  => params['username'],
+      :email     => params['email'],
+      :password  => params['password'],
     )
 
-    flash[:status] = "Your account has been created."
+    flash[:neutral] = "Your account has been created."
     env['warden'].authenticate!
     redirect to('/')
   end
 
   post '/unauthenticated' do
     # Message is currently nil. I need to figure out how to access it.
-    flash[:status] ||= env['warden'].message || "You are not logged in"
+    flash[:neutral] ||= env['warden'].message || "You are not logged in"
     redirect to('/login')
   end
 
@@ -106,8 +108,8 @@ class Rancor < Sinatra::Base
 
   # TODO voting page
   before '/poll/:id/?' do
-    @title = "rancor:poll.#{params[:id]}"
-    @poll ||= Poll.get(params[:id]) || halt(404)
+    @title = "rancor:poll.#{params['id']}"
+    @poll ||= Poll.get(params['id']) || halt(404)
   end
 
   get '/poll/:id/?' do
@@ -115,13 +117,37 @@ class Rancor < Sinatra::Base
   end
 
   post '/poll/:id/?' do
-    # TODO implement voting logic.
-    "Nothing here yet"
+    # TODO Vote update not yet possible, but ballots saved
+    # Random IPs for testing ballots
+    ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
+    ballot = Ballot.create(voter: ip)
+    # ballot = Ballot.create(voter: request.ip)
+    unless @poll.ballots.first(voter: request.ip).nil?
+      flash[:neutral] = "You have already voted!"
+      redirect to("/poll/#{params['id']}/results")
+    end
+
+    @poll.ballots << ballot
+    @poll.save
+
+    params[:vote].each_with_index do |vote, i|
+      ranking = Ranking.create(rank: i + 1)
+      opt = @poll.options.first(text: vote)
+      opt.score += @poll.options.size - i
+      opt.rankings << ranking
+      ballot.rankings << ranking
+
+      ballot.save
+      opt.save
+    end
+
+    flash[:positive] = "You vote has been recorded!"
+    redirect to("/poll/#{params['id']}/results")
   end
 
   # TODO basic results page for people who voted (and for organizers for now)
   get '/poll/:id/results/?' do
-    @options = Poll.get(params[:id]).options order: :score.desc
+    @options = Poll.get(params['id']).options order: :score.desc
     erb :results
   end
 

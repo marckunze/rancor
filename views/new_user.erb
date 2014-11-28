@@ -6,7 +6,5 @@
 		<input name="confirmation" type="password" placeholder="Confirm Password&hellip;"/>
 		<input type="submit" value="Sign Up!" >
 	</form>
-  	<% if flash[:status] %>
-	  	<%= flash[:status] %>
-  	<% end %>
+  <%= styled_flash %>
 </section>

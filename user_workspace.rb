@@ -17,7 +17,7 @@ class Account
   property :id,         Serial
   property :username,   Text, required: true, unique: true
   property :email,      String, length: 320, required: true, unique: true
-  property :password,   BCryptHash
+  property :password,   BCryptHash # , required: true
   property :created_at, DateTime
 
   has n, :poll

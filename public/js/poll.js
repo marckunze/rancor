@@ -17,10 +17,9 @@ $(document).ready(function(){
                    
         $.ajax({
         type: "POST",
-        url: "/new_poll",
         data: { vote: id_order},
         success: function(data){
-            window.location.href = '/confirmation'
+            window.location.href = window.location.pathname + '/results'
         }
       });
   	});

@@ -4,7 +4,5 @@
 		<input name="password" type="password" placeholder="Enter Password&hellip;"/>
 		<input type="submit" value="Sign In!" >
 	</form>
-  	<% if flash[:status] %>
-	  	<p><%= flash[:status] %></p>
-  	<% end %>
+  <%= styled_flash %>
 </section>

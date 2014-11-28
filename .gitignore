@@ -3,3 +3,5 @@ rancor.wiki/*
 .bundle/config
 rancor.db
 /db/rancor.db
+rancor_workspace.db
+/db/rancor_workspace.db
