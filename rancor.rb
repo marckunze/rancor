@@ -107,7 +107,7 @@ class Rancor < Sinatra::Base
     @email_body = erb :email_confirm, :layout => false
     Pony.mail({
       :to => params['email'],
-      :from => 'app31653694@heroku.com',
+      :from => ENV['MANDRILL_USERNAME'],
       :subject => 'Welcome to rancor!', 
       :via => :smtp, 
       :html_body => @email_body, 
