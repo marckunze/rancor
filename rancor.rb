@@ -110,7 +110,7 @@ class Rancor < Sinatra::Base
       :from => 'app31653694@heroku.com',
       :subject => 'Rancor account created', 
       :via => :smtp, 
-      :body => @email_body, 
+      :html_body => @email_body, 
       :via_options => {
         :address  => 'smtp.mandrillapp.com', 
         :user_name => ENV['MANDRILL_USERNAME'],
