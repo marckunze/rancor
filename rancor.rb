@@ -104,7 +104,7 @@ class Rancor < Sinatra::Base
     )
 
     #send confirmation email
-    @email_body = erb :email_confirm
+    @email_body = erb :email_confirm, :layout => false
     Pony.mail({
       :to => params['email'],
       :from => 'app31653694@heroku.com',
