@@ -99,7 +99,7 @@ class Rancor < Sinatra::Base
     #send confirmation email
     Pony.mail({
       :to => params['email'],
-      :from => 'app31653694@heroku.com',
+      :from => 'rancorapp',
       :subject => 'Rancor account created', 
       :via => :smtp, 
       :body => 'test', 
