@@ -34,8 +34,6 @@ class Rancor < Sinatra::Base
     end
   end
 
-  public
-
   # homepage displays all of the users
   get '/' do
     @title = 'rancor:home'
@@ -108,8 +106,8 @@ class Rancor < Sinatra::Base
   end
 
   post '/unauthenticated' do
-    # Reserve '/unauenticated' for failed logins until I figure out why fail!()
-    # is not passing the messages you insert.
+    # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
+    # is not passing the messages inserted.
 
     # Message is currently nil. I need to figure out how to access it.
     flash[:negative] ||= env['warden'].message || "Incorrect username and/or password"
@@ -134,31 +132,21 @@ class Rancor < Sinatra::Base
   end
 
   post '/poll/:id/?' do
-    # TODO Vote update not yet possible, but ballots saved
     # Random IPs for testing ballots
-    ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
-    ballot = Ballot.create(voter: ip)
-    # ballot = Ballot.create(voter: request.ip)
-    unless @poll.ballots.first(voter: request.ip).nil?
-      flash[:neutral] = "You have already voted!"
-      redirect to("/poll/#{params['id']}/results")
+    # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
+    # ballot = Ballot.create(voter: ip)
+    ballot = @poll.ballots.first(voter: request.ip)
+
+    if ballot.nil?
+      add_ballot new_ballot
+      flash[:positive] = "You vote has been recorded!"
+    else
+      reset_vote ballot
+      @poll.reload
+      update_ballot ballot
+      flash[:positive] = "You vote has been updated!"
     end
 
-    @poll.ballots << ballot
-    @poll.save
-
-    params[:vote].each_with_index do |vote, i|
-      ranking = Ranking.create(rank: i + 1)
-      opt = @poll.options.first(text: vote)
-      opt.score += @poll.options.size - i
-      opt.rankings << ranking
-      ballot.rankings << ranking
-
-      ballot.save
-      opt.save
-    end
-
-    flash[:positive] = "You vote has been recorded!"
     redirect to("/poll/#{params['id']}/results")
   end
 
@@ -196,7 +184,50 @@ class Rancor < Sinatra::Base
     "There is nothing here yet"
   end
 
-  private
+  def new_ballot()
+    b = Ballot.create(voter: request.ip)
+    @poll.ballots << b
+    @poll.save
 
+    return b
+  end
+
+  def reset_vote(ballot)
+    score_offset = ballot.poll.options.size + 1 # rank begins at 1, not 0
+    ballot.rankings.each do |ranking|
+      opt = ranking.option
+      opt.score -= (score_offset - ranking.rank)
+      opt.save
+    end
+
+    ballot.save
+    @poll.save
+  end
+
+  def add_ballot(ballot)
+    params[:vote].each_with_index do |vote, i|
+      ranking = Ranking.create(rank: i + 1)
+      opt = @poll.options.first(text: vote)
+      opt.score += @poll.options.size - i
+      opt.rankings << ranking
+      ballot.rankings << ranking
+
+      ballot.save
+      opt.save
+    end
+  end
+
+  def update_ballot(ballot)
+    params[:vote].each_with_index do |vote, i|
+
+      opt = @poll.options.first(text: vote)
+      opt.score += @poll.options.size - i
+      opt.save
+
+      ranking = opt.rankings.first(ballot: ballot)
+      ranking.update(rank: i + 1)
+      ranking.save
+    end
+  end
 
 end
