@@ -1,21 +1,83 @@
+<section id="rancor-home">
+<%= styled_flash %>
+    <div id="home-carousel" class="carousel slide" data-ride="carousel" style="width:100%; margin:0px auto">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#home-carousel" data-slide-to="1"></li>
+            <li data-target="#home-carousel" data-slide-to="2"></li>
+        </ol>
 
-<div class="container" >
-  <div class="jumbotron">
-    <h1>Placeholder</h1>
-    <%= styled_flash %>
-    <ul>
-    	<li><ul>Vote
-    		<li><a href="/vote">vote</a></li>
-    		<li><a href="/results">results</a></li>
-    	</ul></li>
-		<li><ul>org
-    		<li><a href="/new_poll">new poll</a></li>
-    		<li><a href="results">results</a></li>
-    	</ul></li>
-    </ul>
-    <ul>
-    	<li><a href="/all_users">all users</a></li>
-    </ul>
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <div style="max-width:850px; height:30em; margin:0px auto; text-align:center; background:linear-gradient(#191970, #00008B)">
+                    <img src="/images/logo_200x200.png" style="margin:4em auto;" alt="">
+                </div>
+                <div class="carousel-caption">
+                    <h3 style="max-width:600px; margin:0px auto; font-size:3vh">Welcome to Rancor.</h3>
+                </div>
+            </div>
+            <div class="item">
+                <div style="max-width:850px; height:30em; margin:0px auto; text-align:center; background:linear-gradient(#191970, #00008B)">
+                    <p>*** Computer picture ***</p>
+                </div>
+                <div class="carousel-caption">
+                    <h3 style="max-width:600px; margin:0px auto; font-size:3vh">The Ranked Choice voting tool. Because sometimes you need the computer to help make these kinds of decisions for you.</h3>
+                </div>
+            </div>
+            <div class="item">
+                <div style="max-width:850px; height:30em; margin:0px auto; text-align:center; background:linear-gradient(#191970, #00008B)">
+                    <p>*** Screenshot of voting page ***</p>
+                </div>
+                <div class="carousel-caption">
+                    <h3 style="max-width:600px; margin:0px auto; font-size:3vh">Drag, Drop, Choose.</h3>
+                </div>
+            </div>
+        </div>
 
-  </div>
-</div>
+        <!-- Controls -->
+        <a class="left carousel-control" href="#home-carousel" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#home-carousel" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+
+    <!-- Temporary Nav buttons -->
+    <div id="home-accordion-nav" class="accordion stacked" style="color:white; font-size:3em">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle btn btn-default" data-toggle="collapse" data-parent="#home-accordion-nav" href="#accordion-vote">Vote</a>
+            </div>
+            <div id="accordion-vote" class="accordion-body collapse">
+                <div class="accordion-inner">
+    		        <a href="/vote" style="background-color:white">vote</a><br>
+    		        <a href="/results" style="background-color:white">results</a>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle btn btn-default" data-toggle="collapse" data-parent="#home-accordion-nav" href="#accordion-org">org</a>
+            </div>
+            <div id="accordion-org" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <a href="/new_poll" style="background-color:white">new poll</a><br>
+    		        <a href="/results" style="background-color:white">results</a>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle btn btn-default" data-toggle="collapse" data-parent="#home-accordion-nav" href="#accordion-all">all users</a>
+            </div>
+            <div id="accordion-all" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <a href="/all_users" style="background-color:white">all users</a><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
