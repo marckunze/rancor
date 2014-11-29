@@ -104,12 +104,13 @@ class Rancor < Sinatra::Base
     )
 
     #send confirmation email
+    @email_body = erb :email_confirm
     Pony.mail({
       :to => params['email'],
       :from => 'app31653694@heroku.com',
       :subject => 'Rancor account created', 
       :via => :smtp, 
-      :body => erb :email_confirm, 
+      :body => @email_body 
       :via_options => {
         :address  => 'smtp.mandrillapp.com', 
         :user_name => ENV['MANDRILL_USERNAME'],
