@@ -1,18 +1,19 @@
 div.flash {
     font-family: inherit;
+    font-size: large;
     font-style: normal;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 div.positive {
-    color: #3e8f3e;
+    color: #7FFF00;
 
 }
 
 div.negative {
-    color: #b92c28;
+    color: #DC143C;
 }
 
 div.neutral {
-    color: inherit;
+    color: #000000;
 }
