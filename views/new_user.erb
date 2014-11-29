@@ -1,10 +1,24 @@
-<section id="new">
-	<form action="/new_user" method="post">
-		<input name="username" placeholder="Your username&hellip;"/>
-		<input name="email" type="email" placeholder="Your email&hellip;"/>
-		<input name="password" type="password" placeholder="Enter Password&hellip;"/>
-		<input name="confirmation" type="password" placeholder="Confirm Password&hellip;"/>
-		<input type="submit" value="Sign Up!" >
-	</form>
-  <%= styled_flash %>
+<section id="new" style="padding:3em 0px; text-align:center">
+    <div class="container" style="max-width:400px; margin-top:2em; padding:1.5em; color:#656565; background-color:#ADD8E6; border-radius:1em; border:0.2em #696969 solid; text-align:left;">
+	  	<span style="color:red"><%= styled_flash %></span>
+        <form role="form" action="/new_user" method="post">
+            <div class="form-group">
+                <label for="signUpUsername">Username</label>
+                <input name="username" type="text" class="form-control" id="signUpUsername" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label for="signUpEmail">Email</label>
+                <input name="email" type="email" class="form-control" id="signUpEmail" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label for="signUpPassword">Password</label>
+                <input name="password" type="password" class="form-control" id="signUpPassword" placeholder="Select Password">
+            </div>
+            <div class="form-group">
+                <input name="confirmation" type="password" class="form-control" id="signUpConfirmation" placeholder="Confirm Password">
+            </div>
+            <input type="submit" class="btn btn-default" value="Sign Up!">
+        </form>
+    </div>
+    <img src="/images/logo_100x100.png" alt="" style="margin-top:2.5em">
 </section>
