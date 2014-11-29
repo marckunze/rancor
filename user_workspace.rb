@@ -20,7 +20,7 @@ class Account
   property :password,   BCryptHash # , required: true
   property :created_at, DateTime
 
-  has n, :poll
+  has n, :polls
 
   def self.authenticate(user, password)
     u = first(username: user)
@@ -101,12 +101,12 @@ student = Account.create(username: 'student', email: 'cdad@email.com')
 
 # INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
 dinner = Poll.create(question: 'What is for dinner?')
-p1.poll << dinner
+p1.polls << dinner
 p1.save
 
 # INSERT INTO rancor (rid,oid,question) VALUES(2,2,'Go out for drinks?');
 drinks = Poll.create(question: 'Go out for drinks?')
-student.poll << drinks
+student.polls << drinks
 student.save
 
 # INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');

@@ -22,7 +22,6 @@ class Rancor < Sinatra::Base
   Warden::Strategies.add(:password) do
     def valid?
       # docs claim this is optional. Acts as a guard.
-      p "username: #{params['username']}, password: #{params['password']}"
       params['username'] && params['password']
     end
 
@@ -31,7 +30,6 @@ class Rancor < Sinatra::Base
       if account.nil?
         fail!("Incorrect username and/or password")
       else
-        # env['warden'].set_user(@account)
         success!(account)
       end
     end
@@ -59,16 +57,25 @@ class Rancor < Sinatra::Base
   end
 
   post '/login' do
-    p params
     env['warden'].authenticate!
     flash[:positive] = "You have successfully logged in"
-    redirect to('/')
+    redirect to('/home')
   end
 
   get '/logout' do
     env['warden'].logout
     flash[:positive] = "You have successfully logged out"
     redirect to('/')
+  end
+
+  get '/home' do
+    unless env['warden'].authenticated?
+      flash[:negative] = "You are not logged in!"
+      redirect to('/login')
+    end
+
+    @polls = env['warden'].user.polls.all
+    erb :homepage
   end
 
   get '/new_user' do
@@ -121,8 +128,11 @@ class Rancor < Sinatra::Base
   end
 
   post '/unauthenticated' do
+    # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
+    # is not passing the messages inserted.
+
     # Message is currently nil. I need to figure out how to access it.
-    flash[:neutral] ||= env['warden'].message || "You are not logged in"
+    flash[:negative] ||= env['warden'].message || "Incorrect username and/or password"
     redirect to('/login')
   end
 
@@ -132,6 +142,11 @@ class Rancor < Sinatra::Base
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
     @poll ||= Poll.get(params['id']) || halt(404)
+
+    unless @poll.open
+      flash[:neutral] = "Voting is closed for this poll"
+      redirect to("/poll/#{params['id']}/results")
+    end
   end
 
   get '/poll/:id/?' do
@@ -139,31 +154,21 @@ class Rancor < Sinatra::Base
   end
 
   post '/poll/:id/?' do
-    # TODO Vote update not yet possible, but ballots saved
     # Random IPs for testing ballots
-    ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
-    ballot = Ballot.create(voter: ip)
-    # ballot = Ballot.create(voter: request.ip)
-    unless @poll.ballots.first(voter: request.ip).nil?
-      flash[:neutral] = "You have already voted!"
-      redirect to("/poll/#{params['id']}/results")
+    # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
+    # ballot = Ballot.create(voter: ip)
+    ballot = @poll.ballots.first(voter: request.ip)
+
+    if ballot.nil?
+      add_ballot new_ballot
+      flash[:positive] = "You vote has been recorded!"
+    else
+      reset_vote ballot
+      @poll.reload
+      update_ballot ballot
+      flash[:positive] = "You vote has been updated!"
     end
 
-    @poll.ballots << ballot
-    @poll.save
-
-    params[:vote].each_with_index do |vote, i|
-      ranking = Ranking.create(rank: i + 1)
-      opt = @poll.options.first(text: vote)
-      opt.score += @poll.options.size - i
-      opt.rankings << ranking
-      ballot.rankings << ranking
-
-      ballot.save
-      opt.save
-    end
-
-    flash[:positive] = "You vote has been recorded!"
     redirect to("/poll/#{params['id']}/results")
   end
 
@@ -191,12 +196,6 @@ class Rancor < Sinatra::Base
     # TODO Implement poll creation logic
   end
 
-  get '/confirmation' do
-    @title = 'rancor:new poll?'
-    
-    erb :confirmation
-  end
-
   # TODO organizer results page? not sure if needed, and routing on this
   # get '/results-org' do
   #   @title = 'rancor:results(org)'
@@ -206,4 +205,51 @@ class Rancor < Sinatra::Base
   not_found do
     "There is nothing here yet"
   end
+
+  def new_ballot()
+    b = Ballot.create(voter: request.ip)
+    @poll.ballots << b
+    @poll.save
+
+    return b
+  end
+
+  def reset_vote(ballot)
+    score_offset = ballot.poll.options.size + 1 # rank begins at 1, not 0
+    ballot.rankings.each do |ranking|
+      opt = ranking.option
+      opt.score -= (score_offset - ranking.rank)
+      opt.save
+    end
+
+    ballot.save
+    @poll.save
+  end
+
+  def add_ballot(ballot)
+    params[:vote].each_with_index do |vote, i|
+      ranking = Ranking.create(rank: i + 1)
+      opt = @poll.options.first(text: vote)
+      opt.score += @poll.options.size - i
+      opt.rankings << ranking
+      ballot.rankings << ranking
+
+      ballot.save
+      opt.save
+    end
+  end
+
+  def update_ballot(ballot)
+    params[:vote].each_with_index do |vote, i|
+
+      opt = @poll.options.first(text: vote)
+      opt.score += @poll.options.size - i
+      opt.save
+
+      ranking = opt.rankings.first(ballot: ballot)
+      ranking.update(rank: i + 1)
+      ranking.save
+    end
+  end
+
 end

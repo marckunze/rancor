@@ -1,0 +1,5 @@
+<%= styled_flash %>
+<p>Your polls:</p>
+<% @polls.each do |poll| %>
+  <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
+<% end %>
