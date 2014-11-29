@@ -1,0 +1,61 @@
+ .li{
+    list-style-type: none;
+}
+
+.list-group{
+    width: 30%;
+        list-style-type: none;
+        cursor: move;
+        height:30%;
+        margin-top: 10px;
+  }
+    .bs-example{
+      margin: 20px;
+    }
+    .ui-sortable-placeholder {  
+        border: 2px dashed #D3D3D3; 
+        height: 41px;  
+        width: 100%;  
+        background: #EDEDED; 
+    }
+
+.col-md-1{
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+td.rank {
+    font-size: 16px;
+    color: gray;
+    height: 41px;
+}
+
+.question{
+    font-size: 22px;  
+    color: DimGray;  
+}
+
+div.count {
+  width: auto;
+  float: left;
+  margin-top:10px;
+  margin-right: 25px;
+  vertical-align: top;
+}
+
+div.option {
+ overflow: hidden;
+ vertical-align: top;
+}
+
+.glyphicon.glyphicon-sort{
+  position: right;
+  float:right;
+  color: gray;
+}
+
+.glyphicon.glyphicon-info-sign{
+  position: right;
+  float:right;
+  color: gray;
+}

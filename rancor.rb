@@ -160,12 +160,12 @@ class Rancor < Sinatra::Base
 
     if ballot.nil?
       add_ballot new_ballot
-      flash[:positive] = "You vote has been recorded!"
+      flash[:positive] = "Your vote has been recorded!"
     else
       reset_vote ballot
       @poll.reload
       update_ballot ballot
-      flash[:positive] = "You vote has been updated!"
+      flash[:positive] = "Your vote has been updated!"
     end
 
     redirect to("/poll/#{params['id']}/results")
