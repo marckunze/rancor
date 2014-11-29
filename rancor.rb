@@ -77,6 +77,7 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_user' do
+    # various parameter checks
     if params['password'] != params['confirmation']
       flash[:negative] = "Your passwords do not match"
       redirect to('/new_user')
@@ -88,15 +89,17 @@ class Rancor < Sinatra::Base
       redirect to('/new_user')
     end
 
+    #validation ok, create new account
     Account.create(
       :username  => params['username'],
       :email     => params['email'],
       :password  => params['password'],
     )
 
+    #send confirmation email
     Pony.mail({
       :to => params['email'],
-      :from => 'app31653694@heroku.com',
+      #:from => 'app31653694@heroku.com',
       :subject => 'Rancor account created', 
       :via => :smtp, 
       :body => 'test', 
@@ -110,6 +113,7 @@ class Rancor < Sinatra::Base
       }
     })
 
+    #redirect to home page, letting them know of account creation
     flash[:neutral] = "Your account has been created."
     env['warden'].authenticate!
     redirect to('/')
