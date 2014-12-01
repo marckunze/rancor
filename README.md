@@ -6,7 +6,6 @@ The Ranked Choice voting tool. Because sometimes you need the computer to help m
 A project for City College of San Francisco (CCSF) CS 177 (Software Engineering).
 
 ## Full Documentation
-
 See the [Wiki](https://github.com/marckunze/rancor/wiki) for the functional spec, and other information.
 
 ## Communication
@@ -26,6 +25,5 @@ $ bundle install
 $ rackup
 ```
 
-Bugs and feedback
-=================
-* For bugs, questions, and discussion please use the [GitHub Issues](https://github.com/marckunze/rancor/issues)
+## Bugs and feedback
+* For bugs, questions, feedback, and discussion please use the [GitHub Issues](https://github.com/marckunze/rancor/issues)
