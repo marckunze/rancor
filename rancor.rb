@@ -1,7 +1,7 @@
 require 'bundler'
 Bundler.require
 require_relative 'user'
-require 'pony'
+require 'pony' # Shouldn't this be handled by bundler? -- Mark H
 
 class Rancor < Sinatra::Base
   enable :sessions
@@ -34,6 +34,7 @@ class Rancor < Sinatra::Base
     end
   end
 
+#######################################'/'######################################
   # homepage displays all of the users
   get '/' do
     @title = 'rancor:home'
@@ -44,30 +45,34 @@ class Rancor < Sinatra::Base
     # Nothing here yet
   end
 
-  get '/all_users' do
+#################################'/all_users/?'#################################
+  get '/all_users/?' do
     @users = Account.all :order => :id.desc
     @title = 'rancor:users'
     erb :all_users
   end
 
-  get '/login' do
+###################################'/login/?'###################################
+  get '/login/?' do
     @title = 'rancor:login'
     erb :login
   end
 
-  post '/login' do
+  post '/login/?' do
     env['warden'].authenticate!
     flash[:positive] = "You have successfully logged in"
     redirect to('/home')
   end
 
-  get '/logout' do
+###################################'/logout/?'##################################
+  get '/logout/?' do
     env['warden'].logout
     flash[:positive] = "You have successfully logged out"
     redirect to('/')
   end
 
-  get '/home' do
+####################################'/home/?'###################################
+  get '/home/?' do
     unless env['warden'].authenticated?
       flash[:negative] = "You are not logged in!"
       redirect to('/login')
@@ -77,12 +82,13 @@ class Rancor < Sinatra::Base
     erb :homepage
   end
 
-  get '/new_user' do
+##################################'/new_user/?'#################################
+  get '/new_user/?' do
     @title = 'rancor:register'
     erb :new_user
   end
 
-  post '/new_user' do
+  post '/new_user/?' do
     # various parameter checks
     if params['password'] != params['confirmation']
       flash[:negative] = "Your passwords do not match"
@@ -126,17 +132,7 @@ class Rancor < Sinatra::Base
     redirect to('/')
   end
 
-  post '/unauthenticated' do
-    # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
-    # is not passing the messages inserted.
-
-    # Message is currently nil. I need to figure out how to access it.
-    flash[:negative] ||= env['warden'].message || "Incorrect username and/or password"
-    redirect to('/login')
-  end
-
-  # TODO
-
+##################################'/poll/:id/?'#################################
   # TODO voting page
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
@@ -170,6 +166,7 @@ class Rancor < Sinatra::Base
     redirect to("/poll/#{params['id']}/results")
   end
 
+##############################'/poll/:id/results/?'#############################
   # TODO basic results page for people who voted (and for organizers for now)
   get '/poll/:id/results/?' do
     @poll ||= Poll.get(params['id']) || halt(404)
@@ -177,16 +174,8 @@ class Rancor < Sinatra::Base
     erb :results
   end
 
-  # TODO Confirmation page? Not sure on routing on this or if this needs separate page.
-  # I think we should redirect to the results page with a flash message detailing
-  # that the user's vote has been successfully stored
-  # get '/vote/confirm' do
-  #   @title = 'rancor:your vote?'
-  #   #erb :confirm
-  # end
-
-
-  get '/new_poll' do
+##################################'/new_poll/?'#################################
+  get '/new_poll/?' do
     @title = 'rancor:new poll'
     erb :new_poll
   end
@@ -207,13 +196,24 @@ class Rancor < Sinatra::Base
     redirect to("/poll/#{poll.rid}")
   end
 
+###############################'/unauthenticated/?'###############################
+  post '/unauthenticated/?' do
+    # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
+    # is not passing the messages inserted.
+
+    # Message is currently nil. I need to figure out how to access it.
+    flash[:negative] ||= env['warden'].message || "Incorrect username and/or password"
+    redirect to('/login')
+  end
+
+#######################################404######################################
+  not_found do
+    erb :error
+  end
+
   # TODO organizer results page? not sure if needed, and routing on this
   # get '/results-org' do
   #   @title = 'rancor:results(org)'
   #   erb :results_organizer
   # end
-
-  not_found do
-    erb :error
-  end
 end
