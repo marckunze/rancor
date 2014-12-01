@@ -56,6 +56,11 @@ class Poll  # Rancor is the name of the sinatra class
   has n, :options
   has n, :ballots
   has n, :rankings, through: :options
+
+  def total_points()
+    # 1 + 2 + ... + (n - 1) + n = ((n(n + 1)) / 2)
+    ((options.size * (options.size + 1)) / 2) * ballots.size
+  end
 end
 
 class Option

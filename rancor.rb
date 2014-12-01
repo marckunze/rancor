@@ -172,20 +172,10 @@ class Rancor < Sinatra::Base
   end
 
   # TODO basic results page for people who voted (and for organizers for now)
-  def results
-    @options = Poll.get(params['id']).options order: :score.desc
-    @total_points = 0
-    @options.each do |option|
-      @total_points += option.score
-    end
-    @total_points
-  end
-
   get '/poll/:id/results/?' do
-    @options = Poll.get(params['id']).options order: :score.desc
-    @voter_count = Ballot.count
-    @question = Poll.get(params['id']).question
-    @total = results()
+    @poll = Poll.get(params['id'])
+    @options = @poll.options.all order: :score.desc
+    @total = @poll.total_points
     erb :results
   end
 
