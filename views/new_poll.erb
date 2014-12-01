@@ -1,0 +1,135 @@
+<div id="rancor-new-poll" class="container">
+    <div class="jumbotron" style="background-color:#191970">
+        <form class="form-horizontal" role="form" name="question-options-email">
+            <div class="row">
+                <label for="question" class="col-sm-2 control-label">Poll Question</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="question">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6" style="text-align:center; margin-top:10px">
+                    <div class="btn btn-default" id="minus-btn-options">-</div>
+                    <input type="text" size="2" id="numOfOptions" value="2" style="padding:4px 10px; color:black; text-align:center;">
+                    <div class="btn btn-default" id="plus-btn-options">+</div>
+                    <p># of options</p>
+                    <div id="options"></div>
+                </div>
+                <div class="col-sm-6" style="text-align:center; margin-top:10px">
+                    <div class="btn btn-default" id="minus-btn-emails">-</div>
+                    <input type="text" size="2" id="numOfEmails" value="1" style="padding:4px 10px; color:black; text-align:center;">
+                    <div class="btn btn-default" id="plus-btn-emails">+</div>
+                    <p># of participants</p>
+                    <div id="emails"></div>
+                </div>
+            </div>
+            <input type="submit" value="Submit" style="color:black">
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+//***************************script for options***************************
+    displayOptions();
+    function displayOptions()
+    {
+        var optionsHtml = "";
+        var num = parseInt(document.getElementById("numOfOptions").value);
+        for (var i = 0; i < num; i++)
+        {
+            optionsHtml += "<div class='form-group'>";
+            optionsHtml += "<label for='option" + i + "' class='col-sm-4 control-label'>Option " + (i+1) + "</label>";
+            optionsHtml += "<div class='col-sm-8'>";
+            optionsHtml += "<input type='text' class='form-control' id='option" + i + ">";
+            optionsHtml += "</div>";
+            optionsHtml += "<div class='col-sm-6'></div>";
+            optionsHtml += "</div>";
+        }
+        document.getElementById("options").innerHTML = optionsHtml;
+    }
+
+    $(document).ready(function()
+    {
+        $("#numOfOptions").change(function()
+        {
+            var num = parseInt(document.getElementById("numOfOptions").value);
+            if (num < 2)
+            {
+                document.getElementById("numOfOptions").value = 2;
+            }
+            displayOptions();
+        });
+        $("#plus-btn-options").click(function()
+        {
+            var num = parseInt(document.getElementById("numOfOptions").value);
+            document.getElementById("numOfOptions").value = num + 1;
+            displayOptions();
+        });
+        $("#minus-btn-options").click(function()
+        {
+            var num = parseInt(document.getElementById("numOfOptions").value);
+            if (num > 2)
+            {
+                document.getElementById("numOfOptions").value = num - 1;
+                displayOptions();
+            }
+        });
+    });
+
+
+//***************************script for participants***************************
+    displayEmails();
+    function displayEmails()
+    {
+        var emailsHtml = "";
+        var num = parseInt(document.getElementById("numOfEmails").value);
+        for (var i = 0; i < num; i++)
+        {
+            emailsHtml += "<div class='form-group'>";
+            emailsHtml += "<label for='email" + i + "' class='col-sm-4 control-label'>Email " + (i+1) + "</label>";
+            emailsHtml += "<div class='col-sm-8'>";
+            emailsHtml += "<input type='email' class='form-control' id='email" + i + ">";
+            emailsHtml += "</div>";
+            emailsHtml += "<div class='col-sm-6'></div>";
+            emailsHtml += "</div>";
+        }
+        document.getElementById("emails").innerHTML = emailsHtml;
+    }
+
+    $(document).ready(function()
+    {
+        $("#numOfEmails").change(function()
+        {
+            var num = parseInt(document.getElementById("numOfEmails").value);
+            if (num < 1)
+            {
+                document.getElementById("numOfEmails").value = 1;
+            }
+            displayEmails();
+        });
+        $("#plus-btn-emails").click(function()
+        {
+            var num = parseInt(document.getElementById("numOfEmails").value);
+            document.getElementById("numOfEmails").value = num + 1;
+            displayEmails();
+        });
+        $("#minus-btn-emails").click(function()
+        {
+            var num = parseInt(document.getElementById("numOfEmails").value);
+            if (num > 1)
+            {
+                document.getElementById("numOfEmails").value = num - 1;
+                displayEmails();
+            }
+        });
+    });
+</script>

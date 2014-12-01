@@ -200,7 +200,7 @@ class Rancor < Sinatra::Base
 
   get '/new_poll' do
     @title = 'rancor:new poll'
-    # TODO erb for new poll
+    erb :new_poll
   end
 
   post '/new_poll' do
