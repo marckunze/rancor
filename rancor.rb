@@ -162,7 +162,8 @@ class Rancor < Sinatra::Base
       add_ballot new_ballot
       flash[:positive] = "Your vote has been recorded!"
     else
-      reset_vote ballot
+      ballot.reset_vote
+      @poll.save
       @poll.reload
       update_ballot ballot
       flash[:positive] = "Your vote has been updated!"
@@ -213,18 +214,6 @@ class Rancor < Sinatra::Base
     @poll.save
 
     return b
-  end
-
-  def reset_vote(ballot)
-    score_offset = ballot.poll.options.size + 1 # rank begins at 1, not 0
-    ballot.rankings.each do |ranking|
-      opt = ranking.option
-      opt.score -= (score_offset - ranking.rank)
-      opt.save
-    end
-
-    ballot.save
-    @poll.save
   end
 
   def add_ballot(ballot)

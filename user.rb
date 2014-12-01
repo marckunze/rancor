@@ -83,6 +83,17 @@ class Ballot
 
   belongs_to :poll
   has n, :rankings
+
+  def reset_vote()
+    score_offset = poll.options.size + 1 # rank begins at 1, not 0
+    rankings.each do |ranking|
+      opt = ranking.option
+      opt.score -= (score_offset - ranking.rank)
+      opt.save
+    end
+
+    save
+  end
 end
 
 class Ranking
