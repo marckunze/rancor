@@ -10,7 +10,7 @@
     margin-top: 10px;
     margin-bottom: 15px;
     font-size: 16px;
-    color: #5bc0de;
+    color: #367385;
   }
     .bs-example{
       margin: 20px;
@@ -40,6 +40,19 @@ td.rank {
     font-weight: bold;
     font-size: 26px;  
     color:  #505050  ;  
+}
+
+.btn.btn-lg.custom {
+    padding-bottom: -5px; 
+    text-align: bottom;
+    margin-bottom: -5px;
+    color: #5bc0de;
+    border-style: none;
+    border-width: 0px;
+}
+
+.btn.btn-lg.custom:hover {
+    color: #51acc7;
 }
 
 div.count {

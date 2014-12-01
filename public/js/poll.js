@@ -1,12 +1,17 @@
 $(document).ready(function(){
   // sort option list 
-
   $(function() {
         $( "#sortable_options").sortable({
             opacity: .8,
             cursor: "move", 
             placeholder: "ui-sortable-placeholder"
         });
+    });
+
+   $('body').on('click', '.btn.btn-lg.custom', function() {
+      
+      window.location.href = window.location.pathname + '/results'
+        
     });
 
     $('body').on('click', '.btn', function() {
@@ -22,5 +27,5 @@ $(document).ready(function(){
             window.location.href = window.location.pathname + '/results'
         }
       });
-  	});
+    });
  });

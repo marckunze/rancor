@@ -1,9 +1,9 @@
-
 <div class="container" id="poll_question_container">
   <div class="jumbotron">
     <table>
       <tr>
         <td class="question"><%= @poll.question %></td>
+        <td ><a href="#" class="btn btn-lg custom" id="vote"><span class="glyphicon glyphicon glyphicon-stats"></span> Results</a></td>
       </tr>
     </table>
     <div>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="col-md-1">
-      <a href="#" class="btn btn-info btn-lg" style="margin: 0px;" id="vote"><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
+      <a href="#" class="btn btn-info btn-lg" id="vote"><span class="glyphicon glyphicon-chevron-right"></span> Vote</a>
     </div>
   </div>
 </div>
