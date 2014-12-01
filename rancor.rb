@@ -161,10 +161,10 @@ class Rancor < Sinatra::Base
     if ballot.nil?
       # @poll.add_results params[:vote], ip # for testing purposes
       @poll.add_results params[:vote], request.ip
-      flash[:positive] = "Your vote has been recorded!"
+      flash.now[:positive] = "Your vote has been recorded!"
     else
       ballot.update_results params[:vote]
-      flash[:positive] = "Your vote has been updated!"
+      flash.now[:positive] = "Your vote has been updated!"
     end
 
     redirect to("/poll/#{params['id']}/results")
@@ -192,7 +192,19 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_poll' do
-    # TODO Implement poll creation logic
+    if params.empty?
+      flash.now[:negative] = "params hash was empty"
+      halt(404)
+    end
+    poll = Poll.create(question: params['question'])
+    params.each do |param, input|
+      if param.include?('option')
+        poll.options << Option.create(cid: poll.options.size + 1, text: input)
+        poll.save
+      end
+    end
+    flash[:positive] = "Your poll has been created!"
+    redirect to("/poll/#{poll.rid}")
   end
 
   # TODO organizer results page? not sure if needed, and routing on this
@@ -202,6 +214,6 @@ class Rancor < Sinatra::Base
   # end
 
   not_found do
-    "There is nothing here yet"
+    erb :error
   end
 end
