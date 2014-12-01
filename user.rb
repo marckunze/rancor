@@ -58,17 +58,20 @@ class Poll  # Rancor is the name of the sinatra class
   has n, :rankings, through: :options
 
   def total_points()
-    # 1 + 2 + ... + (n - 1) + n = ((n(n + 1)) / 2)
-    ((options.size * (options.size + 1)) / 2) * ballots.size
+  # 1 + 2 + ... + (n - 1) + n = ((n(n + 1)) / 2)
+  # 0 + 1 + 2 + ... + (n - 1) + n = (((n - 1)((n - 1) + 1)) / 2)
+  # (((n - 1)((n - 1) + 1)) / 2) = ((n(n - 1)) / 2)
+  ((options.size * (options.size - 1)) / 2) * ballots.size
   end
 
-  def add_results(vote_results, voter = request.ip)
+  def add_results(vote_results, voter)
     ballot = new_ballot voter
     reload
     vote_results.each_with_index do |vote, i|
-      ranking = Ranking.create(rank: i + 1)
+      rank = i + 1
+      ranking = Ranking.create(rank: rank)
       opt = options.first(text: vote)
-      opt.score += options.size - i
+      opt.score += options.size - rank
       opt.rankings << ranking
       ballot.rankings << ranking
 
@@ -100,6 +103,11 @@ class Option
 
   belongs_to :poll, key: true
   has n, :rankings
+
+  def percent_of_total
+    # Prevents a error caused by attempting to round the value NaN
+    poll.total_points == 0 ? 0 : (score.to_f/poll.total_points.to_f * 100).round
+  end
 end
 
 class Ballot
@@ -112,7 +120,7 @@ class Ballot
   has n, :rankings
 
   def reset()
-    score_offset = poll.options.size + 1 # rank begins at 1, not 0
+    score_offset = poll.options.size # rank begins at 1, not 0
     rankings.each do |ranking|
       opt = ranking.option
       opt.score -= (score_offset - ranking.rank)
@@ -127,13 +135,13 @@ class Ballot
     poll.reload # just in case
 
     results.each_with_index do |vote, i|
-
+      rank = i + 1
       opt = poll.options.first(text: vote)
-      opt.score += poll.options.size - i
+      opt.score += poll.options.size - rank
       opt.save
 
       ranking = opt.rankings.first(ballot: self)
-      ranking.update(rank: i + 1)
+      ranking.update(rank: rank)
       ranking.save
     end
   end

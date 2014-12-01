@@ -160,7 +160,7 @@ class Rancor < Sinatra::Base
 
     if ballot.nil?
       # @poll.add_results params[:vote], ip # for testing purposes
-      @poll.add_results params[:vote]
+      @poll.add_results params[:vote], request.ip
       flash[:positive] = "Your vote has been recorded!"
     else
       ballot.update_results params[:vote]

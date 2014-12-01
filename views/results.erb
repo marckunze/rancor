@@ -2,10 +2,10 @@
   <div class="jumbotron">
   	<div class="question"><span><%= @poll.question %></span></div>
   	<% @options.each do |option| %>
-	  	<div class="skillbar clearfix" data-percent="<%= @poll.total_points == 0 ? 0 : (option.score.to_f/@poll.total_points.to_f * 100).round %>%">
+	  	<div class="skillbar clearfix" data-percent="<%= option.percent_of_total %>%">
 		<div class="skillbar-title" style="background: #5bc0de;"><span><%= option.text %></span></div>
 		<div class="skillbar-bar" style="background: #B0E0E6;"></div>
-		<div class="skill-bar-percent"><%= @poll.total_points == 0 ? 0 : (option.score.to_f/@poll.total_points.to_f * 100).round %>%</div>
+		<div class="skill-bar-percent"><%= option.percent_of_total %>%</div>
 		</div> <!-- End Skill Bar -->
 	  <% end %>
     <div class="total_votes"><span>(Total Votes: <%= @poll.ballots.size %>)</span></div>
