@@ -155,17 +155,15 @@ class Rancor < Sinatra::Base
   post '/poll/:id/?' do
     # Random IPs for testing ballots
     # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
-    # ballot = Ballot.create(voter: ip)
+    # ballot = @poll.ballots.first(voter: ip)
     ballot = @poll.ballots.first(voter: request.ip)
 
     if ballot.nil?
-      add_ballot new_ballot
+      # @poll.add_results params[:vote], ip # for testing purposes
+      @poll.add_results params[:vote]
       flash[:positive] = "Your vote has been recorded!"
     else
-      ballot.reset_vote
-      @poll.save
-      @poll.reload
-      update_ballot ballot
+      ballot.update_results params[:vote]
       flash[:positive] = "Your vote has been updated!"
     end
 
@@ -206,39 +204,4 @@ class Rancor < Sinatra::Base
   not_found do
     "There is nothing here yet"
   end
-
-  def new_ballot()
-    b = Ballot.create(voter: request.ip)
-    @poll.ballots << b
-    @poll.save
-
-    return b
-  end
-
-  def add_ballot(ballot)
-    params[:vote].each_with_index do |vote, i|
-      ranking = Ranking.create(rank: i + 1)
-      opt = @poll.options.first(text: vote)
-      opt.score += @poll.options.size - i
-      opt.rankings << ranking
-      ballot.rankings << ranking
-
-      ballot.save
-      opt.save
-    end
-  end
-
-  def update_ballot(ballot)
-    params[:vote].each_with_index do |vote, i|
-
-      opt = @poll.options.first(text: vote)
-      opt.score += @poll.options.size - i
-      opt.save
-
-      ranking = opt.rankings.first(ballot: ballot)
-      ranking.update(rank: i + 1)
-      ranking.save
-    end
-  end
-
 end

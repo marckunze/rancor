@@ -61,6 +61,33 @@ class Poll  # Rancor is the name of the sinatra class
     # 1 + 2 + ... + (n - 1) + n = ((n(n + 1)) / 2)
     ((options.size * (options.size + 1)) / 2) * ballots.size
   end
+
+  def add_results(vote_results, voter = request.ip)
+    ballot = new_ballot voter
+    reload
+    vote_results.each_with_index do |vote, i|
+      ranking = Ranking.create(rank: i + 1)
+      opt = options.first(text: vote)
+      opt.score += options.size - i
+      opt.rankings << ranking
+      ballot.rankings << ranking
+
+      ballot.save
+      opt.save
+    end
+
+    save
+  end
+
+  private
+
+  def new_ballot(voter)
+    b = Ballot.create(voter: voter)
+    ballots << b
+    save
+
+    return b
+  end
 end
 
 class Option
@@ -84,7 +111,7 @@ class Ballot
   belongs_to :poll
   has n, :rankings
 
-  def reset_vote()
+  def reset()
     score_offset = poll.options.size + 1 # rank begins at 1, not 0
     rankings.each do |ranking|
       opt = ranking.option
@@ -94,6 +121,23 @@ class Ballot
 
     save
   end
+
+  def update_results(results)
+    reset
+    poll.reload # just in case
+
+    results.each_with_index do |vote, i|
+
+      opt = poll.options.first(text: vote)
+      opt.score += poll.options.size - i
+      opt.save
+
+      ranking = opt.rankings.first(ballot: self)
+      ranking.update(rank: i + 1)
+      ranking.save
+    end
+  end
+
 end
 
 class Ranking
