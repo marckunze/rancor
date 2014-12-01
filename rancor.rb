@@ -176,7 +176,6 @@ class Rancor < Sinatra::Base
   get '/poll/:id/results/?' do
     @poll = Poll.get(params['id'])
     @options = @poll.options.all order: :score.desc
-    @total = @poll.total_points
     erb :results
   end
 
