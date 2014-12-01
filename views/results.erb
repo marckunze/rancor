@@ -1,8 +1,16 @@
-<ul>
-  <% @options.each do |option| %>
-    <li><%= "#{option.text}: #{option.score}" %></li>
-  <% end %>
-</ul>
-<!-- I think something from the javascript in the poll page is preventing
-    this message from appearing -->
-<%= styled_flash %>
+<div class="container" id="results">
+  <div class="jumbotron">
+  	<div class="question"><span><%= @question %></span></div>
+  	<% @options.each do |option| %>
+	  	<div class="skillbar clearfix" data-percent="<%= (option.score.to_f/@total.to_f * 100).round %>%">
+		<div class="skillbar-title" style="background: #5bc0de;"><span><%= option.text %></span></div>
+		<div class="skillbar-bar" style="background: #B0E0E6;"></div>
+		<div class="skill-bar-percent"><%= (option.score.to_f/@total.to_f * 100).round %>%</div>
+		</div> <!-- End Skill Bar -->
+	  <% end %>
+    <div class="total_votes"><span>(Total Votes: <%= @voter_count %>)</span></div>
+	<!-- I think something from the javascript in the poll page is preventing
+	    this message from appearing -->
+	<%= styled_flash %>
+  </div>
+</div>
