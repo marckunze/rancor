@@ -101,8 +101,8 @@ class Rancor < Sinatra::Base
 
     #validation ok, create new account
     Account.create(
-      :username  => params['username'].chomp,
-      :email     => params['email'].chomp,
+      :username  => params['username'].strip,
+      :email     => params['email'].strip,
       :password  => params['password']
     )
 
@@ -131,7 +131,8 @@ class Rancor < Sinatra::Base
     ## Check options
     poll_opts = []
     params['option'].each do |input|
-      poll_opts << input.chomp unless input.empty?
+      input.strip!
+      poll_opts << input unless input.empty?
     end
 
     ## Check number of options (must be two or more)
@@ -141,7 +142,7 @@ class Rancor < Sinatra::Base
     end
 
     # Create poll once once input check is complete
-    @poll = Poll.create(question: params['question'].chomp)
+    @poll = Poll.create(question: params['question'].strip)
 
     poll_opts.each do |opt|
       @poll.options << Option.create(cid: @poll.options.size + 1, text: opt)
@@ -156,7 +157,7 @@ class Rancor < Sinatra::Base
     
     # Send invites
     params['email'].each do |address|
-      address.chomp!
+      address.strip!
       send_invite address unless address.empty?
     end
 
