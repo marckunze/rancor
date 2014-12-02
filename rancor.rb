@@ -34,7 +34,6 @@ class Rancor < Sinatra::Base
   end
 
 #######################################'/'######################################
-  # homepage displays all of the users
   get '/' do
     @title = 'rancor:home'
     erb :home
@@ -44,11 +43,16 @@ class Rancor < Sinatra::Base
     # Nothing here yet
   end
 
-#################################'/all_users/?'#################################
-  get '/all_users/?' do
-    @users = Account.all :order => :id.desc
-    @title = 'rancor:users'
-    erb :all_users
+####################################'/home/?'###################################
+  get '/home/?' do
+    unless env['warden'].authenticated?
+      flash[:negative] = "You are not logged in!"
+      redirect to('/login')
+    end
+
+    # Display all polls owned by user
+    @polls = env['warden'].user.polls.all
+    erb :homepage
   end
 
 ###################################'/login/?'###################################
@@ -68,18 +72,6 @@ class Rancor < Sinatra::Base
     env['warden'].logout
     flash[:positive] = "You have successfully logged out"
     redirect to('/')
-  end
-
-####################################'/home/?'###################################
-  get '/home/?' do
-    unless env['warden'].authenticated?
-      flash[:negative] = "You are not logged in!"
-      redirect to('/login')
-    end
-
-    # Display all polls owned by user
-    @polls = env['warden'].user.polls.all
-    erb :homepage
   end
 
 ##################################'/new_user/?'#################################
@@ -132,8 +124,29 @@ class Rancor < Sinatra::Base
     redirect to('/')
   end
 
+##################################'/new_poll/?'#################################
+  get '/new_poll/?' do
+    @title = 'rancor:new poll'
+    erb :new_poll
+  end
+
+  post '/new_poll/?' do
+    if params.empty?
+      flash.now[:negative] = "params hash was empty"
+      halt(404)
+    end
+    poll = Poll.create(question: params['question'])
+    params.each do |param, input|
+      if param.include?('option')
+        poll.options << Option.create(cid: poll.options.size + 1, text: input)
+        poll.save
+      end
+    end
+    flash[:positive] = "Your poll has been created!"
+    redirect to("/poll/#{poll.rid}")
+  end
+
 ##################################'/poll/:id/?'#################################
-  # TODO voting page
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
     @poll ||= Poll.get(params['id']) || halt(404)
@@ -169,33 +182,10 @@ class Rancor < Sinatra::Base
   end
 
 ##############################'/poll/:id/results/?'#############################
-  # TODO basic results page for people who voted (and for organizers for now)
   get '/poll/:id/results/?' do
     @poll ||= Poll.get(params['id']) || halt(404)
     @options = @poll.options.all order: :score.desc
     erb :results
-  end
-
-##################################'/new_poll/?'#################################
-  get '/new_poll/?' do
-    @title = 'rancor:new poll'
-    erb :new_poll
-  end
-
-  post '/new_poll' do
-    if params.empty?
-      flash.now[:negative] = "params hash was empty"
-      halt(404)
-    end
-    poll = Poll.create(question: params['question'])
-    params.each do |param, input|
-      if param.include?('option')
-        poll.options << Option.create(cid: poll.options.size + 1, text: input)
-        poll.save
-      end
-    end
-    flash[:positive] = "Your poll has been created!"
-    redirect to("/poll/#{poll.rid}")
   end
 
 ###############################'/unauthenticated/?'###############################
