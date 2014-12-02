@@ -148,6 +148,12 @@ class Rancor < Sinatra::Base
       @poll.save
     end
 
+    # Add poll to user account
+    if env['warden'].authenticated?
+      env['warden'].user.polls << @poll
+      env['warden'].user.save
+    end
+    
     # Send invites
     params['email'].each do |address|
       address.chomp!
