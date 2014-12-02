@@ -4,15 +4,6 @@ Bundler.require
 require_relative 'poll'
 require_relative 'ranking'
 
-# sets up a new database in this directory
-configure :development do
-  DataMapper.setup(:default, "sqlite3://../db/rancor.db")
-end
-
-configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
-end
-
 class Option
   include DataMapper::Resource
 

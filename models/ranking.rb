@@ -5,15 +5,6 @@ require_relative 'ballot'
 require_relative 'option'
 require_relative 'poll'
 
-# sets up a new database in this directory
-configure :development do
-  DataMapper.setup(:default, "sqlite3://../db/rancor.db")
-end
-
-configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
-end
-
 class Ranking
   include DataMapper::Resource
 

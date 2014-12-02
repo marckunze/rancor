@@ -6,15 +6,6 @@ require_relative 'ballot'
 require_relative 'option'
 require_relative 'ranking'
 
-# sets up a new database in this directory
-configure :development do
-  DataMapper.setup(:default, "sqlite3://../db/rancor.db")
-end
-
-configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
-end
-
 class Poll  # Rancor is the name of the sinatra class
   include DataMapper::Resource
 
