@@ -1,6 +1,6 @@
 require 'bundler'
 Bundler.require
-require_relative 'models'
+require_relative 'models/models'
 require 'pony' # Shouldn't this be handled by bundler? -- Mark H
 
 class Rancor < Sinatra::Base
