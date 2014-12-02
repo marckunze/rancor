@@ -100,28 +100,32 @@ class Rancor < Sinatra::Base
       :password  => params['password'],
     )
 
-    #send confirmation email
-    @email_body = erb :email_confirm, :layout => false
-    Pony.mail({
-      :to => params['email'],
-      :from => ENV['MANDRILL_USERNAME'],
-      :subject => 'Welcome to rancor!', 
-      :via => :smtp, 
-      :html_body => @email_body, 
-      :via_options => {
-        :address  => 'smtp.mandrillapp.com', 
-        :user_name => ENV['MANDRILL_USERNAME'],
-        :password =>  ENV['MANDRILL_APIKEY'],
-        :port =>      '587', 
-        :domain =>    'heroku.com',
-        :authentication => :plain
-      }
-    })
-
     #redirect to home page, letting them know of account creation
     flash[:neutral] = "Your account has been created."
     env['warden'].authenticate!
     redirect to('/')
+  end
+
+  after '/new_user/?' do
+    if request.post?
+      #send confirmation email
+      @email_body = erb :email_confirm, :layout => false
+      Pony.mail({
+        :to => params['email'],
+        :from => ENV['MANDRILL_USERNAME'],
+        :subject => 'Welcome to rancor!',
+        :via => :smtp,
+        :html_body => @email_body,
+        :via_options => {
+          :address  => 'smtp.mandrillapp.com',
+          :user_name => ENV['MANDRILL_USERNAME'],
+          :password =>  ENV['MANDRILL_APIKEY'],
+          :port =>      '587',
+          :domain =>    'heroku.com',
+          :authentication => :plain
+        }
+      })
+    end
   end
 
 ##################################'/new_poll/?'#################################
@@ -131,23 +135,55 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_poll/?' do
-    if params.empty?
-      flash.now[:negative] = "params hash was empty"
-      halt(404)
+    if params['question'].empty?
+      flash[:negative] = "You can't have a poll without a question!"
+      redirect to('/new_poll')
     end
-    poll = Poll.create(question: params['question'])
+
+    @poll = Poll.create(question: params['question'])
+
     params['option'].each do |input|
-        poll.options << Option.create(cid: poll.options.size + 1, text: input)
-        poll.save
+      unless input.empty?
+        @poll.options << Option.create(cid: @poll.options.size + 1, text: input)
+        @poll.save
+      end
     end
+
     flash[:positive] = "Your poll has been created!"
-    redirect to("/poll/#{poll.rid}")
+    redirect to("/poll/#{@poll.rid}")
+  end
+
+  after '/new_poll/?' do
+    if request.post?
+      params['email'].each do |address|
+        unless address.empty?
+          @email_body = erb :email_invite, :layout => false
+          Pony.mail({
+            :to => address,
+            :from => ENV['MANDRILL_USERNAME'],
+            :subject => 'You have been invited to participate in a poll!',
+            :via => :smtp,
+            :html_body => @email_body,
+            :via_options => {
+              :address  => 'smtp.mandrillapp.com',
+              :user_name => ENV['MANDRILL_USERNAME'],
+              :password =>  ENV['MANDRILL_APIKEY'],
+              :port =>      '587',
+              :domain =>    'heroku.com',
+              :authentication => :plain
+            }
+          })
+        end
+      end
+    end
   end
 
 ##################################'/poll/:id/?'#################################
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
     @poll ||= Poll.get(params['id']) || halt(404)
+    # Works because nil is counted as false.
+    @owner_viewing = (@poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
 
     unless @poll.open
       flash[:neutral] = "Voting is closed for this poll"
@@ -156,8 +192,6 @@ class Rancor < Sinatra::Base
   end
 
   get '/poll/:id/?' do
-    # Works because nil is counted as false.
-    @owner_viewing = (@poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
     erb :poll
   end
 
