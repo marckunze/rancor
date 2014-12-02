@@ -136,11 +136,9 @@ class Rancor < Sinatra::Base
       halt(404)
     end
     poll = Poll.create(question: params['question'])
-    params.each do |param, input|
-      if param.include?('option')
+    params['option'].each do |input|
         poll.options << Option.create(cid: poll.options.size + 1, text: input)
         poll.save
-      end
     end
     flash[:positive] = "Your poll has been created!"
     redirect to("/poll/#{poll.rid}")

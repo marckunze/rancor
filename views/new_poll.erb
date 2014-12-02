@@ -4,7 +4,7 @@
             <div class="row">
                 <label for="question" class="col-sm-2 control-label">Poll Question</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="question">
+                    <input type="text" class="form-control" name="question" id="question">
                 </div>
             </div>
             <div class="row">
@@ -50,7 +50,7 @@
             optionsHtml += "<div class='form-group'>";
             optionsHtml += "<label for='option" + i + "' class='col-sm-4 control-label'>Option " + (i+1) + "</label>";
             optionsHtml += "<div class='col-sm-8'>";
-            optionsHtml += "<input type='text' class='form-control' id='option" + i + ">";
+            optionsHtml += "<input type='text' class='form-control' name='option[]' id='option" + i + "'>";
             optionsHtml += "</div>";
             optionsHtml += "<div class='col-sm-6'></div>";
             optionsHtml += "</div>";
@@ -63,7 +63,7 @@
         $("#numOfOptions").change(function()
         {
             var num = parseInt(document.getElementById("numOfOptions").value);
-            if (num < 2)
+            if (num < 2 || isNaN(num))
             {
                 document.getElementById("numOfOptions").value = 2;
             }
@@ -98,7 +98,7 @@
             emailsHtml += "<div class='form-group'>";
             emailsHtml += "<label for='email" + i + "' class='col-sm-4 control-label'>Email " + (i+1) + "</label>";
             emailsHtml += "<div class='col-sm-8'>";
-            emailsHtml += "<input type='email' class='form-control' id='email" + i + ">";
+            emailsHtml += "<input type='email' class='form-control' name='email[]' id='email" + i + "'>";
             emailsHtml += "</div>";
             emailsHtml += "<div class='col-sm-6'></div>";
             emailsHtml += "</div>";
@@ -111,7 +111,7 @@
         $("#numOfEmails").change(function()
         {
             var num = parseInt(document.getElementById("numOfEmails").value);
-            if (num < 1)
+            if (num < 1 || isNaN(num))
             {
                 document.getElementById("numOfEmails").value = 1;
             }
