@@ -1,6 +1,7 @@
 require 'bundler'
 Bundler.require
 require_relative 'models/models'
+require_relative 'email_helpers'
 
 class Rancor < Sinatra::Base
   enable :sessions
@@ -32,6 +33,8 @@ class Rancor < Sinatra::Base
       end
     end
   end
+
+  helpers EmailHelpers
 
 #######################################'/'######################################
   get '/' do
@@ -82,7 +85,10 @@ class Rancor < Sinatra::Base
 
   post '/new_user/?' do
     # various parameter checks
-    if params['password'] != params['confirmation']
+    if params['username'].empty? || params['email'].empty? || params['password'].empty?
+      flash[:negative] = "Fields can not be empty!"
+      redirect to('/new_user')
+    elsif params['password'] != params['confirmation']
       flash[:negative] = "Your passwords do not match"
       redirect to('/new_user')
     elsif Account.exists?(params['username'])
@@ -100,32 +106,12 @@ class Rancor < Sinatra::Base
       :password  => params['password'],
     )
 
+    send_confirmation params['email']
+
     #redirect to home page, letting them know of account creation
     flash[:neutral] = "Your account has been created."
     env['warden'].authenticate!
     redirect to('/')
-  end
-
-  after '/new_user/?' do
-    if request.post?
-      #send confirmation email
-      @email_body = erb :email_confirm, :layout => false
-      Pony.mail({
-        :to => params['email'],
-        :from => ENV['MANDRILL_USERNAME'],
-        :subject => 'Welcome to rancor!',
-        :via => :smtp,
-        :html_body => @email_body,
-        :via_options => {
-          :address  => 'smtp.mandrillapp.com',
-          :user_name => ENV['MANDRILL_USERNAME'],
-          :password =>  ENV['MANDRILL_APIKEY'],
-          :port =>      '587',
-          :domain =>    'heroku.com',
-          :authentication => :plain
-        }
-      })
-    end
   end
 
 ##################################'/new_poll/?'#################################
@@ -149,33 +135,12 @@ class Rancor < Sinatra::Base
       end
     end
 
+    params['email'].each do |address|
+      send_invite address unless address.empty?
+    end
+
     flash[:positive] = "Your poll has been created!"
     redirect to("/poll/#{@poll.rid}")
-  end
-
-  after '/new_poll/?' do
-    if request.post?
-      params['email'].each do |address|
-        unless address.empty?
-          @email_body = erb :email_invite, :layout => false
-          Pony.mail({
-            :to => address,
-            :from => ENV['MANDRILL_USERNAME'],
-            :subject => 'You have been invited to participate in a poll!',
-            :via => :smtp,
-            :html_body => @email_body,
-            :via_options => {
-              :address  => 'smtp.mandrillapp.com',
-              :user_name => ENV['MANDRILL_USERNAME'],
-              :password =>  ENV['MANDRILL_APIKEY'],
-              :port =>      '587',
-              :domain =>    'heroku.com',
-              :authentication => :plain
-            }
-          })
-        end
-      end
-    end
   end
 
 ##################################'/poll/:id/?'#################################
@@ -220,7 +185,7 @@ class Rancor < Sinatra::Base
     erb :results
   end
 
-###############################'/unauthenticated/?'###############################
+##############################'/unauthenticated/?'##############################
   post '/unauthenticated/?' do
     # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
     # is not passing the messages inserted.
