@@ -1,7 +1,6 @@
 require 'bundler'
 Bundler.require
 require_relative 'models/models'
-require 'pony' # Shouldn't this be handled by bundler? -- Mark H
 
 class Rancor < Sinatra::Base
   enable :sessions
@@ -78,6 +77,7 @@ class Rancor < Sinatra::Base
       redirect to('/login')
     end
 
+    # Display all polls owned by user
     @polls = env['warden'].user.polls.all
     erb :homepage
   end
@@ -145,6 +145,8 @@ class Rancor < Sinatra::Base
   end
 
   get '/poll/:id/?' do
+    # Works because nil is counted as false.
+    @owner_viewing = (@poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
     erb :poll
   end
 

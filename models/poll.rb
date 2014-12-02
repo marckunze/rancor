@@ -14,7 +14,7 @@ class Poll  # Rancor is the name of the sinatra class
   property :open,       Boolean, default: true
   property :closedate,  DateTime
 
-  belongs_to :account, required: false
+  belongs_to :owner, 'Account', required: false
   has n, :options
   has n, :ballots
   has n, :rankings, through: :options

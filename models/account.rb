@@ -13,7 +13,7 @@ class Account
   property :password,   BCryptHash # , required: true
   property :created_at, DateTime
 
-  has n, :polls
+  has n, :polls, child_key: [ 'owner_id' ]
 
   def self.authenticate(user, password)
     u = first(username: user)
