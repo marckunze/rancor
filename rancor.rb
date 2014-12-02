@@ -101,9 +101,9 @@ class Rancor < Sinatra::Base
 
     #validation ok, create new account
     Account.create(
-      :username  => params['username'],
-      :email     => params['email'],
-      :password  => params['password'],
+      :username  => params['username'].chomp,
+      :email     => params['email'].chomp,
+      :password  => params['password']
     )
 
     send_confirmation params['email']
@@ -121,24 +121,40 @@ class Rancor < Sinatra::Base
   end
 
   post '/new_poll/?' do
+    # Check input
+    ## Check question
     if params['question'].empty?
       flash[:negative] = "You can't have a poll without a question!"
       redirect to('/new_poll')
     end
 
-    @poll = Poll.create(question: params['question'])
-
+    ## Check options
+    poll_opts = []
     params['option'].each do |input|
-      unless input.empty?
-        @poll.options << Option.create(cid: @poll.options.size + 1, text: input)
-        @poll.save
-      end
+      poll_opts << input.chomp unless input.empty?
     end
 
+    ## Check number of options (must be two or more)
+    if poll_opts.size < 2
+      flash[:negative] = "You must have at least two options!"
+      redirect to('/new_poll')
+    end
+
+    # Create poll once once input check is complete
+    @poll = Poll.create(question: params['question'].chomp)
+
+    poll_opts.each do |opt|
+      @poll.options << Option.create(cid: @poll.options.size + 1, text: opt)
+      @poll.save
+    end
+
+    # Send invites
     params['email'].each do |address|
+      address.chomp!
       send_invite address unless address.empty?
     end
 
+    # Redirect to newly created poll
     flash[:positive] = "Your poll has been created!"
     redirect to("/poll/#{@poll.rid}")
   end
