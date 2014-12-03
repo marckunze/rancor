@@ -1,0 +1,58 @@
+/* layout styles */
+#layout-body
+{
+    background-color:#191970;
+    color:#ADD8E6;
+}
+
+.layout-nav-logo
+{
+    float: left;
+    padding-top:5px;
+    padding-left:5px;
+}
+
+#navbar > .navbar-nav
+{
+    float:none;
+}
+
+a.btn-default
+{
+    margin-top:8px;
+    background-color:#222;
+    color:#999
+}
+
+
+/* home styles */
+#home-carousel
+{
+    width:100%;
+    margin:0px auto;
+}
+#home-carousel > .carousel-inner div.item
+{
+    max-width:850px;
+    height:30em;
+    margin:0px auto;
+    text-align:center;
+    background:linear-gradient(#191970, #00008B)
+}
+
+#home-carousel img
+{
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) 
+}
+
+#home-carousel > .carousel-inner .carousel-caption h3
+{
+    max-width:600px;
+    margin:0px auto;
+    font-size:3vh;
+}
