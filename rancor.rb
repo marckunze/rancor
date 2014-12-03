@@ -109,7 +109,7 @@ class Rancor < Sinatra::Base
     send_confirmation params['email']
 
     #redirect to home page, letting them know of account creation
-    flash[:neutral] = "Your account has been created."
+    flash[:positive] = "Your account has been created."
     env['warden'].authenticate!
     redirect to('/')
   end

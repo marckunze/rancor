@@ -10,13 +10,13 @@ require_relative 'ranking'
 # sets up a new database in this directory
 configure :development do
   DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor.db")
+  DataMapper.finalize.auto_upgrade!
 end
 
 configure :production do
   DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+  DataMapper.finalize.auto_migrate!
 end
-
-DataMapper.finalize.auto_upgrade!
 
 if Account.all.size == 0
   # INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
