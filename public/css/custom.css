@@ -42,7 +42,6 @@ a.btn-default
 
 #home-carousel img
 {
-    margin: 0;
     position: absolute;
     top: 40%;
     left: 50%;
@@ -56,3 +55,63 @@ a.btn-default
     margin:0px auto;
     font-size:3vh;
 }
+
+
+/* new_user styles */
+#new-user
+{
+    text-align:center
+}
+
+#new-user h1
+{
+    font-size:4em;
+    padding-bottom:0.2em;
+}
+
+#new-user h3, #new-user h4
+{
+    color:yellow;
+}
+
+#new-user-info
+{
+    text-align:left;
+}
+
+#login-form
+{
+    max-width:400px;
+    padding:1.5em;
+    color:#656565;
+    background-color:#ADD8E6;
+    border-radius:1em;
+    border:0.2em #696969 solid;
+    text-align:left;
+}
+
+#new-user #login-form label
+{
+    color:#383838;
+}
+
+#new-user img
+{
+    margin-top:2.5em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

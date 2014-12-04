@@ -1,6 +1,22 @@
-<section id="new" style="padding:3em 0px; text-align:center">
-    <div class="container" style="max-width:400px; margin-top:2em; padding:1.5em; color:#656565; background-color:#ADD8E6; border-radius:1em; border:0.2em #696969 solid; text-align:left;">
-	  	<span style="color:red"><%= styled_flash %></span>
+<section id="new-user">
+    <div class="container">
+    <div class="row">
+        <h1>Sign up for rancor today!</h1>
+    </div>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3" id="new-user-info">
+            <h3>Create an account.</h3>
+            <br>
+            <h4>Create polls.</h4>
+            <p>Make polls. Make decisions. Move on.</p>
+            <br>
+            <h4>Keep track of your polls.</h4>
+            <p>History of poll participation.</p>
+        </div>
+        <div class="container col-sm-7">
+    <div class="container" id="login-form">
+	  	<%= styled_flash %>
         <form role="form" action="/new_user" method="post">
             <div class="form-group">
                 <label for="signUpUsername">Username</label>
@@ -20,5 +36,10 @@
             <input type="submit" class="btn btn-default" value="Sign Up!">
         </form>
     </div>
-    <img src="/images/logo_100x100.png" alt="" style="margin-top:2.5em">
+        </div>
+    </div>
+        <div class="row">
+            <img src="/images/logo_100x100.png" alt="rancor logo" height="100px" width="100px">
+        </div>
+    </div>
 </section>
