@@ -7,12 +7,12 @@ require_relative 'ranking'
 class Option
   include DataMapper::Resource
 
-  property :cid,   Integer, key: true, unique: false
+  property :rid,   Serial
+  property :cid,   Integer, unique: false
   property :text,  Text, required: true
   property :score, Integer, default: 0
 
-
-  belongs_to :poll, key: true
+  belongs_to :poll
   has n, :rankings
 
   def percent_of_total
