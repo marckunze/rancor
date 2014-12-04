@@ -40,10 +40,6 @@ class Rancor < Sinatra::Base
 
   # Public: GET request for the path '/'. Serves as the welcome page for the site.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns the rendering for the welcome page as a String
   get '/' do
     @title = 'rancor:home'
@@ -52,10 +48,6 @@ class Rancor < Sinatra::Base
 
   # Public: GET request for paths '/home' and '/home/'. Can only be access by a
   #         user who is logged in.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns the rendering for the homepage as a String if the user is logged in.
   #         If the user is not logged in they are redirected to the login page.
@@ -72,10 +64,6 @@ class Rancor < Sinatra::Base
 
   # Public: GET request for paths '/login' and '/login/'. Serves as the login page.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns the rendering for the login page as a String.
   get '/login/?' do
     @title = 'rancor:login'
@@ -84,10 +72,6 @@ class Rancor < Sinatra::Base
 
   # Public: POST request for paths '/login' and '/login/'. Authenticates user and
   #              redirects them to their homepage if authentication is successful.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns nothing.
   post '/login/?' do
@@ -99,10 +83,6 @@ class Rancor < Sinatra::Base
   # Public: GET request for paths '/logout' and '/logout/'. Logs out the user
   #         and redirects them to the welcome page.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns nothing.
   get '/logout/?' do
     env['warden'].logout
@@ -112,10 +92,6 @@ class Rancor < Sinatra::Base
 
   # Public: GET request for paths '/new_user' and '/new_user/'. Serves as the
   #         new user creation page.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns the rendering for the new user page as a String.
   get '/new_user/?' do
@@ -127,10 +103,6 @@ class Rancor < Sinatra::Base
   #         information provided, creates a new account, and sends a confirmation
   #         email provided by the account creator. Finally, logs the new user in
   #         and redirects them to the homepage.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns nothing.
   post '/new_user/?' do
@@ -173,10 +145,6 @@ class Rancor < Sinatra::Base
   # Public: GET request for paths '/new_poll' and '/new_poll/'. Serves as the new
   #         poll creation page
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # RReturns the rendering for the new poll page as a String.
   get '/new_poll/?' do
     @title = 'rancor:new poll'
@@ -186,10 +154,6 @@ class Rancor < Sinatra::Base
   # Public: POST request for paths '/new_poll' and '/new_poll/'. Verifies input,
   #         creates poll, emails invited users, and finally redirects to the
   #         newly created poll page.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns nothing.
   post '/new_poll/?' do
@@ -242,10 +206,6 @@ class Rancor < Sinatra::Base
   #         Gets the relevant poll, checks to see if the owner of the poll is
   #         viewing the page, and verifies that the poll is still open for voting.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns nothing.
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
@@ -262,10 +222,6 @@ class Rancor < Sinatra::Base
   # Public: GET request for paths '/poll/<id>' and '/poll/<id>/'. Serves as the
   #         voting page.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns the rendering for poll page as a String.
   get '/poll/:id/?' do
     erb :poll
@@ -273,10 +229,6 @@ class Rancor < Sinatra::Base
 
   # Public: POST request for paths '/poll/<id>' and '/poll/<id>/'. Gets the
   #         results of the vote and adds those results to the poll.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns nothing.
   post '/poll/:id/?' do
@@ -308,10 +260,6 @@ class Rancor < Sinatra::Base
   # Public: GET request for paths '/poll/<id>/results' and '/poll/<id>/results/'.
   #         Displays the current results of the poll.
   #
-  # Examples
-  #
-  #   None. Must be accessed through browser
-  #
   # Returns the rendering for the results page as a String
   get '/poll/:id/results/?' do
     @poll ||= Poll.get(params['id']) || halt(404)
@@ -321,10 +269,6 @@ class Rancor < Sinatra::Base
 
   # Public: GET request for path '/unauthenticated'. Adds a message and redirects
   #         the user to the login page.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns nothing.
   post '/unauthenticated' do
@@ -337,10 +281,6 @@ class Rancor < Sinatra::Base
   end
 
   # Public: Helper for handling a 404 status.
-  #
-  # Examples
-  #
-  #   None. Must be accessed through browser
   #
   # Returns the rendering for the error page as a String
   not_found do
