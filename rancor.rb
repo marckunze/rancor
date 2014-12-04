@@ -36,17 +36,29 @@ class Rancor < Sinatra::Base
 
   helpers EmailHelpers
 
-#######################################'/'######################################
+  # The following documentation treats sinatra's get and post helpers as methods.
+
+  # Public: GET request for the path '/'. Serves as the welcome page for the site.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the welcome page as a String
   get '/' do
     @title = 'rancor:home'
-    erb :home
+    erb :welcome
   end
 
-  post '/' do
-    # Nothing here yet
-  end
-
-####################################'/home/?'###################################
+  # Public: GET request for paths '/home' and '/home/'. Can only be access by a
+  #         user who is logged in.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the homepage as a String if the user is logged in.
+  #         If the user is not logged in they are redirected to the login page.
   get '/home/?' do
     unless env['warden'].authenticated?
       flash[:negative] = "You are not logged in!"
@@ -58,32 +70,76 @@ class Rancor < Sinatra::Base
     erb :homepage
   end
 
-###################################'/login/?'###################################
+  # Public: GET request for paths '/login' and '/login/'. Serves as the login page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the login page as a String.
   get '/login/?' do
     @title = 'rancor:login'
     erb :login
   end
 
+  # Public: POST request for paths '/login' and '/login/'. Authenticates user and
+  #              redirects them to their homepage if authentication is successful.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   post '/login/?' do
     env['warden'].authenticate!
     flash[:positive] = "You have successfully logged in"
     redirect to('/home')
   end
 
-###################################'/logout/?'##################################
+  # Public: GET request for paths '/logout' and '/logout/'. Logs out the user
+  #         and redirects them to the welcome page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   get '/logout/?' do
     env['warden'].logout
     flash[:positive] = "You have successfully logged out"
     redirect to('/')
   end
 
-##################################'/new_user/?'#################################
+  # Public: GET request for paths '/new_user' and '/new_user/'. Serves as the
+  #         new user creation page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the new user page as a String.
   get '/new_user/?' do
     @title = 'rancor:register'
     erb :new_user
   end
 
+  # Public: POST request for paths '/new_user' and '/new_user/'. Verifies the
+  #         information provided, creates a new account, and sends a confirmation
+  #         email provided by the account creator. Finally, logs the new user in
+  #         and redirects them to the homepage.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   post '/new_user/?' do
+    # Redirect the user if they are already logged in.
+    if env['warden'].authenticated?
+      flash[:neutral] = "You already have an account!"
+      redirect to('/home')
+    end
+
     # various parameter checks
     if params['username'].empty? || params['email'].empty? || params['password'].empty?
       flash[:negative] = "Fields can not be empty!"
@@ -111,15 +167,31 @@ class Rancor < Sinatra::Base
     #redirect to home page, letting them know of account creation
     flash[:positive] = "Your account has been created."
     env['warden'].authenticate!
-    redirect to('/')
+    redirect to('/home')
   end
 
-##################################'/new_poll/?'#################################
+  # Public: GET request for paths '/new_poll' and '/new_poll/'. Serves as the new
+  #         poll creation page
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # RReturns the rendering for the new poll page as a String.
   get '/new_poll/?' do
     @title = 'rancor:new poll'
     erb :new_poll
   end
 
+  # Public: POST request for paths '/new_poll' and '/new_poll/'. Verifies input,
+  #         creates poll, emails invited users, and finally redirects to the
+  #         newly created poll page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   post '/new_poll/?' do
     # Check input
     ## Check question
@@ -166,7 +238,15 @@ class Rancor < Sinatra::Base
     redirect to("/poll/#{@poll.rid}")
   end
 
-##################################'/poll/:id/?'#################################
+  # Public: before helper for requests for paths '/poll/<id>' and '/poll/<id>/'.
+  #         Gets the relevant poll, checks to see if the owner of the poll is
+  #         viewing the page, and verifies that the poll is still open for voting.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
     @poll ||= Poll.get(params['id']) || halt(404)
@@ -179,10 +259,26 @@ class Rancor < Sinatra::Base
     end
   end
 
+  # Public: GET request for paths '/poll/<id>' and '/poll/<id>/'. Serves as the
+  #         voting page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for poll page as a String.
   get '/poll/:id/?' do
     erb :poll
   end
 
+  # Public: POST request for paths '/poll/<id>' and '/poll/<id>/'. Gets the
+  #         results of the vote and adds those results to the poll.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
   post '/poll/:id/?' do
     # Random IPs for testing ballots
     # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
@@ -190,30 +286,48 @@ class Rancor < Sinatra::Base
     ballot = @poll.ballots.first(voter: request.ip)
 
     if ballot.nil?
-      # @poll.add_results params[:vote], ip # for testing purposes
-      @poll.add_results(params[:vote], request.ip)
-      flash[:positive] = "Your vote has been recorded!"
+      # @poll.add_results()params[:vote], ip) # for testing purposes
+      if @poll.add_results(params[:vote], request.ip)
+        flash[:positive] = "Your vote has been recorded!"
+      else
+        flash[:negative] = "Failure while recording vote"
+        halt
+      end
     else
       if ballot.update_results(params[:vote])
         flash[:positive] = "Your vote has been updated!"
       else
         flash[:negative] = "Failure during vote update"
-        halt(404)
+        halt
       end
     end
 
     redirect to("/poll/#{params['id']}/results")
   end
 
-##############################'/poll/:id/results/?'#############################
+  # Public: GET request for paths '/poll/<id>/results' and '/poll/<id>/results/'.
+  #         Displays the current results of the poll.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the results page as a String
   get '/poll/:id/results/?' do
     @poll ||= Poll.get(params['id']) || halt(404)
     @options = @poll.options.all(order: :score.desc)
     erb :results
   end
 
-##############################'/unauthenticated/?'##############################
-  post '/unauthenticated/?' do
+  # Public: GET request for path '/unauthenticated'. Adds a message and redirects
+  #         the user to the login page.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns nothing.
+  post '/unauthenticated' do
     # Reserve '/unauthenticated' for failed logins until I figure out why fail!()
     # is not passing the messages inserted.
 
@@ -222,14 +336,14 @@ class Rancor < Sinatra::Base
     redirect to('/login')
   end
 
-#######################################404######################################
+  # Public: Helper for handling a 404 status.
+  #
+  # Examples
+  #
+  #   None. Must be accessed through browser
+  #
+  # Returns the rendering for the error page as a String
   not_found do
     erb :error
   end
-
-  # TODO organizer results page? not sure if needed, and routing on this
-  # get '/results-org' do
-  #   @title = 'rancor:results(org)'
-  #   erb :results_organizer
-  # end
 end

@@ -48,7 +48,7 @@ class Account
   #   Account.exists?(foobar)
   #   # => true
   #
-  #   Account.exists?(mhammond@ccsf.edu)
+  #   Account.exists?(foo@bar.com)
   #   # => false
   #
   # Returns true if a user was found, false if not.
@@ -76,7 +76,7 @@ class Account
   #
   # Examples:
   #
-  #   Account.email_exists?(mhammond@ccsf.edu)
+  #   Account.email_exists?(foo@bar.com)
   #   # => false
   #
   # Returns true if a user was found, false if not.

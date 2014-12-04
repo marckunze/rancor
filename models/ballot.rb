@@ -42,7 +42,7 @@ class Ballot
   #   ballot.update_results(["yes", "no", "maybe?"])
   #   # => true
   #
-  # Returns true if the reset was successful, false if not
+  # Returns true if the update was successful, false if not
   def update_results(results)
     return false unless reset # If reset failed then update must fail as well
     poll.reload # just in case
@@ -50,10 +50,14 @@ class Ballot
     results.each_with_index do |vote, i|
       rank = i + 1
       opt = poll.options.first(text: vote)
+      # Fail if option can not be found
+      return false if opt.nil?
       opt.score += poll.options.size - rank
       opt.save
 
       ranking = opt.rankings.first(ballot: self)
+      # Fail if ranking can not be found
+      return false if ranking.nil?
       ranking.update(rank: rank)
       ranking.save
     end
