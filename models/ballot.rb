@@ -14,7 +14,15 @@ class Ballot
   belongs_to :poll
   has n, :rankings
 
-  def reset()
+  # Internal: Resets the rankings and allocated score of the ballot
+  #
+  # Examples
+  #
+  #   ballot.reset
+  #   # => true
+  #
+  # Returns true if the reset was successful, false if not
+  def reset
     score_offset = poll.options.size # rank begins at 1, not 0
     rankings.each do |ranking|
       opt = ranking.option
@@ -25,8 +33,18 @@ class Ballot
     save
   end
 
+  # Internal: Updates the ballot to reflect the new vote
+  #
+  # results - The results of the poll, ranked from first to last, as a String array
+  #
+  # Examples
+  #
+  #   ballot.update_results(["yes", "no", "maybe?"])
+  #   # => true
+  #
+  # Returns true if the reset was successful, false if not
   def update_results(results)
-    reset
+    return false unless reset # If reset failed then update must fail as well
     poll.reload # just in case
 
     results.each_with_index do |vote, i|
@@ -39,5 +57,7 @@ class Ballot
       ranking.update(rank: rank)
       ranking.save
     end
+
+    save
   end
 end

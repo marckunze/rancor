@@ -13,15 +13,8 @@ configure :development do
   DataMapper.finalize.auto_upgrade!
 end
 
-# # I'm using this to test the changes for heroku locally
-# # Please don't mess with it -- Mark
-# configure :development do
-#   DataMapper.setup(:default, 'postgres://localhost/rancor')
-#   DataMapper.finalize.auto_migrate!
-# end
-
 configure :production do
-  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+  DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/rancor')
   DataMapper.finalize.auto_migrate!
 end
 

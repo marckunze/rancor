@@ -106,7 +106,7 @@ class Rancor < Sinatra::Base
       :password  => params['password']
     )
 
-    send_confirmation params['email']
+    send_confirmation(params['email'])
 
     #redirect to home page, letting them know of account creation
     flash[:positive] = "Your account has been created."
@@ -158,7 +158,7 @@ class Rancor < Sinatra::Base
     # Send invites
     params['email'].each do |address|
       address.strip!
-      send_invite address unless address.empty?
+      send_invite(address) unless address.empty?
     end
 
     # Redirect to newly created poll
@@ -191,11 +191,15 @@ class Rancor < Sinatra::Base
 
     if ballot.nil?
       # @poll.add_results params[:vote], ip # for testing purposes
-      @poll.add_results params[:vote], request.ip
-      flash.now[:positive] = "Your vote has been recorded!"
+      @poll.add_results(params[:vote], request.ip)
+      flash[:positive] = "Your vote has been recorded!"
     else
-      ballot.update_results params[:vote]
-      flash.now[:positive] = "Your vote has been updated!"
+      if ballot.update_results(params[:vote])
+        flash[:positive] = "Your vote has been updated!"
+      else
+        flash[:negative] = "Failure during vote update"
+        halt(404)
+      end
     end
 
     redirect to("/poll/#{params['id']}/results")
@@ -204,7 +208,7 @@ class Rancor < Sinatra::Base
 ##############################'/poll/:id/results/?'#############################
   get '/poll/:id/results/?' do
     @poll ||= Poll.get(params['id']) || halt(404)
-    @options = @poll.options.all order: :score.desc
+    @options = @poll.options.all(order: :score.desc)
     erb :results
   end
 
