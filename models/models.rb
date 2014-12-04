@@ -23,7 +23,7 @@ if Account.all.size == 0
   p1 = Account.create(username: 'p1', email: 'abc@email.com', password: "test")
 
   # INSERT INTO User (id,username,email) VALUES(2,'student','cdad@email.com');
-  student = Account.create(username: 'student', email: 'cdad@email.com')
+  student = Account.create(username: 'student', email: 'cdad@email.com', password: 'student')
 
   # INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
   dinner = Poll.create(question: 'What is for dinner?')
