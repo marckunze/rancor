@@ -282,8 +282,16 @@ class Rancor < Sinatra::Base
 
   # Public: Helper for handling a 404 status.
   #
-  # Returns the rendering for the error page as a String
+  # Returns the rendering for the not_found page as a String
   not_found do
+    erb :not_found
+  end
+
+  # Public: Helper for generic error handling.
+  #
+  # Returns the rendering for the error page as a String
+  error do
     erb :error
   end
+
 end
