@@ -36,6 +36,12 @@ class Rancor < Sinatra::Base
 
   helpers EmailHelpers
 
+  helpers do
+    def poll
+      @poll ||= Poll.get(params['id']) || halt(404)
+    end
+  end
+
   # The following documentation treats sinatra's get and post helpers as methods.
 
   # Public: GET request for the path '/'. Serves as the welcome page for the site.
@@ -209,11 +215,10 @@ class Rancor < Sinatra::Base
   # Returns nothing.
   before '/poll/:id/?' do
     @title = "rancor:poll.#{params['id']}"
-    @poll ||= Poll.get(params['id']) || halt(404)
     # Works because nil is counted as false.
-    @owner_viewing = (@poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
+    @owner_viewing = (poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
 
-    unless @poll.open
+    unless poll.open
       flash[:neutral] = "Voting is closed for this poll"
       redirect to("/poll/#{params['id']}/results")
     end
@@ -234,12 +239,12 @@ class Rancor < Sinatra::Base
   post '/poll/:id/?' do
     # Random IPs for testing ballots
     # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
-    # ballot = @poll.ballots.first(voter: ip)
-    ballot = @poll.ballots.first(voter: request.ip)
+    # ballot = poll.ballots.first(voter: ip)
+    ballot = poll.ballots.first(voter: request.ip)
 
     if ballot.nil?
-      # @poll.add_results()params[:vote], ip) # for testing purposes
-      if @poll.add_results(params[:vote], request.ip)
+      # poll.add_results()params[:vote], ip) # for testing purposes
+      if poll.add_results(params[:vote], request.ip)
         flash[:positive] = "Your vote has been recorded!"
       else
         flash[:negative] = "Failure while recording vote"
@@ -262,12 +267,34 @@ class Rancor < Sinatra::Base
   #
   # Returns the rendering for the results page as a String
   get '/poll/:id/results/?' do
-    @poll ||= Poll.get(params['id']) || halt(404)
-    @options = @poll.options.all(order: :score.desc)
+    @options = poll.options.all(order: :score.desc)
     erb :results
   end
 
-  # Public: GET request for path '/unauthenticated'. Adds a message and redirects
+  # Public: Post request for paths '/poll/<id>/close' and '/pool/<id>/close/'
+  #         Closes the poll if requested by the owner.
+  #
+  # Returns nothing.
+  post '/poll/:id/close/?' do
+    # Check to see if currently logged in user is the poll owner
+    unless env['warden'].authenticated? && poll.owner == env['warden'].user
+      flash[:negative] = "You are not authorized to perform this action!"
+      halt
+    end
+
+    poll.open = false
+    poll.save
+  end
+
+  # Public: After helper for paths '/poll/<id>/close' and '/pool/<id>/closes/'
+  #
+  # Returns nothing. Redirects the requester back to the the original page.
+  after '/poll/:id/close/?' do
+    redirect to(request.referrer || '/')
+  end
+
+
+    # Public: GET request for path '/unauthenticated'. Adds a message and redirects
   #         the user to the login page.
   #
   # Returns nothing.
