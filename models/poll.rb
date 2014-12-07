@@ -119,26 +119,6 @@ class Poll
     save
   end
 
-  private
-
-  # Internal: Creates a new ballot for the poll
-  #
-  # voter - the ip address of the voter, represented as a String
-  #
-  # Example
-  #   new_ballot("127.0.0.1")
-  #   # => #<Ballot:0x00000008008135>
-  #
-  # Returns the newly created Ballot, or nil if the ballot creation failed.
-  def new_ballot(voter)
-    b = Ballot.create(voter: voter)
-    ballots << b
-    # Return nothing if save failed
-    return nil unless save
-    return b
-  end
-
-
   # Internal: Closes the poll and sends the results to every invite
   #
   # Example
@@ -156,5 +136,24 @@ class Poll
     end
 
     save
+  end
+
+  private
+
+  # Internal: Creates a new ballot for the poll
+  #
+  # voter - the ip address of the voter, represented as a String
+  #
+  # Example
+  #   new_ballot("127.0.0.1")
+  #   # => #<Ballot:0x00000008008135>
+  #
+  # Returns the newly created Ballot, or nil if the ballot creation failed.
+  def new_ballot(voter)
+    b = Ballot.create(voter: voter)
+    ballots << b
+    # Return nothing if save failed
+    return nil unless save
+    return b
   end
 end
