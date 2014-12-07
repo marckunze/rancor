@@ -268,8 +268,6 @@ class Rancor < Sinatra::Base
         error
       end
     end
-
-    redirect to("/poll/#{params['id']}/results")
   end
 
   # Public: GET request for paths '/poll/<id>/results' and '/poll/<id>/results/'.

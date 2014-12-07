@@ -3,6 +3,7 @@ div.flash {
     font-size: large;
     font-style: normal;
     font-weight: bold;
+    text-align: center;
 }
 
 div.positive {
