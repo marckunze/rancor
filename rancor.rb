@@ -300,10 +300,10 @@ class Rancor < Sinatra::Base
   # Returns nothing.
   post '/poll/:id/destroy/?' do
     # Check to see if currently logged in user is the poll owner
-    # unless env['warden'].authenticated? && poll.owner == env['warden'].user
-    #   flash[:negative] = "You are not authorized to perform this action!"
-    #   halt
-    # end
+    unless env['warden'].authenticated? && poll.owner == env['warden'].user
+      flash[:negative] = "You are not authorized to perform this action!"
+      halt
+    end
 
     poll.destroy
   end
