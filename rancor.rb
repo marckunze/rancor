@@ -210,7 +210,9 @@ class Rancor < Sinatra::Base
     # Send invites
     params['email'].each do |address|
       address.strip!
-      send_invite(address) unless address.empty?
+      next if address.empty?
+      @poll.invites << Invite.new(email: address)
+      send_invite(address)
     end
 
     # Redirect to newly created poll
@@ -290,8 +292,7 @@ class Rancor < Sinatra::Base
       halt
     end
 
-    poll.open = false
-    poll.save
+    poll.close
   end
 
   # Public: After helper for paths '/poll/<id>/close' and '/pool/<id>/closes/'

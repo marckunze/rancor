@@ -5,6 +5,8 @@ require_relative 'account'
 require_relative 'ballot'
 require_relative 'option'
 require_relative 'ranking'
+require_relative 'invite'
+require_relative '../email_helpers'
 
 class Poll
   include DataMapper::Resource
@@ -18,6 +20,7 @@ class Poll
   has n, :options
   has n, :ballots
   has n, :rankings, through: :options
+  has n, :invites
 
   # Internal: Safe version of destroy, removes resource after performing all
   #           validations. Removes the connection to the owner account and destroys
@@ -36,6 +39,7 @@ class Poll
     rankings.destroy unless rankings.nil?
     options.destroy unless options.nil?
     ballots.destroy unless ballots.nil?
+    invites.destroy unless invites.nil?
     reload
     super
   end
@@ -56,6 +60,7 @@ class Poll
     rankings.destroy! unless rankings.nil?
     options.destroy! unless options.nil?
     ballots.destroy! unless ballots.nil?
+    invites.destroy! unless invites.nil?
     reload
     super
   end
@@ -131,5 +136,25 @@ class Poll
     # Return nothing if save failed
     return nil unless save
     return b
+  end
+
+
+  # Internal: Closes the poll and sends the results to every invite
+  #
+  # Example
+  #   @poll.close
+  #   # => true
+  #
+  # Returns true if the operation was successful, false if not.
+  def close
+    return false unless self.open
+
+    self.open = false
+
+    invites.each do |invite|
+      EmailHelpers.send_results(invite.email)
+    end
+
+    save
   end
 end

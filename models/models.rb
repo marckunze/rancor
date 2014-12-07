@@ -6,11 +6,12 @@ require_relative 'ballot'
 require_relative 'option'
 require_relative 'poll'
 require_relative 'ranking'
+require_relative 'invite'
 
 # sets up a new database in this directory
 configure :development do
   DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor.db")
-  DataMapper.finalize.auto_upgrade!
+  DataMapper.finalize.auto_migrate!
 end
 
 configure :production do
