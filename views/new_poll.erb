@@ -69,7 +69,7 @@
             $("#ampm").val("AM");
         else
             $("#ampm").val("PM");
-        $("#datepicker").datepicker();
+        $("#datepicker").datepicker({minDate:0});
         $("#datepicker").datepicker("setDate", defaultCloseDate);
 
         var closeDate = new Date(defaultCloseDate);
