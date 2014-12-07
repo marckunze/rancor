@@ -150,7 +150,7 @@ class Rancor < Sinatra::Base
       :password  => params['password']
     )
 
-    send_confirmation(params['email'])
+    # send_confirmation(params['email'])
 
     #redirect to home page, letting them know of account creation
     flash[:positive] = "Your account has been created."
@@ -195,11 +195,12 @@ class Rancor < Sinatra::Base
 
     # Create poll once once input check is complete
     @poll = Poll.create(question: params['question'].strip)
-
+    @poll.closedate = DateTime.httpdate(params['closeDate'])
     poll_opts.each do |opt|
       @poll.options << Option.new(cid: @poll.options.size + 1, text: opt)
-      @poll.save
     end
+    @poll.save
+
 
     # Add poll to user account
     if env['warden'].authenticated?

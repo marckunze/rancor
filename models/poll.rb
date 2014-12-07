@@ -153,7 +153,6 @@ class Poll
     b = Ballot.create(voter: voter)
     ballots << b
     # Return nothing if save failed
-    return nil unless save
-    return b
+    save ? b : nil
   end
 end
