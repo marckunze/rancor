@@ -16,11 +16,33 @@ class Account
   has n, :polls, child_key: [ 'owner_id' ]
 
 
+  # Internal: Safe version of destroy, removes resource after performing all
+  #           validations. Removes all connections with any owned polls before
+  #           destroying resource. Will automatically fail if connection is not
+  #           removed.
+  #
+  # Examples
+  #
+  #   Account.first(username: foo).destroy
+  #   # => false
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy
     polls.clear.save
     super
   end
 
+  # Internal: Unsafe version of destroy, removes resource after performing no
+  #           validations. Removes all connections with any owned polls before
+  #           destroying resource. Will not automatically fail if connection is
+  #           not removed.
+  #
+  # Examples
+  #
+  #   Account.first(username: foo).destroy!
+  #   # => true
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy!
     polls.clear.save!
     super

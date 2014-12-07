@@ -19,6 +19,18 @@ class Poll
   has n, :ballots
   has n, :rankings, through: :options
 
+  # Internal: Safe version of destroy, removes resource after performing all
+  #           validations. Removes the connection to the owner account and destroys
+  #           all owned resources before destroying self. Will automatically fail
+  #           if connections are not removed.
+  #
+  # Examples
+  #
+  #   @poll.destroy
+  #   # => false
+  #
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy
     self.owner = nil
     rankings.destroy unless rankings.nil?
@@ -28,6 +40,17 @@ class Poll
     super
   end
 
+  # Internal: Unsafe version of destroy, removes resource after performing no
+  #           validations. Removes the connection to the owner account and destroys
+  #           all owned resources before destroying self. Will not automatically
+  #           fail if connections are not removed.
+  #
+  # Examples
+  #
+  #   @poll.destroy!
+  #   # => true
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy!
     self.owner = nil
     rankings.destroy! unless rankings.nil?

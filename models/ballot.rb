@@ -14,12 +14,34 @@ class Ballot
   belongs_to :poll
   has n, :rankings
 
+  # Internal: Safe version of destroy, removes resource after performing all
+  #           validations. Removes the connection with the poll that owns the
+  #           resource before destroying resource. Will automatically fail if
+  #           connection is not removed.
+  #
+  # Examples
+  #
+  #   @poll.ballots.each { |ballot| ballot.destroy }
+  #   # => true
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy
     self.poll = nil
     rankings.destroy
     super
   end
 
+  # Internal: Unsafe version of destroy, removes resource after performing no
+  #           validations. Removes the connection with the poll that owns the
+  #           resource before destroying resource. Will not automatically fail
+  #           if connection is not removed.
+  #
+  # Examples
+  #
+  #   @poll.ballots.each { |ballot| ballot.destroy! }
+  #   # => true
+  #
+  # Returns true if the operation was successful, false if not.
   def destroy!
     self.poll = nil
     rankings.destroy!

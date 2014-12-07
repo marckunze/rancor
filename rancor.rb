@@ -37,8 +37,18 @@ class Rancor < Sinatra::Base
   helpers EmailHelpers
 
   helpers do
+    # Internal: Returns the poll that corresponds to the id or sends the requester
+    # to the 404 page
+    #
+    # Examples
+    #
+    #   poll.options.all(order: :score.desc)
+    #
+    #   poll.add_results(params[:vote], request.ip)
+    #
+    # Returns the poll that corresponds to the id parameter.
     def poll
-      @poll ||= Poll.get(params['id']) || halt(404)
+      @poll ||= Poll.get(params['id']) || not_found
     end
   end
 
@@ -248,14 +258,14 @@ class Rancor < Sinatra::Base
         flash[:positive] = "Your vote has been recorded!"
       else
         flash[:negative] = "Failure while recording vote"
-        halt
+        error
       end
     else
       if ballot.update_results(params[:vote])
         flash[:positive] = "Your vote has been updated!"
       else
         flash[:negative] = "Failure during vote update"
-        halt
+        error
       end
     end
 
@@ -290,7 +300,7 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/poll/:id/close/?' do
-    halt(404) unless request.post?
+    not_found unless request.post?
     redirect to(request.referrer || '/')
   end
 
@@ -305,14 +315,14 @@ class Rancor < Sinatra::Base
       halt
     end
 
-    poll.destroy
+    error unless poll.destroy
   end
 
   # Public: After helper for paths '/poll/<id>/destroy' and '/pool/<id>/destroy/'
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/poll/:id/destroy/?' do
-    halt(404) unless request.post?
+    not_found unless request.post?
     redirect to(request.referrer || '/')
   end
 
@@ -326,7 +336,7 @@ class Rancor < Sinatra::Base
       halt
     end
 
-    env['warden'].user.destroy
+    error unless env['warden'].user.destroy
     env['warden'].logout
   end
 
@@ -334,7 +344,7 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/account/destroy/?' do
-    halt(404) unless request.get?
+    not_found unless request.get?
     redirect to(request.referrer || '/')
   end
 
