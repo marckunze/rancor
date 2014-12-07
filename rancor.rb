@@ -316,6 +316,28 @@ class Rancor < Sinatra::Base
     redirect to(request.referrer || '/')
   end
 
+  # Public: Post request for paths '/account/destroy' and '/account/destroy/'
+  #         Deletes the user's account.
+  #
+  # Returns nothing.
+  post '/account/destroy?' do
+    unless env['warden'].authenticated?
+      flash[:negative] = "You are not authorized to perform this action!"
+      halt
+    end
+
+    env['warden'].user.destroy
+    env['warden'].logout
+  end
+
+  # Public: After helper for paths '/account/destroy' and '/account/destroy/'
+  #
+  # Returns nothing. Redirects the requester back to the the original page.
+  after '/account/destroy/?' do
+    halt(404) unless request.get?
+    redirect to(request.referrer || '/')
+  end
+
   # Public: GET request for path '/unauthenticated'. Adds a message and redirects
   #         the user to the login page.
   #
