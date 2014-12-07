@@ -344,7 +344,7 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/account/destroy/?' do
-    not_found unless request.get?
+    not_found unless request.post?
     redirect to(request.referrer || '/')
   end
 
