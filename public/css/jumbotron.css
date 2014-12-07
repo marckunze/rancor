@@ -7,6 +7,7 @@ body {
 .jumbotron{
 	margin-top: 15px;
     padding: 20px;
-    border: 1px solid LightGray;
+    border: 1px solid gray;
     overflow: hidden;
+    background: rgba(229, 214, 207, 0.9) !important;
 }

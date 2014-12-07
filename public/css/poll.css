@@ -10,16 +10,16 @@
     margin-top: 10px;
     margin-bottom: 15px;
     font-size: 16px;
-    color: #367385;
+    color: #363536;
   }
     .bs-example{
       margin: 20px;
     }
     .ui-sortable-placeholder {  
-        border: 2px dashed #D3D3D3; 
+        border: 2px dashed #bab6b6; 
         height: 44px;  
         width: 100%;  
-        background: #EDEDED; 
+        background-color: #e5d7cf; 
     }
 
 .col-md-1{
@@ -32,27 +32,27 @@
 
 td.rank {
     font-size: 16px;
-    color: gray;
+    color: #877f85;
     height: 41px;
 }
 
 .question{
     font-weight: bold;
     font-size: 26px;  
-    color:  #505050  ;  
+    color: #40333c;  
 }
 
 .btn.btn-lg.custom {
     padding-bottom: -5px; 
     text-align: bottom;
     margin-bottom: -5px;
-    color: #5bc0de;
+    color: #e07f16;
     border-style: none;
     border-width: 0px;
 }
 
 .btn.btn-lg.custom:hover {
-    color: #51acc7;
+    color: #e09d56;
 }
 
 div.count {
