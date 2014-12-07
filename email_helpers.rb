@@ -27,6 +27,19 @@ module EmailHelpers
     send_email(address, 'You have been invited to participate in a poll!', :email_invite)
   end
 
+  # Internal: Sends a results email when a poll closes
+  #
+  # address - The email address attached to the new account that was created.
+  #
+  # Examples
+  #
+  #   send_results foo@bar.com
+  #
+  # Returns nothing
+  def send_results(address)
+    send_email(address, 'Welcome to rancor!', :email_results)
+  end
+
   # Internal: Sends an email using Pony
   #
   # address - The email address of the recipient
