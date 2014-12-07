@@ -1,5 +1,5 @@
 <div id="rancor-new-poll" class="container">
-    <div class="jumbotron" style="background-color:#191970">
+    <div class="jumbotron">
         <form class="form-horizontal" role="form" name="question-options-email" method="post">
             <div class="row">
                 <label for="question" class="col-sm-2 control-label">Poll Question</label>
@@ -7,23 +7,37 @@
                     <input type="text" class="form-control" name="question" id="question">
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <label class="col-sm-3 control-label" style="text-align:center">Poll ClosingDate/Time</label>
+                <div class="col-sm-2 has-feedback">
+                    <input type="text" id="datepicker" class="form-control">
+                    <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+                </div>
+                <div class="col-sm-4">
+                        <span style="float:left"><select class="form-control text-center" id="hour"></select></span>
+                        <span style="float:left"><select class="form-control text-center" id="minute"></select></span>
+                        <span style="float:left"><select class="form-control text-center" id="ampm"></select></span>
+                        <input type="text" id="closedate" name="closeDate" size="27">UTC Time
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-6" style="text-align:center; margin-top:10px">
-                    <div class="btn btn-default" id="minus-btn-options">-</div>
-                    <input type="text" size="2" id="numOfOptions" value="2" style="padding:4px 10px; color:black; text-align:center;">
-                    <div class="btn btn-default" id="plus-btn-options">+</div>
+                    <div class="btn btn-default glyphicon glyphicon-minus" id="minus-btn-options"></div>
+                    <input type="text" size="2" id="numOfOptions" value="2" style="font-size:1.3em; text-align:center;">
+                    <div class="btn btn-default glyphicon glyphicon-plus" id="plus-btn-options"></div>
                     <p># of options</p>
                     <div id="options"></div>
                 </div>
                 <div class="col-sm-6" style="text-align:center; margin-top:10px">
-                    <div class="btn btn-default" id="minus-btn-emails">-</div>
-                    <input type="text" size="2" id="numOfEmails" value="1" style="padding:4px 10px; color:black; text-align:center;">
-                    <div class="btn btn-default" id="plus-btn-emails">+</div>
+                    <div class="btn btn-default glyphicon glyphicon-minus" id="minus-btn-emails"></div>
+                    <input type="text" size="2" id="numOfEmails" value="1" style="font-size:1.3em; text-align:center;">
+                    <div class="btn btn-default glyphicon glyphicon-plus" id="plus-btn-emails"></div>
                     <p># of participants</p>
                     <div id="emails"></div>
                 </div>
             </div>
-            <input type="submit" value="Submit" style="color:black">
+            <input type="submit" value="Submit" style="" class="btn btn-info btn-lg">
         </form>
     </div>
 </div>
@@ -39,6 +53,85 @@
 
 
 <script type="text/javascript">
+//***************************script for closing date/time***************************
+    $(document).ready(function()
+    {
+        loadDateTimeHtml();
+        var defaultCloseDate = new Date();
+        defaultCloseDate.setDate(defaultCloseDate.getDate() + 1);
+        var hours12 = defaultCloseDate.getHours();
+        if (hours12 % 12 == 0)
+            $("#hour").val(12);
+        else
+            $("#hour").val(hours12 % 12);
+        $("#minute").val(defaultCloseDate.getMinutes());
+        if (defaultCloseDate.getHours() < 12)
+            $("#ampm").val("AM");
+        else
+            $("#ampm").val("PM");
+        $("#datepicker").datepicker();
+        $("#datepicker").datepicker("setDate", defaultCloseDate);
+
+        var closeDate = new Date(defaultCloseDate);
+        $("#closedate").val(closeDate.toUTCString());
+
+        $("#datepicker").change(function()
+        {
+            var currentDatePicker = $(this).datepicker("getDate");
+            closeDate.setFullYear(currentDatePicker.getFullYear());
+            closeDate.setMonth(currentDatePicker.getMonth());
+            closeDate.setDate(currentDatePicker.getDate());
+            $("#closedate").val(closeDate.toUTCString());
+        });
+
+        $("#minute").change(function()
+        {
+            closeDate.setMinutes($("#minute").val());
+            $("#closedate").val(closeDate.toUTCString());
+        });
+
+        $("#hour").change(function()
+        {
+            changeHour();
+        });
+
+        $("#ampm").change(function()
+        {
+            changeHour();
+        });
+
+        function changeHour()
+        {
+            var hourChange = parseInt($("#hour").val()) % 12;
+            if ($("#ampm").val() == "PM")
+                hourChange += 12;
+            closeDate.setHours(hourChange);
+            $("#closedate").val(closeDate.toUTCString());
+        }
+    });
+
+    function loadDateTimeHtml()
+    {
+        var hourHtml = "";
+        var minuteHtml = "";
+        var ampmHtml = "";
+
+        for (var i = 1; i <= 12; i++)
+        {
+            hourHtml += "<option value='" + i + "'>" + i + "</option>";
+        }
+        document.getElementById("hour").innerHTML = hourHtml;
+
+        for (var i = 0; i < 60; i++)
+        {
+            minuteHtml += "<option value='" + i +"'> :" + ("0" + i).slice(-2) + "</option>";
+        }
+        document.getElementById("minute").innerHTML = minuteHtml;
+
+        ampmHtml += "<option value='AM'>AM</option>";
+        ampmHtml += "<option value='PM'>PM</option>";
+        document.getElementById("ampm").innerHTML = ampmHtml;
+    }
 //***************************script for options***************************
     displayOptions();
     function displayOptions()
