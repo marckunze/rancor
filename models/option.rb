@@ -15,6 +15,18 @@ class Option
   belongs_to :poll
   has n, :rankings
 
+  def destroy
+    self.poll = nil
+    rankings.destroy
+    super
+  end
+
+  def destroy!
+    self.poll = nil
+    rankings.destroy!
+    super
+  end
+
   # Internal: Returns, as a integer, the percentage of the total score the object
   #           represents
   #

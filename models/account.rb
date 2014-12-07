@@ -15,6 +15,17 @@ class Account
 
   has n, :polls, child_key: [ 'owner_id' ]
 
+
+  def destroy
+    polls.clear.save
+    super
+  end
+
+  def destroy!
+    polls.clear.save!
+    super
+  end
+
   # Internal: Retrieves user account if their credentials are valid
   #
   # user     - The username or email of the user attempting to log in.

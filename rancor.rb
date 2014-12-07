@@ -187,7 +187,7 @@ class Rancor < Sinatra::Base
     @poll = Poll.create(question: params['question'].strip)
 
     poll_opts.each do |opt|
-      @poll.options << Option.create(cid: @poll.options.size + 1, text: opt)
+      @poll.options << Option.new(cid: @poll.options.size + 1, text: opt)
       @poll.save
     end
 
@@ -243,7 +243,7 @@ class Rancor < Sinatra::Base
     ballot = poll.ballots.first(voter: request.ip)
 
     if ballot.nil?
-      # poll.add_results()params[:vote], ip) # for testing purposes
+      # if poll.add_results(params[:vote], ip) # for testing purposes
       if poll.add_results(params[:vote], request.ip)
         flash[:positive] = "Your vote has been recorded!"
       else
@@ -290,11 +290,33 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/poll/:id/close/?' do
+    halt(404) unless request.post?
     redirect to(request.referrer || '/')
   end
 
+  # Public: Post request for paths '/poll/<id>/destroy' and '/pool/<id>/destroy/'
+  #         Deletes the poll if requested by the owner.
+  #
+  # Returns nothing.
+  post '/poll/:id/destroy/?' do
+    # Check to see if currently logged in user is the poll owner
+    # unless env['warden'].authenticated? && poll.owner == env['warden'].user
+    #   flash[:negative] = "You are not authorized to perform this action!"
+    #   halt
+    # end
 
-    # Public: GET request for path '/unauthenticated'. Adds a message and redirects
+    poll.destroy
+  end
+
+  # Public: After helper for paths '/poll/<id>/destroy' and '/pool/<id>/destroy/'
+  #
+  # Returns nothing. Redirects the requester back to the the original page.
+  after '/poll/:id/destroy/?' do
+    halt(404) unless request.post?
+    redirect to(request.referrer || '/')
+  end
+
+  # Public: GET request for path '/unauthenticated'. Adds a message and redirects
   #         the user to the login page.
   #
   # Returns nothing.

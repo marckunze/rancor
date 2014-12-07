@@ -36,18 +36,18 @@ if Account.all.size == 0
   student.save
 
   # INSERT INTO choices (rid,cid,option) VALUES(1,1,'steak');
-  steak = Option.create(cid: 1, text: 'steak')
+  steak = Option.new(cid: 1, text: 'steak')
   dinner.options << steak
   # INSERT INTO choices (rid,cid,option) VALUES(1,2,'sushi');
-  sushi = Option.create(cid: 2, text: 'sushi')
+  sushi = Option.new(cid: 2, text: 'sushi')
   dinner.options << sushi
   dinner.save
 
   # INSERT INTO choices (rid,cid,option) VALUES(2,1,'yes');
-  yes = Option.create(cid: 1, text: 'yes')
+  yes = Option.new(cid: 1, text: 'yes')
   drinks.options << yes
   #INSERT INTO choices (rid,cid,option) VALUES(2,2,'no');
-  no = Option.create(cid: 2, text: 'no')
+  no = Option.new(cid: 2, text: 'no')
   drinks.options << no
   drinks.save
 end

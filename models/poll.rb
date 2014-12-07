@@ -19,6 +19,24 @@ class Poll
   has n, :ballots
   has n, :rankings, through: :options
 
+  def destroy
+    self.owner = nil
+    rankings.destroy unless rankings.nil?
+    options.destroy unless options.nil?
+    ballots.destroy unless ballots.nil?
+    reload
+    super
+  end
+
+  def destroy!
+    self.owner = nil
+    rankings.destroy! unless rankings.nil?
+    options.destroy! unless options.nil?
+    ballots.destroy! unless ballots.nil?
+    reload
+    super
+  end
+
   # Internal: Calculates and returns the total points available in the poll
   #
   # Examples
