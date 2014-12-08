@@ -20,15 +20,26 @@
 }
 
 /*! SOURCE : http://w3lessons.info/2013/06/04/skill-bar-with-jquery-css3/ */
+.skillbar-container{
+	width: 100%;  
+    height:35px; 
+    color:#000;
+    margin-bottom: 15px;
+    padding:0;
+    position:relative;
+    clear: both;
+}
 
 .skillbar {
-	position:relative;
-	display:block;
+	position:absolute;
+	display:inline;
+	float: left;
 	margin-bottom:15px;
-	width:100%;
+	left:165px;
+	width:80%;
 	background:#ffffff;
 	height:35px;
-	border-radius:3px;
+	border-radius:3px;	
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 	-webkit-transition:0.4s linear;
@@ -45,9 +56,11 @@
 
 .skillbar-title {
 	position:absolute;
-	top:0;
-	left:0;
-	width:110px;
+	display:inline;
+	float: left;
+	top: 0px;
+	width: 165px;
+	left: -165px;
 	font-weight:bold;
 	font-size:14px;
 	color:#ffffff;
