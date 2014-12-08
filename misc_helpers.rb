@@ -26,7 +26,8 @@ module MiscHelpers
   #
   # Returns true if operation is successful, false if not.
   def close_polls
-    Poll.all(open: true, closedate: round_to_hour).close
+    p "Closing polls set to close at #{nearest_hour = round_to_hour}"
+    Poll.all(open: true, closedate: nearest_hour).each { |poll| poll.close }
   end
 
   # Internal: Takes a instance of a Time object and returns a DateTime object
@@ -40,7 +41,10 @@ module MiscHelpers
   #   round_to_hour(Time.new(2002, 10, 31, 2, 2, 2))
   # ` # => #<DateTime: 2002-10-31T02:00:00-08:00 ((2452579j,36000s,0n),-28800s,2299161j)>
   #
-  # Returns a DateTime object, or nil if an incompatible object was passed. 
+  #   round_to_hour(5)
+  #   # => nil
+  #
+  # Returns a DateTime object, or nil if an incompatible object was passed.
   def round_to_hour(time = Time.now)
     return nil unless time.is_a? Time
     # Eliminates the milliseconds.
@@ -48,6 +52,7 @@ module MiscHelpers
     # rounds to the nearest hour (E.G. 10:57 becomes 11:00)
     time += time.min >= 30 ? 1 * HOUR : 0
     time -= time.min * MIN + time.sec
-    time.to_datetime
+    # convert to utc time before converting to DateTime
+    time.localtime(0).to_datetime
   end
 end

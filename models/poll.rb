@@ -128,6 +128,7 @@ class Poll
   # Returns true if the operation was successful, false if not.
   def close
     return false unless self.open
+    p "Closing poll ##{self.rid}"
 
     self.open = false
 
