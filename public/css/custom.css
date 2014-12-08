@@ -16,13 +16,16 @@
     float:none;
 }
 
-a.btn-default
+#navbar .btn-inverse
 {
-    margin-top:8px;
-    background-color:#222;
-    color:#999
+    border-color:#999;
+    margin-left:0.3em;
 }
 
+#navbar .btn-inverse:hovr
+{
+    background-color:#999;
+}
 
 /* home styles */
 #home-carousel

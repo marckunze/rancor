@@ -82,6 +82,9 @@
 		</li>
 		<% if env['warden'].authenticated? %>
 			<a class="btn btn-default navbar-right" href="/logout" role="button">logout</a>
+			<a class="btn btn-inverse navbar-right" href="/home" role="button">
+                <span class="glyphicon glyphicon-home">&nbsphome</span>
+            </a>
 		<% else %>
 			<form class="navbar-form navbar-right" role="form" action="/login" method="post">
 			  <div class="form-group">
