@@ -16,28 +16,32 @@
                 </div>
                 <div class="col-sm-4">
                         <span style="float:left"><select class="form-control text-center" id="hour"></select></span>
-                        <span style="float:left"><select class="form-control text-center" id="minute"></select></span>
+                    <!--    <span style="float:left"><select class="form-control text-center" id="minute"></select></span>  -->
                         <span style="float:left"><select class="form-control text-center" id="ampm"></select></span>
+                        <div class="btn-group" role="group" style="float:left">
+                            <div class="btn btn-warning" role="button" id="unset-time-btn">Unset</div>
+                            <div class="btn btn-warning disabled" role="button" id="set-time-btn">Set</div>
+                        </div>
                         <input type="text" id="closedate" name="closeDate" size="27">UTC Time
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6" style="text-align:center; margin-top:10px">
-                    <div class="btn btn-default glyphicon glyphicon-minus" id="minus-btn-options"></div>
+                    <div class="btn btn-default glyphicon glyphicon-minus" role="button" id="minus-btn-options"></div>
                     <input type="text" size="2" id="numOfOptions" value="2" style="font-size:1.3em; text-align:center;">
-                    <div class="btn btn-default glyphicon glyphicon-plus" id="plus-btn-options"></div>
+                    <div class="btn btn-default glyphicon glyphicon-plus" role="button" id="plus-btn-options"></div>
                     <p># of options</p>
                     <div id="options"></div>
                 </div>
                 <div class="col-sm-6" style="text-align:center; margin-top:10px">
-                    <div class="btn btn-default glyphicon glyphicon-minus" id="minus-btn-emails"></div>
+                    <div class="btn btn-default glyphicon glyphicon-minus" role="button" id="minus-btn-emails"></div>
                     <input type="text" size="2" id="numOfEmails" value="1" style="font-size:1.3em; text-align:center;">
-                    <div class="btn btn-default glyphicon glyphicon-plus" id="plus-btn-emails"></div>
+                    <div class="btn btn-default glyphicon glyphicon-plus" role="button" id="plus-btn-emails"></div>
                     <p># of participants</p>
                     <div id="emails"></div>
                 </div>
             </div>
-            <input type="submit" value="Submit" style="" class="btn btn-info btn-lg">
+            <input type="submit" value="Submit" style="" class="btn btn-info btn-lg" role="button">
         </form>
       <%= styled_flash %>
     </div>
@@ -60,6 +64,9 @@
         loadDateTimeHtml();
         var defaultCloseDate = new Date();
         defaultCloseDate.setDate(defaultCloseDate.getDate() + 1);
+        defaultCloseDate.setHours(defaultCloseDate.getHours() + 1);
+        defaultCloseDate.setMinutes(0);
+        defaultCloseDate.setSeconds(0);
         var hours12 = defaultCloseDate.getHours();
         if (hours12 % 12 == 0)
             $("#hour").val(12);
@@ -85,11 +92,11 @@
             $("#closedate").val(closeDate.toUTCString());
         });
 
-        $("#minute").change(function()
-        {
-            closeDate.setMinutes($("#minute").val());
-            $("#closedate").val(closeDate.toUTCString());
-        });
+        //$("#minute").change(function()
+        //{
+        //    closeDate.setMinutes($("#minute").val());
+        //    $("#closedate").val(closeDate.toUTCString());
+        //});
 
         $("#hour").change(function()
         {
@@ -109,12 +116,32 @@
             closeDate.setHours(hourChange);
             $("#closedate").val(closeDate.toUTCString());
         }
+
+        $("#unset-time-btn").click(function()
+        {
+            $("#unset-time-btn").addClass("disabled");
+            $("#set-time-btn").removeClass("disabled");
+            $("#closedate").val("");
+            $("#datepicker").datepicker("disable");
+            $("#hour").prop("disabled", true);
+            $("#ampm").prop("disabled", true);
+        });
+
+        $("#set-time-btn").click(function()
+        {
+            $("#set-time-btn").addClass("disabled");
+            $("#unset-time-btn").removeClass("disabled");
+            $("#closedate").val(closeDate.toUTCString());
+            $("#datepicker").datepicker("enable");
+            $("#hour").prop("disabled", false);
+            $("#ampm").prop("disabled", false);
+        });
     });
 
     function loadDateTimeHtml()
     {
         var hourHtml = "";
-        var minuteHtml = "";
+        //var minuteHtml = "";
         var ampmHtml = "";
 
         for (var i = 1; i <= 12; i++)
@@ -123,11 +150,11 @@
         }
         document.getElementById("hour").innerHTML = hourHtml;
 
-        for (var i = 0; i < 60; i++)
-        {
-            minuteHtml += "<option value='" + i +"'> :" + ("0" + i).slice(-2) + "</option>";
-        }
-        document.getElementById("minute").innerHTML = minuteHtml;
+        //for (var i = 0; i < 60; i++)
+        //{
+        //    minuteHtml += "<option value='" + i +"'> :" + ("0" + i).slice(-2) + "</option>";
+        //}
+        //document.getElementById("minute").innerHTML = minuteHtml;
 
         ampmHtml += "<option value='AM'>AM</option>";
         ampmHtml += "<option value='PM'>PM</option>";
