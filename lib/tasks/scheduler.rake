@@ -25,7 +25,7 @@ task :mail_results do
 
   #########
   ## This is now taken care for you in the helpers. As it's currently set up,
-  ## you should be allow to perform this with one statement:
+  ## you should be able to perform this with one statement:
   ## Rancor.new.helpers.close_polls
   ## (SHOULD, because I haven't tested it yet)
   #########

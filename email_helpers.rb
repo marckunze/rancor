@@ -7,7 +7,7 @@ module EmailHelpers
   #
   # Examples
   #
-  #   send_confirmation foo@bar.com
+  #   send_confirmation(foo@bar.com)
   #
   # Returns nothing
   def send_confirmation(address)
@@ -20,7 +20,7 @@ module EmailHelpers
   #
   # Examples
   #
-  #   send_invite foo@bar.com
+  #   send_invite(foo@bar.com)
   #
   # Returns nothing
   def send_invite(address)
@@ -30,14 +30,17 @@ module EmailHelpers
   # Internal: Sends a results email when a poll closes
   #
   # address - The email address attached to the new account that was created.
+  # poll    - The poll the results are from
   #
   # Examples
   #
-  #   send_results foo@bar.com
+  #   send_results(foo@bar.com, @poll)
   #
   # Returns nothing
-  def send_results(address)
-    send_email(address, 'Welcome to rancor!', :email_results)
+  def send_results(address, poll)
+    @poll = poll
+    @winner = @poll.options.max(:score)
+    send_email(address, 'The results are in!', :email_results)
   end
 
   # Internal: Sends an email using Pony

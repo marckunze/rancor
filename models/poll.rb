@@ -132,7 +132,7 @@ class Poll
     self.open = false
 
     invites.each do |invite|
-      EmailHelpers.send_results(invite.email)
+      EmailHelpers.send_results(invite.email, self)
     end
 
     save
