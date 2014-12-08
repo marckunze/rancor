@@ -4,10 +4,12 @@ Bundler.require
 require './rancor'
 
 # TODO Having problems including the email helpers
-#require_relative '../../email_helpers'
-#require "#{settings.root}/email_helper"
+require_relative '../../email_helpers'
+#require "#{settings.root}/email_helpers"
 
-#include EmailHelpers
+helpers do
+  include EmailHelpers
+end
 
 desc "This tasks is called by the Heroku scheduler add-on"
 task :mail_results do
@@ -37,8 +39,8 @@ task :mail_results do
     	#voters.each mail a result
         puts "The winner or poll " + @poll_question + " was: " + @poll_winning_option
 
-        #TODO change to correcct email dest
-#        send_results('rancorapp@mailinator.com')
+        #TODO change to correct email dest
+        #send_results('rancorapp@mailinator.com')
 
     end
   

@@ -2,7 +2,8 @@
 #Bundler.require
 #require_relative 'models/models'
 #require './rancor'
-#require_relative 'email_helpers'
+require_relative 'email_helpers'
+include EmailHelpers
 
 Dir.glob('lib/tasks/*.rake').each {|r| load r}
 
