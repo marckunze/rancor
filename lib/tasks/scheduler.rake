@@ -23,7 +23,15 @@ task :mail_results do
 
   #TODO Get all polls with close date of past time period (hours or minutes)
 
+  #########
+  ## This is now taken care for you in the helpers. As it's currently set up,
+  ## you should be allow to perform this with one statement:
+  ## Rancor.new.helpers.close_polls
+  ## (SHOULD, because I haven't tested it yet)
+  #########
+
     #TODO Get poll/rank winner and info from tables
+    # TODO move this work to email_results.erb and poll.rb
     #temp example
     @poll_question = "What the f?"
     @poll_winning_option = "Yeah, seriously?"

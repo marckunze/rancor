@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require
 require_relative 'models/models'
 require_relative 'email_helpers'
+require_relative 'misc_helpers'
 
 class Rancor < Sinatra::Base
   enable :sessions
@@ -34,23 +35,7 @@ class Rancor < Sinatra::Base
     end
   end
 
-  helpers EmailHelpers
-
-  helpers do
-    # Internal: Returns the poll that corresponds to the id or sends the requester
-    # to the 404 page
-    #
-    # Examples
-    #
-    #   poll.options.all(order: :score.desc)
-    #
-    #   poll.add_results(params[:vote], request.ip)
-    #
-    # Returns the poll that corresponds to the id parameter.
-    def poll
-      @poll ||= Poll.get(params['id']) || not_found
-    end
-  end
+  helpers EmailHelpers, MiscHelpers
 
   # The following documentation treats sinatra's get and post helpers as methods.
 
@@ -374,5 +359,4 @@ class Rancor < Sinatra::Base
   error do
     erb :error
   end
-
 end
