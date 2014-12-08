@@ -1,10 +1,11 @@
 require 'bundler'
 Bundler.require
 require_relative 'models/models'
-require_relative 'email_helpers'
-require_relative 'misc_helpers'
+require_relative 'helpers/email_helpers'
+require_relative 'helpers/misc_helpers'
 
 class Rancor < Sinatra::Base
+  set :root, Dir.pwd # Sets the root directory as the directory config.ru is in.
   enable :sessions
   register Sinatra::Flash
 

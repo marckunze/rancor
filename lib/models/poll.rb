@@ -6,7 +6,7 @@ require_relative 'ballot'
 require_relative 'option'
 require_relative 'ranking'
 require_relative 'invite'
-require_relative '../email_helpers'
+require_relative '../helpers/email_helpers'
 
 class Poll
   include DataMapper::Resource
