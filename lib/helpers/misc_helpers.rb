@@ -18,16 +18,16 @@ module MiscHelpers
     @poll ||= Poll.get(params['id']) || not_found
   end
 
-  # Internal: Closes all polls that are set to be closed at the top of the
+  # Internal: Returns all polls that are set to be closed at the top of the
   #           nearest hour.
   #
   # Examples
-  #   Rancor.new.helpers.close_polls
+  #   Rancor.new.helpers.expired_polls
   #
-  # Returns true if operation is successful, false if not.
-  def close_polls
-    p "Closing polls set to close at #{nearest_hour = round_to_hour}"
-    Poll.all(:open => true, :closedate.lte => nearest_hour).each { |poll| poll.close }
+  # Returns A collection a Polls containing all polls that need to be closed.
+  def expired_polls
+    p "Expired polls set to close at #{nearest_hour = round_to_hour}"
+    Poll.all(:open => true, :closedate.lte => nearest_hour)
   end
 
   # Internal: Takes a instance of a Time object and returns a DateTime object

@@ -39,7 +39,8 @@ module EmailHelpers
   # Returns nothing
   def send_results(address, poll)
     @poll = poll
-    @winner = @poll.options.max(:score)
+    score = @poll.options.max(:score)
+    @winner = @poll.options.first(score: score)
     send_email(address, 'The results are in!', :email_results)
   end
 

@@ -119,7 +119,7 @@ class Poll
     save
   end
 
-  # Internal: Closes the poll and sends the results to every invite
+  # Internal: Closes the poll
   #
   # Example
   #   @poll.close
@@ -131,11 +131,6 @@ class Poll
     p "Closing poll ##{self.rid}"
 
     self.open = false
-
-    invites.each do |invite|
-      EmailHelpers.send_results(invite.email, self)
-    end
-
     save
   end
 
