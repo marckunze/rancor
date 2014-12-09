@@ -51,4 +51,19 @@ if Account.all.size == 0
   no = Option.new(cid: 2, text: 'no')
   drinks.options << no
   drinks.save
+
+  # third poll with a closedate
+  curtime = DateTime.now
+  time1 = DateTime.new(curtime.year, curtime.month, curtime.day, curtime.hour
+    , 0, 0, 0, 0)
+
+  foo = Poll.create(question: "Foo?", closedate: time1)
+  student.polls << foo
+  student.save
+  bar = Option.new(cid: 1, text:'bar')
+  baz = Option.new(cid: 2, text:'baz')
+  foo.options << bar
+  foo.options << baz
+  foo.save
+
 end
