@@ -4,7 +4,7 @@ require_relative '../rancor'
 
 desc "This tasks is called by the Heroku scheduler add-on"
 task :mail_results do
-  rancor = Rancor.new
+  rancor = Rancor.prototype.dup
   polls = rancor.helpers.expired_polls
   polls.each do |poll|
     poll.close
