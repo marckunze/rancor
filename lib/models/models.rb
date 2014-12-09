@@ -70,6 +70,8 @@ if Account.all.size == 0
   foo.options << Option.new(cid: 1, text:'yes')
   foo.options << Option.new(cid: 2, text:'of course')
   foo.options << Option.new(cid: 3, text: 'Is there anyone left to trade?')
+  foo.invites << Invite.new(email: 'rancorapp@mailinator.com')
+  foo.invites << Invite.new(email: 'rancorapp2@mailinator.com')
   foo.save
 
 end
