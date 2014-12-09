@@ -3,3 +3,7 @@
 <% @polls.each do |poll| %>
   <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
 <% end %>
+<p>Polls you are invited to:</p>
+<% @invites.each do |poll| %>
+    <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
+<% end %>
