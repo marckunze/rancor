@@ -64,7 +64,10 @@ class Rancor < Sinatra::Base
     # Display all polls user is invited to
     @invites = []
     Invite.all(email: env['warden'].user.email).each do |invite|
-      @invites << invite.poll if invite.poll.open
+      # invite.poll.owner.email might be streching things too far.
+      if invite.poll.open && invite.poll.owner.email != env['warden'].user.email
+        @invites << invite.poll
+      end
     end
     @title = 'rancor:user home'
     erb :homepage
@@ -207,6 +210,11 @@ class Rancor < Sinatra::Base
       @poll.invites << Invite.new(email: address)
       send_invite(address)
     end
+    # Owner gets the results, but not the invite
+    if env['warden'].authenticated?
+      @poll.invites << Invite.new(email: env['warden'].user.email)
+    end
+    @poll.save
 
     # Redirect to newly created poll
     flash[:positive] = "Your poll has been created!"
