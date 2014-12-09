@@ -27,7 +27,7 @@ module MiscHelpers
   # Returns true if operation is successful, false if not.
   def close_polls
     p "Closing polls set to close at #{nearest_hour = round_to_hour}"
-    Poll.all(open: true, closedate: nearest_hour).each { |poll| poll.close }
+    Poll.all(:open => true, :closedate.lte => nearest_hour).each { |poll| poll.close }
   end
 
   # Internal: Takes a instance of a Time object and returns a DateTime object
