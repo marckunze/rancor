@@ -356,6 +356,7 @@ class Rancor < Sinatra::Base
   #
   # Returns the rendering for the not_found page as a String
   not_found do
+    @title = 'rancor:home'
     erb :not_found
   end
 
@@ -363,6 +364,7 @@ class Rancor < Sinatra::Base
   #
   # Returns the rendering for the error page as a String
   error do
+    @title = 'rancor:error'
     erb :error
   end
 end
