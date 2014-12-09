@@ -1,9 +1,17 @@
 <%= styled_flash %>
-<p>Your polls:</p>
-<% @polls.each do |poll| %>
-  <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
-<% end %>
-<p>Polls you are invited to:</p>
-<% @invites.each do |poll| %>
-    <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
-<% end %>
+<div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Your polls:</h3>
+    </div>
+    <div class="panel-body">
+		<% @polls.each do |poll| %>
+		  <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
+		<% end %>
+		<p>Polls you are invited to:</p>
+		<% @invites.each do |poll| %>
+		    <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
+		<% end %>
+	</div>
+</div>
+       
+

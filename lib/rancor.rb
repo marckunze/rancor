@@ -66,6 +66,7 @@ class Rancor < Sinatra::Base
     Invite.all(email: env['warden'].user.email).each do |invite|
       @invites << invite.poll if invite.poll.open
     end
+    @title = 'rancor:user home'
     erb :homepage
   end
 
