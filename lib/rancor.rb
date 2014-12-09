@@ -325,26 +325,48 @@ class Rancor < Sinatra::Base
     not_found unless request.post?
     redirect to(request.referrer || '/')
   end
+  
+  before '/account/*' do
+    not_found unless request.post?
+    unless env['warden'].authenticated?
+      flash[:negative] = "You are not authorized to perform this action!"
+      halt
+    end
+    pass
+  end
 
   # Public: Post request for paths '/account/destroy' and '/account/destroy/'
   #         Deletes the user's account.
   #
   # Returns nothing.
   post '/account/destroy?' do
-    unless env['warden'].authenticated?
-      flash[:negative] = "You are not authorized to perform this action!"
-      halt
-    end
-
     error unless env['warden'].user.destroy
     env['warden'].logout
   end
+  
+  before '/account/change/*' do
+    unless params['password'] == env['warden'].user.password
+      flash[:negative] = "Your password was incorrect!"
+      halt
+    end
+  end
 
-  # Public: After helper for paths '/account/destroy' and '/account/destroy/'
+  post '/account/change/email/?' do 
+    error unless env['warden'].user.update(email: params['new_email'])
+  end
+  
+  post '/account/change/password/?' do
+    unless params['new_pass'] == params['confirm']
+      flash[:negative] = "Your passwords do not match"
+      halt
+    end
+    error unless env['warden'].user.update(password: params['new_pass'])
+  end
+  
+  # Public: After helper all paths that are part of  '/account/*'
   #
   # Returns nothing. Redirects the requester back to the the original page.
-  after '/account/destroy/?' do
-    not_found unless request.post?
+  after '/account/*' do
     redirect to(request.referrer || '/')
   end
 
