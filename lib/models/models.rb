@@ -21,10 +21,10 @@ end
 
 if Account.all.size == 0
   # INSERT INTO User (id,username,email) VALUES(1,'p1','abc@email.com');
-  p1 = Account.create(username: 'p1', email: 'abc@email.com', password: "test")
+  p1 = Account.create(username: 'p1', email: 'rancorapp@mailinator.com', password: "test")
 
   # INSERT INTO User (id,username,email) VALUES(2,'student','cdad@email.com');
-  student = Account.create(username: 'student', email: 'cdad@email.com', password: 'student')
+  student = Account.create(username: 'student', email: 'rancorapp2@mailinator.com', password: 'student')
 
   # INSERT INTO rancor (rid,oid,question) VALUES(1,1,'What is for dinner?');
   dinner = Poll.create(question: 'What is for dinner?')
@@ -54,8 +54,7 @@ if Account.all.size == 0
 
   # third poll with a closedate
   curtime = DateTime.now
-  time1 = DateTime.new(curtime.year, curtime.month, curtime.day, curtime.hour
-    , 0, 0, 0, 0)
+  time1 = DateTime.new(curtime.year, curtime.month, curtime.day, curtime.hour+1, 0, 0, 0, 0)
 
   foo = Poll.create(question: "Foo?", closedate: time1)
   student.polls << foo
