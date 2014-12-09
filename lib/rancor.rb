@@ -63,7 +63,9 @@ class Rancor < Sinatra::Base
     @polls = env['warden'].user.polls.all
     # Display all polls user is invited to
     @invites = []
-    Invite.all(email: env['warden'].user.email).each { |invite| @invites << invite.poll }
+    Invite.all(email: env['warden'].user.email).each do |invite|
+      @invites << invite.poll if invite.poll.open
+    end
     erb :homepage
   end
 
