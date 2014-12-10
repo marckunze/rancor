@@ -261,14 +261,14 @@ class Rancor < Sinatra::Base
         flash[:positive] = "Your vote has been recorded!"
       else
         flash[:negative] = "Failure while recording vote"
-        error
+        halt(500)
       end
     else
       if ballot.update_results(params[:vote])
         flash[:positive] = "Your vote has been updated!"
       else
         flash[:negative] = "Failure during vote update"
-        error
+        halt(500)
       end
     end
   end
@@ -315,7 +315,7 @@ class Rancor < Sinatra::Base
       halt
     end
 
-    error unless poll.destroy
+    halt(500) unless poll.destroy
   end
 
   # Public: After helper for paths '/poll/<id>/destroy' and '/pool/<id>/destroy/'
@@ -327,7 +327,7 @@ class Rancor < Sinatra::Base
   end
   
   before '/account/*' do
-    not_found unless request.post?
+    #not_found unless request.post?
     unless env['warden'].authenticated?
       flash[:negative] = "You are not authorized to perform this action!"
       halt
@@ -339,35 +339,35 @@ class Rancor < Sinatra::Base
   #         Deletes the user's account.
   #
   # Returns nothing.
-  post '/account/destroy?' do
-    error unless env['warden'].user.destroy
+  post '/account/destroy/?' do
+    halt(500) unless env['warden'].user.destroy
     env['warden'].logout
   end
   
   before '/account/change/*' do
     unless params['password'] == env['warden'].user.password
-      flash[:negative] = "Your password was incorrect!"
+      flash[:negative] = "Password entered was incorrect!"
       halt
     end
   end
 
   post '/account/change/email/?' do 
-    error unless env['warden'].user.update(email: params['new_email'])
+    halt(500) unless env['warden'].user.update(email: params['new_email'])
   end
   
   post '/account/change/password/?' do
     unless params['new_pass'] == params['confirm']
-      flash[:negative] = "Your passwords do not match"
+      flash[:negative] = "Your new passwords do not match"
       halt
     end
-    error unless env['warden'].user.update(password: params['new_pass'])
+    halt(500) unless env['warden'].user.update(password: params['new_pass'])
   end
   
   # Public: After helper all paths that are part of  '/account/*'
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/account/*' do
-    redirect to(request.referrer || '/')
+    redirect to(request.referrer || '/') unless response.not_found?
   end
 
   # Public: GET request for path '/unauthenticated'. Adds a message and redirects
