@@ -300,7 +300,7 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/poll/:id/close/?' do
-    not_found unless request.post?
+    halt(404) unless request.post?
     redirect to(request.referrer || '/')
   end
 
@@ -322,12 +322,12 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/poll/:id/destroy/?' do
-    not_found unless request.post?
+    halt(404) unless request.post?
     redirect to(request.referrer || '/')
   end
   
   before '/account/*' do
-    #not_found unless request.post?
+    halt(404) unless request.post?
     unless env['warden'].authenticated?
       flash[:negative] = "You are not authorized to perform this action!"
       halt
@@ -367,7 +367,8 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing. Redirects the requester back to the the original page.
   after '/account/*' do
-    redirect to(request.referrer || '/') unless response.not_found?
+    pass unless response.successful?
+    redirect to(request.referrer || '/')
   end
 
   # Public: GET request for path '/unauthenticated'. Adds a message and redirects
@@ -383,19 +384,19 @@ class Rancor < Sinatra::Base
     redirect to('/login')
   end
 
+  # Public: Helper for server error handling.
+  #
+  # Returns the rendering for the error page as a String
+  error 500..505 do
+    @title = 'rancor:error'
+    erb :error
+  end
+
   # Public: Helper for handling a 404 status.
   #
   # Returns the rendering for the not_found page as a String
   not_found do
     @title = 'rancor:home'
     erb :not_found
-  end
-
-  # Public: Helper for generic error handling.
-  #
-  # Returns the rendering for the error page as a String
-  error do
-    @title = 'rancor:error'
-    erb :error
   end
 end
