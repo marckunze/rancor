@@ -1,65 +1,60 @@
 <%= styled_flash %>
-<p>Your polls:</p>
-<% @polls.each do |poll| %>
-  <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
-<% end %>
-<p>Polls you are invited to:</p>
-<% @invites.each do |poll| %>
-    <p><%="Poll ##{poll.rid}: #{poll.question}"%></p>
-<% end %>
-
 <div id="rancor-homepage" class="container">
     <div class="jumbotron">
-        <fieldset style="border:black 2px solid;border-radius:1em; margin:1em">
-            <legend style="width:auto;margin:5px;padding:5px">My polls</legend>
-            <div class="row">
-                <div class="col-sm-6">
-                    <p>Poll Question</p>
-                </div>
-                <div class="col-sm-3">
-                    <p>Poll Closing At:</p>
-                </div>
-            </div>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">My polls</h3>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
             <% @polls.each do |poll| %>
-                <div class="row" style="margin-bottom:5px">
-                    <div class="col-sm-3">
-                    <%= "<a href='/poll/#{poll.rid}'>#{poll.question}</a>" %>
+                <div class="row text-left" style="margin-bottom:5px;border-bottom:solid black 1px">
+                    <div class="col-sm-7">
+                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results"><span class="glyphicon glyphicon-stats"></span></a>
+                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                        <p class="well well-sm glyphicon glyphicon-question-sign" style="font-size:1em">&nbsp<%= poll.question %></p>
                     </div>
-                    <div class="col-sm-3">
-                    <%= "<a href='/poll/#{poll.rid}/results' class='btn btn-warning btn-sm' role='button'><span class='glyphicon glyphicon-stats'></span>Results</a>" %>
+                    <div class="col-sm-5">
+                        <form action="/poll/<%= poll.rid %>/close" method="post" onsubmit="return confirm('Close poll?')">
+                            <% if poll.open %>
+                            <button type="submit" value="Close Poll" class="btn btn-danger">
+                                <i class="glyphicon glyphicon-time"></i>
+                                Close Poll
+                            </button>
+                            <% end %>
+                            <% if poll.open %>
+                            <p class="well well-sm" style="font-size:1em;display:inline-block"><%= poll.closedate.nil? ? "open indefinitely" : "#{poll.closedate}" %></p>
+                            <% else %>
+                            <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
+                            <% end %>
+                        </form>
                     </div>
-                    <div class="col-sm-3">
+                </div>
+            <% end %>
+            </div> <!-- panel-body -->
+        </div> <!-- my polls panel-info -->
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Polls invited to</h3>
+            </div>
+            <div class="panel-body">
+            <% @invites.each do |poll| %>
+                <div class="row text-left" style="margin-bottom:5px;border-bottom:solid black 1px">
+                    <div class="col-sm-7">
+                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results"><span class="glyphicon glyphicon-stats"></span></a>
+                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                        <p class="well well-sm glyphicon glyphicon-question-sign" style="font-size:1em">&nbsp<%= poll.question %></p>
+                    </div>
+                    <div class="col-sm-5">
                         <% if poll.open %>
-                        <%= poll.closedate.nil? ? "open indefinitely" : "#{poll.closedate}" %>
+                        Closing time:
+                        <p class="well well-sm" style="font-size:1em;display:inline-block"><%= poll.closedate.nil? ? "open indefinitely" : "#{poll.closedate}" %></p>
                         <% else %>
-                        Poll is closed.
+                        <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
                         <% end %>
                     </div>
-                    <% if poll.open %>
-                    <%= "<form action='/poll/#{poll.rid}/close' method='post'>" %>
-                        <input type="submit" value="Close Poll" class="btn btn-danger btn-sm">
-                    </form>
-                    <% end %>
                 </div>
             <% end %>
-        </fieldset>
-        <fieldset style="border:black 2px solid;border-radius:1em; margin:1em;">
-            <legend style="width:auto;margin:5px;padding:5px">Polls invited to</legend>
-            <div class="row">
-                <div class="col-sm-6">
-                    <p>Poll Question</p>
-                </div>
-            </div>
-            <% @invites.each do |poll| %>
-            <div class="row">
-                <div class="col-sm-3">
-                <%= "<a href='/poll/#{poll.rid}'>#{poll.question}</a>" %>
-                </div>
-                <div class="col-sm-3">
-                <%= "<a href='/poll/#{poll.rid}/results' class='btn btn-warning btn-sm' role='button'><span class='glyphicon glyphicon-stats'></span>Results</a>" %>
-                </div>
-            </div>
-            <% end %>
-        </fieldset>
-    </div>
-</div>
+            </div> <!-- panel-body -->
+        </div> <!-- invited polls panel-info -->
+    </div> <!-- jumbotron -->
+</div> <!-- rancor-homepage -->
