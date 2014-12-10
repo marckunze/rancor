@@ -11,10 +11,11 @@ require_relative '../helpers/email_helpers'
 class Poll
   include DataMapper::Resource
 
-  property :rid,        Serial
-  property :question,   Text
-  property :open,       Boolean, default: true
-  property :closedate,  DateTime
+  property :rid,         Serial
+  property :question,    String, length: 80
+  property :description, Text, required: false
+  property :open,        Boolean, default: true
+  property :closedate,   DateTime
 
   belongs_to :owner, 'Account', required: false
   has n, :options

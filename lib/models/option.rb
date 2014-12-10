@@ -9,7 +9,7 @@ class Option
 
   property :rid,   Serial
   property :cid,   Integer, unique: false
-  property :text,  Text, required: true
+  property :text,  String, length: 50, required: true
   property :score, Integer, default: 0
 
   belongs_to :poll
