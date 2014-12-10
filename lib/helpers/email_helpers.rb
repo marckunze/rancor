@@ -27,21 +27,21 @@ module EmailHelpers
     send_email(address, 'You have been invited to participate in a poll!', :email_invite)
   end
 
-  # Internal: Sends a results email when a poll closes
+  # Internal: Sends a results email to all invited participates
   #
-  # address - The email address attached to the new account that was created.
-  # poll    - The poll the results are from
+  # poll    - The poll containing the invites
   #
   # Examples
-  #
-  #   send_results(foo@bar.com, @poll)
+  #   send_results(@poll)
   #
   # Returns nothing
-  def send_results(address, poll)
+  def send_results(poll)
     @poll = poll
     score = @poll.options.max(:score)
     @winner = @poll.options.first(score: score)
-    send_email(address, 'The results are in!', :email_results)
+    @poll.invites.each do |invite|
+      send_email(invite.email, 'The results are in!', :email_results)
+    end
   end
 
   # Internal: Sends an email using Pony

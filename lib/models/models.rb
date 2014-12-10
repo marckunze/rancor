@@ -17,7 +17,7 @@ end
 
 configure :production do
   DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/rancor')
-  DataMapper.finalize.auto_migrate!
+  DataMapper.finalize.auto_upgrade!
 end
 
 if Account.all.size == 0

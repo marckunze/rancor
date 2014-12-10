@@ -8,8 +8,7 @@ task :mail_results do
   polls = rancor.helpers.expired_polls
   polls.each do |poll|
     poll.close
-    poll.invites.each do |invite|
-      rancor.helpers.send_results(invite.email, poll)
-    end
+    # Comment out the following line when testing locally
+    rancor.helpers.send_results(poll)
   end
 end
