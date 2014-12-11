@@ -22,7 +22,13 @@
                             </button>
                             <% end %>
                             <% if poll.open %>
-                            <p class="well well-sm" style="font-size:1em;display:inline-block"><%= poll.closedate.nil? ? "open indefinitely" : "#{poll.closedate}" %></p>
+                            <p class="well well-sm" style="font-size:1em;display:inline-block">
+                                <% if poll.closedate.nil? %> 
+                                open indefinitely
+                                <% else %>
+                                <script>document.write(new Date("<%= poll.closedate %>").toLocaleString());</script>
+                                <% end %>
+                            </p>
                             <% else %>
                             <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
                             <% end %>
@@ -47,7 +53,13 @@
                     <div class="col-sm-5">
                         <% if poll.open %>
                         Closing time:
-                        <p class="well well-sm" style="font-size:1em;display:inline-block"><%= poll.closedate.nil? ? "open indefinitely" : "#{poll.closedate}" %></p>
+                        <p class="well well-sm" style="font-size:1em;display:inline-block">
+                            <% if poll.closedate.nil? %> 
+                            open indefinitely
+                            <% else %>
+                            <script>document.write(new Date("<%= poll.closedate %>").toLocaleString());</script>
+                            <% end %>
+                        </p>
                         <% else %>
                         <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
                         <% end %>
