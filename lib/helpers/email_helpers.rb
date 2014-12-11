@@ -70,8 +70,7 @@ module EmailHelpers
     begin
       Pony.mail({
         :to => recipient,
-        #:from => ENV['MANDRILL_USERNAME'],
-        :from => sender + "@http://rancor.herokuapp.com/",
+        :from => ENV['MANDRILL_USERNAME'],   
         :subject => subject,
         :via => :smtp,
         :html_body => @email_body,
