@@ -79,7 +79,7 @@ module EmailHelpers
           :user_name => ENV['MANDRILL_USERNAME'],
           :password =>  ENV['MANDRILL_APIKEY'],
           :port =>      '587',
-          :domain =>    'heroku.com',    
+          #:domain =>    'heroku.com',    
           :authentication => :plain
         }
       })
