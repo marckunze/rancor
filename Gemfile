@@ -8,8 +8,6 @@ gem 'bcrypt'      # Required for passwords. Should be automatically install by d
 gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'ordinalize', '~> 0.0.3'
 gem 'pony'        # Required for email
-gem 'mandrill-api'# also email, likely move to production once functioning
-gem 'rake'
 
 # http://bundler.io/v1.3/sinatra.html
 # http://bundler.io/v1.3/gemfile.html
