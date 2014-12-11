@@ -60,6 +60,9 @@
 	float: left;
 	top: 0px;
 	width: 165px;
+  	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 	left: -165px;
 	font-weight:bold;
 	font-size:14px;
@@ -79,6 +82,10 @@
 	padding:0 20px;
 	height:35px;
 	line-height:35px;
+	width: 165px;
+  	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
 	-webkit-border-top-left-radius:3px;
 	-webkit-border-bottom-left-radius:3px;
 	-moz-border-radius-topleft:3px;

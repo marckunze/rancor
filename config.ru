@@ -3,5 +3,5 @@ require 'bundler'
 
 Bundler.require
 
-require_relative 'lib/rancor'
+require File.expand_path("../lib/rancor", __FILE__)
 run Rancor
