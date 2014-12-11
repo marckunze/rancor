@@ -8,13 +8,13 @@ $(document).ready(function(){
         });
     });
 
-   $('body').on('click', '.btn.btn-lg.custom', function() {
+   $('#results').on('click', function() {
       
       window.location.href = window.location.pathname + '/results'
         
     });
 
-    $('body').on('click', '.btn', function() {
+    $('#vote').on('click', function() {
       // Get order of sortable list as array
         var id_order = $("#sortable_options").sortable('toArray');
         // Test the array
