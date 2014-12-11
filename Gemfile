@@ -24,6 +24,7 @@ end
 
 group :production do
   #Same but with production
+  gem 'rake'
   gem "pg"
   gem "dm-postgres-adapter"
   gem "dm-migrations"
