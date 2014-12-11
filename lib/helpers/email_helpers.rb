@@ -11,27 +11,34 @@ module EmailHelpers
   #
   # Returns nothing
   def send_confirmation(address)
-    send_email(address, 'Welcome to rancor!', :email_confirm)
+    send_email('Welcome to rancor!', :email_confirm, address)
   end
 
-  # Internal: Sends a invitation email when a new poll is created.
+  # Internal: Sends a invitation email to all invited participates.
   #
-  # address - The email address added by the poll creator
+  # poll - The poll containing the invites
   #
   # Examples
   #
-  #   send_invite(foo@bar.com)
+  #   send_invite(@poll)
   #
   # Returns nothing
-  def send_invite(address)
-    send_email(address, 'You have been invited to participate in a poll!', :email_invite)
+  def send_invites(poll)
+    @poll = poll
+    sender = @poll.owner.nil? ? 'rancor' : @poll.owner.username
+    @poll.invites.each do |invite|
+      next if !@poll.owner.nil? && invite.email == @poll.owner.email
+      send_email('You have been invited to participate in a poll!',
+                 :email_invite, invite.email, sender)
+    end
   end
 
-  # Internal: Sends a results email to all invited participates
+  # Internal: Sends a results email to all invited participates.
   #
-  # poll    - The poll containing the invites
+  # poll - The poll containing the invites
   #
   # Examples
+  #
   #   send_results(@poll)
   #
   # Returns nothing
@@ -39,39 +46,46 @@ module EmailHelpers
     @poll = poll
     score = @poll.options.max(:score)
     @winner = @poll.options.first(score: score)
+    sender = @poll.owner.nil? ? 'rancor' : @poll.owner.username
     @poll.invites.each do |invite|
-      send_email(invite.email, 'The results are in!', :email_results)
+      send_email('The results are in!', :email_results, invite.email, sender)
     end
   end
 
   # Internal: Sends an email using Pony
   #
-  # address - The email address of the recipient
-  # subject - The subject line of the email
-  # body    - An .erb file (file name passed as a symbol) that contains the body
-  #           of the email.
+  # subject   - The subject line of the email
+  # body      - An .erb file (file name passed as a symbol) that contains the
+  #             body of the email.
+  # recipient - The email address of the recipient
+  # sender    - The owner of the poll the email is related to.
   #
   # Examples
   #
   #   send_email foo@bar.com, "Hello, world!", :hello_world
   #
   # Returns nothing
-  def send_email(address, subject, body)
+  def send_email(subject, body, recipient, sender = "rancor")
     @email_body = erb body, :layout => false
-    Pony.mail({
-      :to => address,
-      :from => ENV['MANDRILL_USERNAME'],
-      :subject => subject,
-      :via => :smtp,
-      :html_body => @email_body,
-      :via_options => {
-        :address  => 'smtp.mandrillapp.com',
-        :user_name => ENV['MANDRILL_USERNAME'],
-        :password =>  ENV['MANDRILL_APIKEY'],
-        :port =>      '587',
-        :domain =>    'heroku.com',
-        :authentication => :plain
-      }
-    })
+    begin
+      Pony.mail({
+        :to => recipient,
+        :from => sender,
+        :subject => subject,
+        :via => :smtp,
+        :html_body => @email_body,
+        :via_options => {
+          :address  => 'smtp.mandrillapp.com',
+          :user_name => ENV['MANDRILL_USERNAME'],
+          :password =>  ENV['MANDRILL_APIKEY'],
+          :port =>      '587',
+          :domain =>    'rancor.herokuapp.com',
+          :authentication => :plain
+        }
+      })
+    rescue
+      raise if env['RACK_ENV'] == :production
+      # else: fall through and do nothing, you were testing locally.
+    end
   end
 end

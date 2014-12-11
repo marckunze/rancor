@@ -22,6 +22,7 @@ module MiscHelpers
   #           nearest hour.
   #
   # Examples
+  #
   #   Rancor.new.helpers.expired_polls
   #
   # Returns A collection a Polls containing all polls that need to be closed.
@@ -35,6 +36,7 @@ module MiscHelpers
   #           object is passed, rounds the current time to the nearest hour
   #
   # Examples
+  #
   #   round_to_hour
   #   # => #<DateTime: 2014-12-08T23:00:00+00:00 ((2457000j,82800s,0n),+0s,2299161j)>
   #

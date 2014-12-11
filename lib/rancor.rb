@@ -193,31 +193,32 @@ class Rancor < Sinatra::Base
     @poll.closedate = DateTime.httpdate(params['closeDate']) unless params['closeDate'].empty?
     # params['description'].nil? is just a temporary stopgap to prevent errors
     # until the feature is implemented.
-    @poll.description = params['description'] unless params['description'].nil? || params['description'].empty?
+    unless params['description'].nil? || params['description'].empty?
+      @poll.description = params['description']
+    end
     poll_opts.each do |opt|
       @poll.options << Option.new(cid: @poll.options.size + 1, text: opt)
     end
-    @poll.save
+    halt(500) unless @poll.save
 
 
     # Add poll to user account
     if env['warden'].authenticated?
       env['warden'].user.polls << @poll
-      env['warden'].user.save
+      halt(500) unless env['warden'].user.save
+      @poll.invites << Invite.new(email: env['warden'].user.email)
     end
     
-    # Send invites
+    # Add invites
     params['email'].each do |address|
       address.strip!
       next if address.empty?
       @poll.invites << Invite.new(email: address)
-      send_invite(address)
     end
-    # Owner gets the results, but not the invite
-    if env['warden'].authenticated?
-      @poll.invites << Invite.new(email: env['warden'].user.email)
-    end
-    @poll.save
+    halt(500) unless @poll.save
+    # Send invites
+    send_invites(@poll)
+
 
     # Redirect to newly created poll
     flash[:positive] = "Your poll has been created!"
