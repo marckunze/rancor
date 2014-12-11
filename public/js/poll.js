@@ -8,7 +8,7 @@ $(document).ready(function(){
         });
     });
 
-   $('#results').on('click', function() {
+   $('#results-btn').on('click', function() {
       
       window.location.href = window.location.pathname + '/results'
         
