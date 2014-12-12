@@ -191,6 +191,11 @@ class Rancor < Sinatra::Base
     # Create poll once once input check is complete
     @poll = Poll.create(question: params['question'].strip)
     @poll.closedate = DateTime.httpdate(params['closeDate']) unless params['closeDate'].empty?
+    # "allow_dup" is only passed as a parameter is box is checked.
+    # As a result, true == not nil and false == nil
+    unless params["allow_dup"].nil?
+      @poll.dup_check = false
+    end
     # params['description'].nil? is just a temporary stopgap to prevent errors
     # until the feature is implemented.
     unless params['description'].nil? || params['description'].empty?
