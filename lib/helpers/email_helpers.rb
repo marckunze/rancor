@@ -68,7 +68,7 @@ module EmailHelpers
     begin
       Pony.mail({
         :to => recipient,
-        :from => "rancor",
+        :from => ENV['MANDRILL_USERNAME'],
         :subject => subject,
         :via => :smtp,
         :html_body => @email_body,
