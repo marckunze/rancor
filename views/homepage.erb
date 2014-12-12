@@ -6,14 +6,30 @@
                 <h3 class="panel-title">My polls</h3>
             </div> <!-- panel-heading -->
             <div class="panel-body">
-            <% @polls.each do |poll| %>
-                <div class="row text-left" style="margin-bottom:5px;border-bottom:solid black 1px">
-                    <div class="col-sm-7">
-                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results"><span class="glyphicon glyphicon-stats"></span></a>
-                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                        <p class="well well-sm glyphicon glyphicon-question-sign" style="font-size:1em">&nbsp<%= poll.question %></p>
+            <% @polls.each_with_index do |poll, index| %>
+                <div class="row poll-row">
+                    <div class="col-sm-2">
+                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results">
+                            <span class="glyphicon glyphicon-stats"></span>
+                        </a>
+                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                        <div class="btn btn-success" role="button" title="Description" id="myPollDes-btn<%= index %>">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </div>
+                        <div title="Poll Description" id="myPollDes<%= index %>">
+                            <%= poll.description.nil? ? "None provided." : "#{poll.description}" %>
+                        </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
+                        <p class="question-container" title="<%= poll.question %>">
+                            <i class="glyphicon glyphicon-question-sign"></i>
+                            &nbsp
+                            <%= poll.question %>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
                         <form action="/poll/<%= poll.rid %>/close" method="post" onsubmit="return confirm('Close poll?')">
                             <% if poll.open %>
                             <button type="submit" value="Close Poll" class="btn btn-danger">
@@ -22,7 +38,7 @@
                             </button>
                             <% end %>
                             <% if poll.open %>
-                            <p class="well well-sm" style="font-size:1em;display:inline-block">
+                            <p class="closedate-container">
                                 <% if poll.closedate.nil? %> 
                                 open indefinitely
                                 <% else %>
@@ -30,7 +46,7 @@
                                 <% end %>
                             </p>
                             <% else %>
-                            <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
+                            <p class="closedate-container">Poll is closed.</p>
                             <% end %>
                         </form>
                     </div>
@@ -43,17 +59,33 @@
                 <h3 class="panel-title">Polls invited to</h3>
             </div>
             <div class="panel-body">
-            <% @invites.each do |poll| %>
-                <div class="row text-left" style="margin-bottom:5px;border-bottom:solid black 1px">
-                    <div class="col-sm-7">
-                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results"><span class="glyphicon glyphicon-stats"></span></a>
-                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page"><span class="glyphicon glyphicon-chevron-right"></span></a>
-                        <p class="well well-sm glyphicon glyphicon-question-sign" style="font-size:1em">&nbsp<%= poll.question %></p>
+            <% @invites.each_with_index do |poll, index| %>
+                <div class="row poll-row">
+                    <div class="col-sm-2">
+                        <a href="/poll/<%= poll.rid %>/results" class="btn btn-warning" role="button" title="See Results">
+                            <span class="glyphicon glyphicon-stats"></span>
+                        </a>
+                        <a href="/poll/<%= poll.rid %>" class="btn btn-info" role="button" title="Voting Page">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                        <div class="btn btn-success" role="button" title="Description" id="invitesDes-btn<%= index %>">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </div>
+                        <div title="Poll Description" id="invitesDes<%= index %>">
+                            <%= poll.description.nil? ? "None provided." : "#{poll.description}" %>
+                        </div>
                     </div>
-                    <div class="col-sm-5">
+                    <div class="col-sm-6">
+                        <p class="question-container" title="<%= poll.question %>">
+                            <i class="glyphicon glyphicon-question-sign"></i>
+                            &nbsp
+                            <%= poll.question %>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
                         <% if poll.open %>
                         Closing time:
-                        <p class="well well-sm" style="font-size:1em;display:inline-block">
+                        <p class="closedate-container">
                             <% if poll.closedate.nil? %> 
                             open indefinitely
                             <% else %>
@@ -61,7 +93,7 @@
                             <% end %>
                         </p>
                         <% else %>
-                        <p class="well well-sm" style="font-size:1em;display:inline-block">Poll is closed.</p>
+                        <p class="closedate-container">Poll is closed.</p>
                         <% end %>
                     </div>
                 </div>
@@ -70,3 +102,21 @@
         </div> <!-- invited polls panel-info -->
     </div> <!-- jumbotron -->
 </div> <!-- rancor-homepage -->
+
+
+<script type="text/javascript">
+<% @polls.each_with_index do |poll, index| %>
+    $("#myPollDes<%= index %>").dialog({autoOpen:false});
+    $("#myPollDes-btn<%= index %>").click(function()
+    {
+        $("#myPollDes<%= index %>").dialog("open");
+    });
+<% end %>
+<% @invites.each_with_index do |poll, index| %>
+    $("#invitesDes<%= index %>").dialog({autoOpen:false});
+    $("#invitesDes-btn<%= index %>").click(function()
+    {
+        $("#invitesDes<%= index %>").dialog("open");
+    });
+<% end %>
+</script>
