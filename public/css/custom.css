@@ -122,6 +122,32 @@
     margin-top:2.5em;
 }
 
+/* new-poll styles */
+#rancor-new-poll .page-header
+{
+    color:#C79665;
+}
+
+#rancor-new-poll .row
+{
+    margin:1em -1.1em;
+}
+
+#rancor-new-poll .limit-caption
+{
+    color:red;
+    font-size:0.75em;
+    padding:0 1em;
+    margin:0;
+}
+
+#numOfOptions,
+#numOfEmails
+{
+    font-size:1.3em;
+    text-align:center;
+}
+
 /* welcome styles */
 #home-carousel
 {
