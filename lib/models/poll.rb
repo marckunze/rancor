@@ -15,6 +15,7 @@ class Poll
   property :question,    String, length: 80
   property :description, Text, required: false
   property :open,        Boolean, default: true
+  property :dup_check,   Boolean, default: true
   property :closedate,   DateTime
 
   belongs_to :owner, 'Account', required: false

@@ -256,8 +256,8 @@ class Rancor < Sinatra::Base
   post '/poll/:id/?' do
     # Random IPs for testing ballots
     # ip = "%d.%d.%d.%d" % [rand(256), rand(256), rand(256), rand(256)]
-    # ballot = poll.ballots.first(voter: ip)
-    ballot = poll.ballots.first(voter: request.ip)
+    # ballot = poll.dup_check ? poll.ballots.first(voter: ip) : nil
+    ballot = poll.dup_check ? poll.ballots.first(voter: request.ip) : nil
 
     if ballot.nil?
       # if poll.add_results(params[:vote], ip) # for testing purposes
