@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="panel panel-primary pull-right" id="change-email-panel">
                     <div class="panel-heading">
-                        <h4>Change e-mail<h4>
+                        <h4>Change e-mail</h4>
                     </div>
                     <div class="panel-body">
                         <form action="/account/change/email" method="post" onsubmit="return confirm('Change email?')">
@@ -28,14 +28,14 @@
                 </div>
                 <div class="panel panel-primary pull-right" id="change-password-panel">
                     <div class="panel-heading">
-                        <h4>Change password<h4>
+                        <h4>Change password</h4>
                     </div>
                     <div class="panel-body">
                         <form action="/account/change/password" method="post" onsubmit="return confirm('Change password?')">
-                            <input type="password" name="password" autofocus="autofocus" placeholder="current password" required="required">
                             <input type="password" name="new_pass" placeholder="new password" required="required">
                             <input type="password" name="confirm" placeholder="confirm new password">
-                            <button type="submit" class="btn btn-primary">
+                            <input type="password" name="password" autofocus="autofocus" placeholder="current password" required="required">
+                          <button type="submit" class="btn btn-primary">
                                 Change Password
                             </button>
                         </form>
