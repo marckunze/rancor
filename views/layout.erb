@@ -65,21 +65,9 @@
 	  <a class="navbar-brand" href="/">rancor</a>
 	</div>
 	<div id="navbar" class="navbar-collapse collapse">
-	  <ul class="nav navbar-nav">
-		<li class="dropdown">
-		  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">vote<span class="caret"></span></a>
-		  <ul class="dropdown-menu" role="menu">
-			<li><a href="/vote">vote</a></li>
-			<li><a href="/results">results</a></li>
-		  </ul>
-		</li>
-		<li class="dropdown">
-		  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">org<span class="caret"></span></a>
-		  <ul class="dropdown-menu" role="menu">
-			<li><a href="/new_poll">new poll</a></li>
-			<li><a href="/results">results</a></li>
-		  </ul>
-		</li>
+		<a class="btn btn-primary" href="/new_poll" role="button">
+		  <span class="glyphicon glyphicon-check">&nbspnew poll</span>
+		</a>
 		<% if env['warden'].authenticated? %>
 			<a class="btn btn-inverse navbar-right" href="/logout" role="button">logout</a>
 			<a class="btn btn-inverse navbar-right" href="/home" role="button">
@@ -97,7 +85,6 @@
 			  <a class="btn btn-info" href="/new_user" role="button">register</a>
 			</form>
 		<% end %>
-	  </ul>
 	</div><!--/.navbar-collapse -->
   </div>
 </nav>

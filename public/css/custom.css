@@ -16,6 +16,12 @@
     float:none;
 }
 
+#navbar .btn-primary
+{
+    margin-top:8px;
+    margin-left:0.3em;
+}
+
 #navbar .btn-inverse
 {
     border-color:#999;
