@@ -25,11 +25,10 @@ module EmailHelpers
   # Returns nothing
   def send_invites(poll)
     @poll = poll
-    sender = @poll.owner.nil? ? 'rancor' : @poll.owner.username
     @poll.invites.each do |invite|
       next if (!@poll.owner.nil?) && invite.email == @poll.owner.email
       send_email('You have been invited to participate in a poll!',
-                 :email_invite, invite.email, sender)
+                 :email_invite, invite.email)
     end
   end
 
@@ -46,9 +45,8 @@ module EmailHelpers
     @poll = poll
     score = @poll.options.max(:score)
     @winner = @poll.options.first(score: score)
-    sender = @poll.owner.nil? ? 'rancor' : @poll.owner.username
     @poll.invites.each do |invite|
-      send_email('The results are in!', :email_results, invite.email, sender)
+      send_email('The results are in!', :email_results, invite.email)
     end
   end
 
@@ -65,12 +63,12 @@ module EmailHelpers
   #   send_email foo@bar.com, "Hello, world!", :hello_world
   #
   # Returns nothing
-  def send_email(subject, body, recipient, sender = "rancor")
+  def send_email(subject, body, recipient)
     @email_body = erb body, :layout => false
     begin
       Pony.mail({
         :to => recipient,
-        :from => ENV['MANDRILL_USERNAME'],   
+        :from => "rancor",
         :subject => subject,
         :via => :smtp,
         :html_body => @email_body,
@@ -79,7 +77,7 @@ module EmailHelpers
           :user_name => ENV['MANDRILL_USERNAME'],
           :password =>  ENV['MANDRILL_APIKEY'],
           :port =>      '587',
-          #:domain =>    'heroku.com',    
+          :domain =>    'heroku.com',
           :authentication => :plain
         }
       })
