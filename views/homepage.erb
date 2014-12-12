@@ -1,5 +1,50 @@
-<%= styled_flash %>
 <div id="rancor-homepage" class="container">
+    <div id="change-support" class="row">
+        <div class="col-md-3 col-md-offset-9">
+            <div class="row">
+                <div class="btn btn-default btn-sm pull-right" id="change-password-btn" role="button">
+                    Change password 
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </div>
+                <div class="btn btn-default btn-sm pull-right" id="change-email-btn" role="button">
+                    Change e-mail
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel panel-primary pull-right" id="change-email-panel">
+                    <div class="panel-heading">
+                        <h4>Change e-mail<h4>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/account/change/email" method="post" onsubmit="return confirm('Change email?')">
+                            <input type="email" name="new_email" autofocus="autofocus" placeholder="new email" required="required">
+                            <input type="password" name="password" placeholder="password">
+                            <button type="submit" class="btn btn-primary">
+                                Change Email
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel panel-primary pull-right" id="change-password-panel">
+                    <div class="panel-heading">
+                        <h4>Change password<h4>
+                    </div>
+                    <div class="panel-body">
+                        <form action="/account/change/password" method="post" onsubmit="return confirm('Change password?')">
+                            <input type="password" name="password" autofocus="autofocus" placeholder="current password" required="required">
+                            <input type="password" name="new_pass" placeholder="new password" required="required">
+                            <input type="password" name="confirm" placeholder="confirm new password">
+                            <button type="submit" class="btn btn-primary">
+                                Change Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%= styled_flash %>
     <div class="jumbotron">
         <div class="panel panel-info">
             <div class="panel-heading">
@@ -105,18 +150,58 @@
 
 
 <script type="text/javascript">
-<% @polls.each_with_index do |poll, index| %>
-    $("#myPollDes<%= index %>").dialog({autoOpen:false});
-    $("#myPollDes-btn<%= index %>").click(function()
+    $(document).ready(function()
     {
-        $("#myPollDes<%= index %>").dialog("open");
+        <% @polls.each_with_index do |poll, index| %>
+        $("#myPollDes<%= index %>").dialog({autoOpen:false});
+        $("#myPollDes-btn<%= index %>").click(function()
+        {
+            $("#myPollDes<%= index %>").dialog("open");
+        });
+        <% end %>
+        <% @invites.each_with_index do |poll, index| %>
+        $("#invitesDes<%= index %>").dialog({autoOpen:false});
+        $("#invitesDes-btn<%= index %>").click(function()
+        {
+            $("#invitesDes<%= index %>").dialog("open");
+        });
+        <% end %>
+
+//**************************Change support script*************************
+        $("#change-email-panel").hide();
+        $("#change-password-panel").hide();
+
+        $("#change-email-btn").click(function()
+        {
+                $("#change-password-panel").hide();
+                if ($("#change-email-panel").css("display") == "none")
+                {
+                    $("#change-email-panel").slideDown();
+                    $("#change-email-btn > i").removeClass("glyphicon-chevron-down");
+                    $("#change-email-btn > i").addClass("glyphicon-chevron-up");
+                }
+                else
+                {
+                    $("#change-email-panel").slideUp();
+                    $("#change-email-btn > i").removeClass("glyphicon-chevron-up");
+                    $("#change-email-btn > i").addClass("glyphicon-chevron-down");
+                }
+        });
+        $("#change-password-btn").click(function()
+        {
+                $("#change-email-panel").hide();
+                if ($("#change-password-panel").css("display") == "none")
+                {
+                    $("#change-password-panel").slideDown();
+                    $("#change-password-btn > i").removeClass("glyphicon-chevron-down");
+                    $("#change-password-btn > i").addClass("glyphicon-chevron-up");
+                }
+                else
+                {
+                    $("#change-password-panel").slideUp();
+                    $("#change-password-btn > i").removeClass("glyphicon-chevron-up");
+                    $("#change-password-btn > i").addClass("glyphicon-chevron-down");
+                }
+        });
     });
-<% end %>
-<% @invites.each_with_index do |poll, index| %>
-    $("#invitesDes<%= index %>").dialog({autoOpen:false});
-    $("#invitesDes-btn<%= index %>").click(function()
-    {
-        $("#invitesDes<%= index %>").dialog("open");
-    });
-<% end %>
 </script>

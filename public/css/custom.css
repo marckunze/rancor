@@ -48,6 +48,19 @@
     border-bottom:none;
 }
 
+#change-support .btn
+{
+    margin-top:0.5em;
+}
+
+#change-email-panel,
+#change-password-panel
+{
+    position:absolute;
+    z-index:7;
+    border:3px solid #513743;
+}
+
 #rancor-homepage .glyphicon-info-sign
 {
     color:white;
