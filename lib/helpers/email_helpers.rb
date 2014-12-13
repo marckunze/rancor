@@ -82,7 +82,7 @@ module EmailHelpers
         }
       })
     rescue
-      raise if env['RACK_ENV'] == :production
+      raise if ENV['RACK_ENV'] == :production
       # else: fall through and do nothing, you were testing locally.
     end
   end

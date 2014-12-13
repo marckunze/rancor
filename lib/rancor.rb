@@ -354,7 +354,12 @@ class Rancor < Sinatra::Base
     halt(500) unless env['warden'].user.destroy
     env['warden'].logout
   end
-  
+
+  # Public: Before helper for the paths that handel password changing and email
+  #         changing. Checks to see that the user password entered matches the
+  #         password tied to the user account.
+  #
+  # Returns nothing
   before '/account/change/*' do
     unless  env['warden'].user.password == params['password']
       flash[:negative] = "Password entered was incorrect!"
@@ -362,14 +367,20 @@ class Rancor < Sinatra::Base
     end
   end
 
+  # Public: Path handling email change requests.
+  #
+  # Returns nothing.
   post '/account/change/email/?' do 
     halt(500) unless env['warden'].user.update(email: params['new_email'])
-    flash[:positive] = "Your email has been changed successfully"
+    flash[:positive] = "Your email has been changed successfully!"
   end
-  
+
+  # Public: Path handling password change requests.
+  #
+  # Returns nothing.
   post '/account/change/password/?' do
     unless params['new_pass'] == params['confirm']
-      flash[:negative] = "Your new passwords do not match"
+      flash[:negative] = "Your new password does not match its confirmation."
       halt
     end
     halt(500) unless env['warden'].user.update(password: params['new_pass'])
