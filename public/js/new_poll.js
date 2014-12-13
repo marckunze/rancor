@@ -60,24 +60,22 @@
             $("#closedate").val(closeDate.toUTCString());
         }
 
-        $("#unset-time-btn").click(function()
+        $("#closedate-btn").click(function()
         {
-            $("#unset-time-btn").addClass("disabled");
-            $("#set-time-btn").removeClass("disabled");
-            $("#closedate").val("");
-            $("#close-date-picker").datepicker("disable");
-            $("#hour").prop("disabled", true);
-            $("#ampm").prop("disabled", true);
-        });
-
-        $("#set-time-btn").click(function()
-        {
-            $("#set-time-btn").addClass("disabled");
-            $("#unset-time-btn").removeClass("disabled");
-            $("#closedate").val(closeDate.toUTCString());
-            $("#close-date-picker").datepicker("enable");
-            $("#hour").prop("disabled", false);
-            $("#ampm").prop("disabled", false);
+            if ($("#datepicker-container").css("display") == "none")
+            {
+                $("#datepicker-container").show();
+                $("#timepicker-container").show();
+                $("#closedate-btn-text").text("Do not close");
+                $("#closedate").val(closeDate.toUTCString());
+            }
+            else
+            {
+                $("#datepicker-container").hide();
+                $("#timepicker-container").hide();
+                $("#closedate-btn-text").text("Set Date/Time");
+                $("#closedate").val("");
+            }
         });
     });
 
