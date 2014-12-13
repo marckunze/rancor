@@ -1,3 +1,10 @@
+/* shared styles */
+#rancor-new-poll .page-header,
+#rancor-homepage .page-header
+{
+    color:#C79665;
+}
+
 /* layout styles */
 #layout-body
 {
@@ -35,6 +42,15 @@
 }
 
 /* homepage styles */
+#change-support-btn-container
+{
+    margin-bottom:0.714em;
+}
+
+#rancor-homepage .jumbotron
+{
+    padding-top:1.43em;
+}
 #rancor-homepage .poll-row
 {
     text-align:left;
@@ -61,6 +77,11 @@
     border:3px solid #513743;
 }
 
+#change-email-panel .panel-heading,
+#change-password-panel .panel-heading
+{
+    border-radius:0;
+}
 #rancor-homepage .glyphicon-info-sign
 {
     color:white;
@@ -142,11 +163,6 @@
 }
 
 /* new-poll styles */
-#rancor-new-poll .page-header
-{
-    color:#C79665;
-}
-
 #rancor-new-poll .row
 {
     margin:1em -1.1em;
