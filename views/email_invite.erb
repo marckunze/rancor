@@ -4,8 +4,8 @@
 		<h2>You have been invited!</h2>
 		<p>Hi, this is just to inform you that you have been invited to participate in a poll!</p>
 	  	<p>The poll is located at
-		  	<a href="<%= "https://rancor.herokuapp.com/poll/#{@poll.rid}" %>">
-		  		<%= "https://rancor.herokuapp.com/poll/#{@poll.rid}" %>
+		  	<a href="<%= "https://#{ENV['APP_NAME']}.herokuapp.com/poll/#{@poll.rid}" %>">
+		  		<%= "https://#{ENV['APP_NAME']}.herokuapp.com/poll/#{@poll.rid}" %>
 			</a>
 		</p>
 	</div>
