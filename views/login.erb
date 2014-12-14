@@ -1,8 +1,18 @@
-<section id="new">
-	<form action="/login" method="post">
-		<input name="username" placeholder="Your username&hellip;"/>
-		<input name="password" type="password" placeholder="Enter Password&hellip;"/>
-		<input type="submit" value="Sign In!" >
-	</form>
-  <%= styled_flash %>
-</section>
+<div id="rancor-login" class="container">
+    <div id="login-form">
+        <form role="form" action="/login" method="post" class="form-signin">
+            <h2 class="form-signin-heading text-center">Log in to rancor</h2>
+            <img src="/images/logo_cbg_150x150.png" class="text-center" alt="logo"></img>
+            <%= styled_flash %>
+            <label for="loginUsername" class="sr-only">Username or Email</label>
+            <input name="username" type="text" class="form-control" id="loginUsername" placeholder="Username or Email">
+            <label for="loginPassword" class="sr-only">Password</label>
+            <input name="password" type="password" class="form-control" id="loginPassword" placeholder="Password">
+            <input type="submit" class="btn btn-lg btn-success btn-block" value="log in">
+        </form>
+        <div id="login-form-footer">
+            <h4>New to rancor?</h4>
+            <input type="button" class="btn btn-lg btn-info btn-block" value="register">
+        </div>  <!-- #login-form-footer -->
+    </div>  <!-- #login-form -->
+</div>  <!-- #rancor-login -->

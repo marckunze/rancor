@@ -141,7 +141,7 @@
     text-align:left;
 }
 
-#login-form
+#signup-form
 {
     max-width:400px;
     padding:1.5em;
@@ -152,7 +152,7 @@
     text-align:left;
 }
 
-#new-user #login-form label
+#new-user #signup-form label
 {
     color:#383838;
 }
@@ -160,6 +160,34 @@
 #new-user img
 {
     margin-top:2.5em;
+}
+
+/* login styles */
+#rancor-login
+{
+    max-width:400px;
+    margin:2em auto 0;
+}
+#login-form
+{
+    padding:0 1.5em 1.5em 1.5em;
+    color:#656565;
+    background-color:#ADD8E6;
+    border-radius:1em;
+    border:0.2em #696969 solid;
+    text-align:left;
+}
+
+#login-form img
+{
+    display:block;
+    margin:3em auto;
+}
+
+#login-form-footer
+{
+    margin-top:2em;
+    border-top:2px solid;
 }
 
 /* new-poll styles */
