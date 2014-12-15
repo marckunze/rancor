@@ -27,7 +27,7 @@ module EmailHelpers
   # Returns nothing
   def send_invites(poll)
     @poll = poll
-    @closing_ hours = TimeDifference.between(Time.now, @poll.closedate).in_hours.floor
+    @closing_hours = TimeDifference.between(Time.now, @poll.closedate).in_hours.floor
     @poll.invites.each do |invite|
       next if (!@poll.owner.nil?) && invite.email == @poll.owner.email
       send_email('You have been invited to participate in a poll!',
