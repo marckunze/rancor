@@ -1,5 +1,7 @@
 # Internal: Module for helpers that will be used by sinatra. These methods revolve
 #           around the sending of email.
+require 'time'
+
 module EmailHelpers
   # Internal: Sends a confirmation email when a user creates a new account
   #
