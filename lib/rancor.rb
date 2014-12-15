@@ -236,7 +236,7 @@ class Rancor < Sinatra::Base
   #
   # Returns nothing.
   before '/poll/:id/?' do
-    @title = "rancor:poll.#{params['id']}"
+    @title = "rancor:poll ##{params['id']}"
     # Works because nil is counted as false.
     @owner_viewing = (poll.owner.id == env['warden'].user.id) if env['warden'].authenticated?
 
@@ -287,6 +287,7 @@ class Rancor < Sinatra::Base
   #
   # Returns the rendering for the results page as a String
   get '/poll/:id/results/?' do
+    @title = "rancor:poll ##{params['id']}"
     @options = poll.options.all(order: :score.desc)
     erb :results
   end
