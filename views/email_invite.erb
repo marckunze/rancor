@@ -4,7 +4,7 @@
 		<h2>You have been invited!</h2>
 		<p>Hi, this is just to inform you that you have been invited by <%= "#{@poll.owner.nil? ? 'Anonymous' : @poll.owner.username}" %> to participate in a poll!</p>
 		<p>This is for <%= "#{@poll.question.nil? ? 'a question' : @poll.question}" %>.
-		<%= "#{@poll.desciption.nil? ? '' : 'Specifically' +@poll.description}"  + '.' %> </p>
+		<%= "#{@poll.desciption.nil? ? '' : @poll.description}" %> </p>
 	  	<p>The poll is located at
 		  	<a href="<%= "https://#{ENV['APP_NAME']}.herokuapp.com/poll/#{@poll.rid}" %>">
 		  		<%= "https://#{ENV['APP_NAME']}.herokuapp.com/poll/#{@poll.rid}" %>
