@@ -12,7 +12,7 @@
 			</a>
 		</p>
 		<p>
-			This poll will close in <%= "#{@poll.closedate.nil? ? ' infinity ' : TimeDifference.between(Time.now, @poll.closedate)} " %> hours
+			This poll will close in <%= "#{@poll.closedate.nil? ? ' infinity ' : TimeDifference.between(Time.now, @poll.closedate).floor } " %> hours
 		</p>
 	</div>
 </div>
