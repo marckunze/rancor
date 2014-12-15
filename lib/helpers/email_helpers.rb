@@ -1,5 +1,7 @@
 # Internal: Module for helpers that will be used by sinatra. These methods revolve
 #           around the sending of email.
+require 'bundler'
+Bundler.require
 require 'time'
 
 module EmailHelpers
