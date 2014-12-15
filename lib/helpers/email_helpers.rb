@@ -1,7 +1,5 @@
 # Internal: Module for helpers that will be used by sinatra. These methods revolve
 #           around the sending of email.
-require 'time'
-
 module EmailHelpers
   # Internal: Sends a confirmation email when a user creates a new account
   #
@@ -27,7 +25,6 @@ module EmailHelpers
   # Returns nothing
   def send_invites(poll)
     @poll = poll
-    @closing_hours = ((DateTime.now - @poll.closedate) * 24 * 60).to_i
     @poll.invites.each do |invite|
       next if (!@poll.owner.nil?) && invite.email == @poll.owner.email
       send_email('You have been invited to participate in a poll!',

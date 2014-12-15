@@ -1,14 +1,13 @@
 source 'https://rubygems.org'
 # fixing a ruby version to avoid a warning on heroku
 ruby "2.0.0"
-gem 'sinatra'          # Required for running framework
-gem 'data_mapper'      # ORM adapter for db
-gem 'warden'           # Required for authentication
-gem 'bcrypt'           # Required for passwords. Should be automatically install by data_mapper
+gem 'sinatra'     # Required for running framework
+gem 'data_mapper' # ORM adapter for db
+gem 'warden'      # Required for authentication
+gem 'bcrypt'      # Required for passwords. Should be automatically install by data_mapper
 gem 'sinatra-flash', require: 'sinatra/flash'
 gem 'ordinalize', '~> 0.0.3'
-gem 'pony'             # Required for email
-gem 'time_difference'  # Required for time difference
+gem 'pony'        # Required for email
 
 # http://bundler.io/v1.3/sinatra.html
 # http://bundler.io/v1.3/gemfile.html

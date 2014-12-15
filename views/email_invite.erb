@@ -11,8 +11,5 @@
 		  		<%= "https://#{ENV['APP_NAME']}.herokuapp.com/poll/#{@poll.rid}" %>
 			</a>
 		</p>
-		<p>
-			This poll will close in <%= "#{@poll.closedate.nil? ? ' infinity ' : TimeDifference.between(Time.now, @poll.closedate).floor } " %> hours
-		</p>
 	</div>
 </div>
