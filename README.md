@@ -24,6 +24,10 @@ $ cd rancor
 $ bundle install
 $ rackup
 ```
+## Data definition
+Polls and data are structured as below.
+
+![rancor-erd-2014-12-14](https://cloud.githubusercontent.com/assets/1037136/5431373/847cc8f4-83dc-11e4-8022-785042604b7b.png)
 
 ## Bugs and feedback
 * For bugs, questions, feedback, and discussion please use the [GitHub Issues](https://github.com/marckunze/rancor/issues)
