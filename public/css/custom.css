@@ -1,6 +1,5 @@
 /* shared styles */
-#rancor-new-poll .page-header,
-#rancor-homepage .page-header
+.page-header
 {
     color:#C79665;
 }

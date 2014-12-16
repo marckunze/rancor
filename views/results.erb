@@ -1,4 +1,8 @@
 <div class="container" id="results">
+  <div class="page-header">
+      <h1>Poll Results</h1>
+  </div>  <!-- .page-header -->
+  <%= styled_flash %>
   <div class="jumbotron">
   	<div class="question"><span><%= @poll.question %></span></div>
   	<% @options.each do |option| %>
@@ -13,5 +17,4 @@
 	  <% end %>
     <div class="total_votes"><span>(Total Votes: <%= @poll.ballots.size %>)</span></div>
   </div>
-  <%= styled_flash %>
 </div>
