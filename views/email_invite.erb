@@ -1,8 +1,8 @@
 
 <div class="container" >
 	<div class="jumbotron">
-		<h2>Come vote with Rancor!</h2>
-		<p>Hi, this is just to inform you that you have been invited by <%= "#{@poll.owner.nil? ? 'Anonymous' : @poll.owner.username}" %> to participate in a poll using Rancor, the ranked-choice voting and poll creation app!</p>
+		<h2>Come vote with rancor!</h2>
+		<p>Hi, this is just to inform you that you have been invited by <%= "#{@poll.owner.nil? ? 'Anonymous' : @poll.owner.username}" %> to participate in a poll using rancor, the ranked-choice voting tool!</p>
 		<p><%= "#{@poll.question.nil? ? 'a question' : @poll.question}" %>?.
 		<%= "#{@poll.description.nil? ? ' ' : @poll.description}" %> 
 		</p>
