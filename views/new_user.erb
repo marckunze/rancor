@@ -1,11 +1,16 @@
-<section id="new-user">
-    <div class="container">
-    <div class="row">
-        <h1>Sign up for rancor today!</h1>
-    </div>
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-3" id="new-user-info">
+<section>
+    <div class="container" id="poll_question_container">
+        <div class="page-header">
+            <div class="new-user-header">
+                <div class="new-user-logo">
+                    <img src="/images/logo_100x100.png" alt="rancor logo" height="100px" width="100px">
+                </div>
+                <div class="new-user-signup" id="new-user">
+                    <h1>Sign up for rancor today!</h1>
+                </div>
+            </div>    
+        </div>  <!-- .page-header -->
+        <div class="new-user-text" id="new-user">
             <h3>Create an account.</h3>
             <br>
             <h4>Create polls.</h4>
@@ -14,32 +19,31 @@
             <h4>Keep track of your polls.</h4>
             <p>History of poll participation.</p>
         </div>
-        <div class="container-center col-sm-7">
-    <div id="signup-form">
-        <%= styled_flash %>
-        <form role="form" action="/new_user" method="post">
-            <div class="form-group">
-                <label for="signUpUsername">Username</label>
-                <input name="username" type="text" class="form-control" id="signUpUsername" placeholder="Enter username">
+            <div class="new-user-form" id="new-user">
+                <div id="signup-form">
+                    <%= styled_flash %>
+                    <form role="form" action="/new_user" method="post">
+                        <div class="form-group">
+                            <label for="signUpUsername">Username</label>
+                            <input name="username" type="text" class="form-control" id="signUpUsername" placeholder="Enter username">
+                        </div>
+                        <div class="form-group">
+                            <label for="signUpEmail">Email</label>
+                            <input name="email" type="email" class="form-control" id="signUpEmail" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="signUpPassword">Password</label>
+                            <input name="password" type="password" class="form-control" id="signUpPassword" placeholder="Select Password">
+                        </div>
+                        <div class="form-group">
+                            <input name="confirmation" type="password" class="form-control" id="signUpConfirmation" placeholder="Confirm Password">
+                        </div>
+                        <input type="submit" class="btn btn-default" value="Sign Up!">
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="signUpEmail">Email</label>
-                <input name="email" type="email" class="form-control" id="signUpEmail" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-                <label for="signUpPassword">Password</label>
-                <input name="password" type="password" class="form-control" id="signUpPassword" placeholder="Select Password">
-            </div>
-            <div class="form-group">
-                <input name="confirmation" type="password" class="form-control" id="signUpConfirmation" placeholder="Confirm Password">
-            </div>
-            <input type="submit" class="btn btn-default" value="Sign Up!">
-        </form>
-    </div>
-        </div>
-    </div>
-        <div class="row">
-            <img src="/images/logo_100x100.png" alt="rancor logo" height="100px" width="100px">
-        </div>
+        
     </div>
 </section>
+
+
