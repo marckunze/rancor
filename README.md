@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/marckunze/rancor/master/public/images/logo_cbg_150x150.png?token=AA_TUL6CQzXPGQZ6s5pscZk7ZSX8pAPtks5UmkZGwA%3D%3D">
+<img src="https://raw.githubusercontent.com/marckunze/rancor/master/public/images/logo_cbg_150x150.png">
 
 # rancor
 The Ranked Choice voting tool. Because sometimes you need the computer to help make these kinds of decisions for you.
