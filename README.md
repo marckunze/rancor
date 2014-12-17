@@ -6,7 +6,7 @@ The Ranked Choice voting tool. Because sometimes you need the computer to help m
 A project for City College of San Francisco (CCSF) CS 177 (Software Engineering).
 
 ## Full Documentation
-See the [Wiki](https://github.com/marckunze/rancor/wiki) for the functional spec, and other information.
+See the [Wiki](https://github.com/marckunze/rancor/wiki) for the full documentation, including getting started, the functional spec, and other information.
 
 ## Communication
 * Google Group: [ranked-chooser-ccsf-cs177](groups.google.com/forum/#!forum/ranked-chooser-ccsf-cs177)
@@ -31,3 +31,6 @@ Polls and data are structured as below.
 
 ## Bugs and feedback
 * For bugs, questions, feedback, and discussion please use the [GitHub Issues](https://github.com/marckunze/rancor/issues)
+
+## License
+This project is licensed under the terms of the MIT license.
