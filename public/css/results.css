@@ -120,7 +120,7 @@
 	max-width: 250px; 
 }
 
-.skillbar-title + .tooltip > .tooltip-arrow .tooltip.top
+.skillbar-title + .tooltip > .tooltip-arrow
 { 
-	border-top: 5px solid #40333c;
+	opacity: .7;
 }
