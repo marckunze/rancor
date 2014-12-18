@@ -1,13 +1,23 @@
 require 'bundler'
 Bundler.require
-require_relative 'models/models'
-require_relative 'helpers/email_helpers'
-require_relative 'helpers/misc_helpers'
+Dir[File.dirname(__FILE__) + '/models/*.rb'].each { |file| require file }
+Dir[File.dirname(__FILE__) + '/helpers/*.rb'].each { |file| require file }
+
 
 class Rancor < Sinatra::Base
   set :root, Dir.pwd # Sets the root directory as the directory config.ru is in.
   enable :sessions
   register Sinatra::Flash
+
+  configure :development do
+    DataMapper.setup(:default, "sqlite3://#{Dir.pwd}/db/rancor.db")
+    DataMapper.finalize.auto_upgrade!
+  end
+
+  configure :production do
+    DataMapper.setup(:default, ENV['DATABASE_URL'] || 'postgres://localhost/rancor')
+    DataMapper.finalize.auto_upgrade!
+  end
 
   use Warden::Manager do |config|
     config.serialize_into_session{|account| account.id }
