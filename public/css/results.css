@@ -113,3 +113,14 @@
 	color:#ffffff;
 	color:rgba(0, 0, 0, 0.4);
 }
+
+.skillbar-title + .tooltip > .tooltip-inner 
+{
+	background-color: #40333c;
+	max-width: 250px; 
+}
+
+.skillbar-title + .tooltip > .tooltip-arrow .tooltip.top
+{ 
+	border-top: 5px solid #40333c;
+}

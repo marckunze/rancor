@@ -3,14 +3,17 @@
 }
 
 .list-group{
-    width: 30%;
+    width: 40%;
     position: absolute;
     list-style-type: none;
     cursor: move;
-    margin-top: 10px;
+    margin-top: 12px;
     margin-bottom: 15px;
     font-size: 16px;
     color: #363536;
+    height: 44px;
+    word-wrap: break-word;
+    white-space: normal;
   }
     .bs-example{
       margin: 20px;
@@ -33,7 +36,8 @@
 td.rank {
     font-size: 16px;
     color: #877f85;
-    height: 41px;
+    height: 44px;
+    top: -2px;
 }
 
 .question{
