@@ -26,9 +26,11 @@ module EmailHelpers
   def send_invites(poll)
     @poll = poll
     @poll.invites.each do |invite|
-      next if (!@poll.owner.nil?) && invite.email == @poll.owner.email
-      send_email('You have been invited to participate in a poll!',
-                 :email_invite, invite.email)
+      next if (invite.nil? || @poll.owner.nil?)
+      unless invite.email == @poll.owner.email
+        send_email('You have been invited to participate in a poll!',
+                   :email_invite, invite.email)
+      end
     end
   end
 
