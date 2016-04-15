@@ -70,14 +70,14 @@ module EmailHelpers
     begin
       Pony.mail({
         :to => recipient,
-        :from => ENV['MANDRILL_USERNAME'],
+        :from => ENV['SENDGRID_USERNAME'],
         :subject => subject,
         :via => :smtp,
         :html_body => @email_body,
         :via_options => {
-          :address  => 'smtp.mandrillapp.com',
-          :user_name => ENV['MANDRILL_USERNAME'],
-          :password =>  ENV['MANDRILL_APIKEY'],
+          :address  => 'smtp.sendgrid.net',
+          :user_name => ENV['SENDGRID_USERNAME'],
+          :password =>  ENV['SENDGRID_PASSWORD'],
           :port =>      '587',
           :domain =>    'heroku.com',
           :authentication => :plain
